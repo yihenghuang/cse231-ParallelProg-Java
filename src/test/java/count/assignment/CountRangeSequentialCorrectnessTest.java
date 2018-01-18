@@ -29,6 +29,8 @@ import edu.wustl.cse231s.bioinformatics.Nucleobase;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link NucleobaseCounting#countRangeSequential(byte[], Nucleobase, int, int)}
  */
 @CountRubric(CountRubric.Category.RANGE)
 public class CountRangeSequentialCorrectnessTest {

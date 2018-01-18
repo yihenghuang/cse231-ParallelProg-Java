@@ -30,6 +30,8 @@ import edu.wustl.cse231s.print.AbstractNoPrintingTest;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link NucleobaseCounting}
  */
 @CountRubric(CountRubric.Category.NO_PRINTING)
 public class NoPrintingTest extends AbstractNoPrintingTest {

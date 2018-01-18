@@ -24,14 +24,14 @@ package count.assignment;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import midpoint.assignment.NWaySplitRemainderTest;
+import midpoint.assignment.MidpointTest;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ CountRangeSequentialCorrectnessTest.class, CountSequentialCorrectnessTest.class,
-		IsolatedNucleobaseTest.class, MidpointTest.class, NWaySplitRemainderTest.class, UpperLowerTest.class,
+		IsolatedNucleobaseTest.class, MidpointTest.class, NWaySplitRemainderTest.class, LowerUpperTest.class,
 		NWaySplitTest.class, DivideAndConquerTest.class, ParallelismTest.class, NoPrintingTest.class })
 public class CountTestSuite {
 

@@ -41,7 +41,10 @@ import edu.wustl.cse231s.bioinformatics.Nucleobase;
 import edu.wustl.cse231s.bioinformatics.io.resource.ChromosomeResource;
 
 /**
+ * @author Finn Voichick
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link NucleobaseCounting#countParallelDivideAndConquer(byte[], Nucleobase, int)}
  */
 @RunWith(Parameterized.class)
 @CountRubric(CountRubric.Category.DIVIDE_AND_CONQUER)
@@ -51,7 +54,8 @@ public class DivideAndConquerTest {
 	private final int threshold;
 	private final int truthAndBeautyCount;
 
-	public DivideAndConquerTest(ChromosomeResource chromosomeResource, Nucleobase targetNucleobase, int thresholdDenom) throws IOException {
+	public DivideAndConquerTest(ChromosomeResource chromosomeResource, Nucleobase targetNucleobase, int thresholdDenom)
+			throws IOException {
 		this.chromosome = chromosomeResource.getData();
 		this.targetNucleobase = targetNucleobase;
 		this.threshold = Math.max(this.chromosome.length / thresholdDenom, 2);
@@ -72,7 +76,7 @@ public class DivideAndConquerTest {
 		int[] thresholdDenoms = { 8, 71, 231 };
 
 		List<Object[]> list = new LinkedList<>();
-		for(ChromosomeResource chromosomeResource : ChromosomeResource.getTestEnumConstants()) {
+		for (ChromosomeResource chromosomeResource : ChromosomeResource.getTestEnumConstants()) {
 			for (Nucleobase targetNucleobase : Nucleobase.values()) {
 				for (int thresholdDenom : thresholdDenoms) {
 					list.add(new Object[] { chromosomeResource, targetNucleobase, thresholdDenom });

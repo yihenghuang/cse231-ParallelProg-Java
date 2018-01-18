@@ -37,6 +37,8 @@ import edu.wustl.cse231s.v5.impl.BookkeepingV5Impl;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link NucleobaseCounting}
  */
 public class ParallelismTest {
 	private void testFinishAndAsyncCounts(int expectedFinishCount, int expectedAsyncCountAllowingForMinus1,
@@ -71,7 +73,7 @@ public class ParallelismTest {
 	}
 
 	@Test
-	@CountRubric(CountRubric.Category.UPPER_LOWER)
+	@CountRubric(CountRubric.Category.LOWER_UPPER)
 	public void testUpperLower() {
 		Nucleobase nucleobase = Nucleobase.ADENINE;
 		byte[] chromosome = createChromosome(100, nucleobase);

@@ -37,6 +37,8 @@ import edu.wustl.cse231s.bioinformatics.io.resource.ChromosomeResource;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link NucleobaseCounting#countParallelNWaySplit(byte[], Nucleobase, int)}
  */
 @CountRubric(CountRubric.Category.NWAY)
 public class NWaySplitTest {

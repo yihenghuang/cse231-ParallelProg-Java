@@ -37,10 +37,10 @@ import edu.wustl.cse231s.bioinformatics.io.resource.ChromosomeResource;
 import edu.wustl.cse231s.junit.JUnitUtils;
 
 /**
- * A unit test for {@link XNucleobaseCounting}.
- * 
  * @author Finn Voichick
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link NucleobaseCounting#countSequential(byte[], Nucleobase)}
  */
 @RunWith(Parameterized.class)
 @CountRubric(CountRubric.Category.SEQUENTIAL)

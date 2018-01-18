@@ -19,34 +19,59 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package midpoint.assignment;
+package count.assignment;
 
 import static edu.wustl.cse231s.v5.V5.launchApp;
 
-import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import count.assignment.NucleobaseCounting;
 import count.assignment.rubric.CountRubric;
+import count.core.NucleobaseCountUtils;
 import edu.wustl.cse231s.bioinformatics.Nucleobase;
+import edu.wustl.cse231s.bioinformatics.io.resource.ChromosomeResource;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link NucleobaseCounting#countParallelLowerUpperSplit(byte[], Nucleobase)}
  */
-@CountRubric(CountRubric.Category.NWAY)
-public class NWaySplitRemainderTest {
-	@Test
-	public void testRemainder() throws Exception {
-		launchApp(()-> {
-			byte[] chromosome = "AAA".getBytes(StandardCharsets.UTF_8);
-			int actualCountA = NucleobaseCounting.countParallelNWaySplit(chromosome, Nucleobase.ADENINE, 3);
-			Assert.assertEquals(3, actualCountA);
+@CountRubric(CountRubric.Category.LOWER_UPPER)
+public class LowerUpperTest {
+	private static List<byte[]> chromosomes;
+	static {
+		chromosomes = new ArrayList<>(1);
+		chromosomes.add(ChromosomeResource.HOMO_SAPIENS_Y.getData());
+	}
 
-			int actualCount = NucleobaseCounting.countParallelNWaySplit(chromosome, Nucleobase.ADENINE, 2);
-			Assert.assertNotEquals(2, actualCount);
-			Assert.assertEquals(3, actualCount);
+	private void testUpperLowerNucleobase(Nucleobase nucleobase) {
+		launchApp(() -> {
+			for (byte[] chromosome : chromosomes) {
+				int expectedCount = NucleobaseCountUtils.countSequential(chromosome, nucleobase);
+				int actualCount = NucleobaseCounting.countParallelLowerUpperSplit(chromosome, nucleobase);
+				Assert.assertEquals(expectedCount, actualCount);
+			}
 		});
+	}
+
+	@Test
+	@CountRubric(CountRubric.Category.LOWER_UPPER)
+	public void testUpperLower() {
+		for (Nucleobase nucleobase : Nucleobase.values()) {
+			if (nucleobase == Nucleobase.URACIL) {
+				// pass
+			} else {
+				this.testUpperLowerNucleobase(nucleobase);
+			}
+		}
+	}
+
+	@Test
+	@CountRubric(CountRubric.Category.LOWER_UPPER)
+	public void testUpperLowerUracil() {
+		this.testUpperLowerNucleobase(Nucleobase.URACIL);
 	}
 }

@@ -33,7 +33,7 @@ public @interface CountRubric {
 		RANGE,
 		SEQUENTIAL,
 		MIDPOINT,
-		UPPER_LOWER,
+		LOWER_UPPER,
 		NWAY,
 		DIVIDE_AND_CONQUER,
 		NO_PRINTING

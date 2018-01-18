@@ -29,6 +29,11 @@ import org.junit.Test;
 import count.assignment.rubric.CountRubric;
 import edu.wustl.cse231s.bioinformatics.Nucleobase;
 
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link NucleobaseCounting}
+ */
 public class IsolatedNucleobaseTest {
 	@Test
 	@CountRubric(CountRubric.Category.SEQUENTIAL)
@@ -48,7 +53,7 @@ public class IsolatedNucleobaseTest {
 	}
 
 	@Test
-	@CountRubric(CountRubric.Category.UPPER_LOWER)
+	@CountRubric(CountRubric.Category.LOWER_UPPER)
 	public void justAUpperLowerSplit() {
 		byte[] b = new byte[100];
 		for (int i = 0; i < 100; ++i) {

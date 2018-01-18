@@ -19,14 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package count.assignment;
+package midpoint.assignment;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import count.assignment.rubric.CountRubric;
-import midpoint.assignment.MidpointUtils;
 
+/**
+ * @author Ben Choi
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link MidpointUtils#calculateMidpoint(int, int)}
+ */
 @CountRubric(CountRubric.Category.MIDPOINT)
 public class MidpointTest {
 	private static void assertWithinRange(String message, int expectedMinInclusive, int expected,
