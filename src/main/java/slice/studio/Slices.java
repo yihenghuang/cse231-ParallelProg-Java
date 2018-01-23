@@ -31,7 +31,7 @@ import edu.wustl.cse231s.NotYetImplementedException;
 import slice.core.Slice;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Finn Voichick
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
