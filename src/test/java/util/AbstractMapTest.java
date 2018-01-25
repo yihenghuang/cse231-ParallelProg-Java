@@ -19,21 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package count.assignment;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+package util;
 
-import midpoint.assignment.MidpointTest;
+import static org.junit.Assert.assertEquals;
+
+import java.util.Map;
+
+import edu.wustl.cse231s.util.MapUtils;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ CountRangeSequentialCorrectnessTest.class, CountSequentialCorrectnessTest.class,
-		IsolatedNucleobaseTest.class, MidpointTest.class, NWaySplitRemainderTest.class, LowerUpperTest.class,
-		NWaySplitTest.class, NWaySplitRemainderCeilingTest.class, DivideAndConquerTest.class, ParallelismTest.class,
-		NoPrintingTest.class })
-public class CountTestSuite {
+public abstract class AbstractMapTest {
+	protected static <K, V> void putOnBoth(Map<K, V> expected, Map<K, V> actual, K key, V value) {
+		V expectedReturnValue = expected.put(key, value);
+		V actualReturnValue = actual.put(key, value);
+		MapUtils.assertMapsAreEquivalent(expected, actual);
+		assertEquals(expectedReturnValue, actualReturnValue);
+	}
 
+	protected static <K, V> void removeFromBoth(Map<K, V> expected, Map<K, V> actual, K key) {
+		V expectedReturnValue = expected.remove(key);
+		V actualReturnValue = actual.remove(key);
+		MapUtils.assertMapsAreEquivalent(expected, actual);
+		assertEquals(expectedReturnValue, actualReturnValue);
+	}
 }
