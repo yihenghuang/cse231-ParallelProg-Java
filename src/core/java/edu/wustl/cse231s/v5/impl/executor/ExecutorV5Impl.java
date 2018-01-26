@@ -93,7 +93,7 @@ public class ExecutorV5Impl extends AbstractV5Impl {
 	}
 
 	@Override
-	public <R> Future<R> async(CheckedCallable<R> body) {
+	public <R> Future<R> future(CheckedCallable<R> body) {
 		FinishContext context = contextStack.get().peek();
 		Future<R> task = executorService.submit(() -> {
 			Deque<FinishContext> stack = contextStack.get();
@@ -109,7 +109,7 @@ public class ExecutorV5Impl extends AbstractV5Impl {
 	}
 
 	@Override
-	public <R> Future<R> async(AwaitFuturesOption awaitFuturesOption, CheckedCallable<R> body) {
+	public <R> Future<R> future(AwaitFuturesOption awaitFuturesOption, CheckedCallable<R> body) {
 		List<Future<?>> futures = awaitFuturesOption.getFutures();
 		CompletableFuture<?>[] completableFutures = new CompletableFuture[futures.size()];
 		int i = 0;

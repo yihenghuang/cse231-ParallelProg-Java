@@ -19,21 +19,51 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package count.assignment;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+package util.lab.collection;
 
-import midpoint.assignment.MidpointTest;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Collection;
+import java.util.Iterator;
+
+import org.junit.Test;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ CountRangeSequentialCorrectnessTest.class, CountSequentialCorrectnessTest.class,
-		IsolatedNucleobaseTest.class, MidpointTest.class, NWaySplitRemainderTest.class, LowerUpperTest.class,
-		NWaySplitTest.class, NWaySplitRemainderCeilingTest.class, DivideAndConquerTest.class, ParallelismTest.class,
-		NoPrintingTest.class })
-public class CountTestSuite {
+public class IteratorRemoveIllegalStateExceptionTest {
+	@Test(expected = IllegalStateException.class)
+	public void testRemoveForEmpty() {
+		Collection<Void> collection = new LinkedNodesCollection<>();
+		Iterator<Void> iterator = collection.iterator();
+		assertFalse(iterator.hasNext());
+		iterator.remove();
+	}
 
+	@Test(expected = IllegalStateException.class)
+	public void testRemoveAtBeginning() {
+		int value = 71;
+		Collection<Integer> collection = new LinkedNodesCollection<>();
+		collection.add(value);
+		Iterator<Integer> iterator = collection.iterator();
+		assertTrue(iterator.hasNext());
+		iterator.remove();
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void testRemoveTwice() {
+		Collection<Integer> collection = new LinkedNodesCollection<>();
+		collection.add(3);
+		collection.add(2);
+		collection.add(1);
+		Iterator<Integer> iterator = collection.iterator();
+		assertTrue(iterator.hasNext());
+		int value = iterator.next();
+		assertEquals(1, value);
+		iterator.remove();
+		iterator.remove();
+	}
 }

@@ -19,21 +19,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package count.assignment;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+package util.lab.collection;
 
-import midpoint.assignment.MidpointTest;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
+import org.junit.Test;
+
+import com.google.common.collect.Lists;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ CountRangeSequentialCorrectnessTest.class, CountSequentialCorrectnessTest.class,
-		IsolatedNucleobaseTest.class, MidpointTest.class, NWaySplitRemainderTest.class, LowerUpperTest.class,
-		NWaySplitTest.class, NWaySplitRemainderCeilingTest.class, DivideAndConquerTest.class, ParallelismTest.class,
-		NoPrintingTest.class })
-public class CountTestSuite {
+public class RemoveAllViaIteratorTest {
+	@Test
+	public void test() {
+		String s = "abcdefg";
+		List<Character> list = Lists.charactersOf(s);
+		ListIterator<Character> listIterator = list.listIterator(list.size());
 
+		Collection<Character> collection = new LinkedNodesCollection<>();
+		while (listIterator.hasPrevious()) {
+			char c = listIterator.previous();
+			collection.add(c);
+		}
+
+		Iterator<Character> iterator = collection.iterator();
+		while (iterator.hasNext()) {
+			iterator.next();
+			iterator.remove();
+		}
+		assertTrue(collection.isEmpty());
+	}
 }

@@ -229,7 +229,7 @@ public abstract class AbstractV5Impl implements V5Impl {
 
 	@Override
 	public void async(AwaitFuturesOption awaitFuturesOption, CheckedRunnable body) {
-		async(awaitFuturesOption, ()->{
+		future(awaitFuturesOption, ()->{
 			body.run();
 			return null;
 		});

@@ -40,7 +40,7 @@ public interface V5Impl {
 
 	void async(CheckedRunnable body);
 
-	<R> Future<R> async(CheckedCallable<R> body);
+	<R> Future<R> future(CheckedCallable<R> body);
 
 	void forseq(int min, int maxExclusive, CheckedIntConsumer body) throws InterruptedException, ExecutionException;
 
@@ -116,7 +116,7 @@ public interface V5Impl {
 
 	void async(AwaitFuturesOption awaitFuturesOption, CheckedRunnable body);
 
-	<R> Future<R> async(AwaitFuturesOption awaitFuturesOption, CheckedCallable<R> body);
+	<R> Future<R> future(AwaitFuturesOption awaitFuturesOption, CheckedCallable<R> body);
 	
 	void doWork(long n);
 }
