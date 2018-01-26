@@ -106,8 +106,8 @@ public class V5 {
 		getImpl().async(body);
 	}
 
-	public static <R> Future<R> async(CheckedCallable<R> body) {
-		return getImpl().async(body);
+	public static <R> Future<R> future(CheckedCallable<R> body) {
+		return getImpl().future(body);
 	}
 
 	public static void forseq(int min, int maxExclusive, CheckedIntConsumer body)
@@ -326,8 +326,8 @@ public class V5 {
 		getImpl().async(awaitFuturesOption, body);
 	}
 
-	public static <R> Future<R> async(AwaitFuturesOption awaitFuturesOption, CheckedCallable<R> body) {
-		return getImpl().async(awaitFuturesOption, body);
+	public static <R> Future<R> future(AwaitFuturesOption awaitFuturesOption, CheckedCallable<R> body) {
+		return getImpl().future(awaitFuturesOption, body);
 	}
 
 	public static void finish(RegisterAccumulatorsOption registerAccumulatorsOption, CheckedRunnable body)

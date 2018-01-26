@@ -22,34 +22,38 @@
 
 package util.lab.collection;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.List;
+import java.util.ListIterator;
 
 import org.junit.Test;
+
+import com.google.common.collect.Lists;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-public class IteratorRemoveNoSuchElementExceptionTest {
-	@Test(expected = NoSuchElementException.class)
-	public void testRemoveForEmpty() {
-		Collection<Void> collection = new LinkedNodesCollection<>();
-		Iterator<Void> iterator = collection.iterator();
-		assertFalse(iterator.hasNext());
-		iterator.remove();
-	}
+public class RemoveAllViaIteratorTest {
+	@Test
+	public void test() {
+		String s = "abcdefg";
+		List<Character> list = Lists.charactersOf(s);
+		ListIterator<Character> listIterator = list.listIterator(list.size());
 
-	@Test(expected = NoSuchElementException.class)
-	public void testRemoveAtBeginning() {
-		int value = 71;
-		Collection<Integer> collection = new LinkedNodesCollection<>();
-		collection.add(value);
-		Iterator<Integer> iterator = collection.iterator();
-		assertTrue(iterator.hasNext());
-		iterator.remove();
+		Collection<Character> collection = new LinkedNodesCollection<>();
+		while (listIterator.hasPrevious()) {
+			char c = listIterator.previous();
+			collection.add(c);
+		}
+
+		Iterator<Character> iterator = collection.iterator();
+		while (iterator.hasNext()) {
+			iterator.next();
+			iterator.remove();
+		}
+		assertTrue(collection.isEmpty());
 	}
 }
