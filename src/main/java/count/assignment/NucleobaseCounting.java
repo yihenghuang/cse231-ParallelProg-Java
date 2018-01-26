@@ -164,6 +164,7 @@ public class NucleobaseCounting {
 		for (int arrayIndex = numTasks*sliceLength; arrayIndex<chromosome.length; arrayIndex++) {
 			if (chromosome[arrayIndex]==targetNucleobase.toByte()) sub[numTasks]++;
 		}
+		
 		int total = 0;
 		for (int subs : sub) {
 			total+=subs;

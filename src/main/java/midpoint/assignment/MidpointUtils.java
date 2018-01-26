@@ -31,5 +31,6 @@ import edu.wustl.cse231s.NotYetImplementedException;
 public class MidpointUtils {
 	public static int calculateMidpoint(int a, int b) {
 		return (a + b)/2;
+		
 	}
 }
