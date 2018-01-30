@@ -32,7 +32,7 @@ import edu.wustl.cse231s.NotYetImplementedException;
 import sort.core.merge.Combiner;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class ParallelCombiner implements Combiner {
