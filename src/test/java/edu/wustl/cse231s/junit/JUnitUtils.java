@@ -29,6 +29,8 @@ import java.util.List;
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class JUnitUtils {
+	public static final long DEFAULT_TIMEOUT = 1000L;
+	
 	public static <A> Collection<Object[]> toParameterizedArguments(Object argA0, Object... argAs) {
 		List<Object[]> result = new ArrayList<>();
 		result.add(new Object[] { argA0 });

@@ -24,6 +24,8 @@ package util.core.map;
 import org.junit.Assert;
 import org.junit.Test;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
+
 import java.util.Map;
 
 /**
@@ -32,7 +34,7 @@ import java.util.Map;
 public abstract class AbstractWordCountComputeTest {
 	protected abstract <K, V> Map<K, V> createMap();
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void testNotPresent() {
 		Map<String, Integer> map = this.createMap();
 		
@@ -42,7 +44,7 @@ public abstract class AbstractWordCountComputeTest {
 		});
 	}
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void testPresent() {
 		Map<String, Integer> map = this.createMap();
 		
@@ -58,7 +60,7 @@ public abstract class AbstractWordCountComputeTest {
 	}
 	
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void testWordCount() {
 		Map<String, Integer> map = this.createMap();
 		

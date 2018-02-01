@@ -28,6 +28,7 @@ import org.junit.Test;
 
 import count.assignment.rubric.CountRubric;
 import edu.wustl.cse231s.bioinformatics.Nucleobase;
+import edu.wustl.cse231s.junit.JUnitUtils;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
@@ -35,7 +36,7 @@ import edu.wustl.cse231s.bioinformatics.Nucleobase;
  *         {@link NucleobaseCounting}
  */
 public class IsolatedNucleobaseTest {
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	@CountRubric(CountRubric.Category.SEQUENTIAL)
 	public void justASequential() {
 		byte[] b = new byte[100];
@@ -52,7 +53,7 @@ public class IsolatedNucleobaseTest {
 		}
 	}
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	@CountRubric(CountRubric.Category.LOWER_UPPER)
 	public void justAUpperLowerSplit() {
 		byte[] b = new byte[100];
@@ -73,7 +74,7 @@ public class IsolatedNucleobaseTest {
 		});
 	}
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	@CountRubric(CountRubric.Category.NWAY)
 	public void justANWaySplit() {
 		byte[] b = new byte[100];

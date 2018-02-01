@@ -23,55 +23,50 @@ package count.assignment;
 
 import static edu.wustl.cse231s.v5.V5.launchApp;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.util.Collection;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import count.assignment.rubric.CountRubric;
 import count.core.NucleobaseCountUtils;
 import edu.wustl.cse231s.bioinformatics.Nucleobase;
 import edu.wustl.cse231s.bioinformatics.io.resource.ChromosomeResource;
+import edu.wustl.cse231s.junit.JUnitUtils;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  * 
  *         {@link NucleobaseCounting#countParallelLowerUpperSplit(byte[], Nucleobase)}
  */
+@RunWith(Parameterized.class)
 @CountRubric(CountRubric.Category.LOWER_UPPER)
 public class LowerUpperTest {
-	private static List<byte[]> chromosomes;
-	static {
-		chromosomes = new ArrayList<>(1);
-		chromosomes.add(ChromosomeResource.HOMO_SAPIENS_Y.getData());
+	private final byte[] chromosome;
+	private final Nucleobase targetNucleobase;
+
+	public LowerUpperTest(ChromosomeResource chromosomeResource, Nucleobase targetNucleobase) throws IOException {
+		this.chromosome = chromosomeResource.getData();
+		this.targetNucleobase = targetNucleobase;
 	}
 
-	private void testUpperLowerNucleobase(Nucleobase nucleobase) {
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@CountRubric(CountRubric.Category.LOWER_UPPER)
+	public void testUpperLower() {
+		int expectedCount = NucleobaseCountUtils.countSequential(chromosome, targetNucleobase);
 		launchApp(() -> {
-			for (byte[] chromosome : chromosomes) {
-				int expectedCount = NucleobaseCountUtils.countSequential(chromosome, nucleobase);
-				int actualCount = NucleobaseCounting.countParallelLowerUpperSplit(chromosome, nucleobase);
-				Assert.assertEquals(expectedCount, actualCount);
-			}
+			int actualCount = NucleobaseCounting.countParallelLowerUpperSplit(chromosome, targetNucleobase);
+			Assert.assertEquals(expectedCount, actualCount);
 		});
 	}
 
-	@Test
-	@CountRubric(CountRubric.Category.LOWER_UPPER)
-	public void testUpperLower() {
-		for (Nucleobase nucleobase : Nucleobase.values()) {
-			if (nucleobase == Nucleobase.URACIL) {
-				// pass
-			} else {
-				this.testUpperLowerNucleobase(nucleobase);
-			}
-		}
-	}
-
-	@Test
-	@CountRubric(CountRubric.Category.LOWER_UPPER)
-	public void testUpperLowerUracil() {
-		this.testUpperLowerNucleobase(Nucleobase.URACIL);
+	@Parameters(name = "{0} {1}")
+	public static Collection<Object[]> getConstructorArguments() {
+		return JUnitUtils.toParameterizedArguments2(new ChromosomeResource[] { ChromosomeResource.HOMO_SAPIENS_Y },
+				Nucleobase.values());
 	}
 }

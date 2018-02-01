@@ -31,6 +31,7 @@ import java.util.Iterator;
 
 import org.junit.Test;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import util.lab.rubric.UtilRubric;
 
 /**
@@ -112,7 +113,7 @@ public class EqualsTest {
 		return list;
 	}
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void testPrimitiveRemoveFirst() {
 		Collection<Integer> list = createBoxedPrimitiveList();
 		assertEquals(3, list.size());
@@ -127,7 +128,7 @@ public class EqualsTest {
 		assertFalse(iterator.hasNext());
 	}
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void testPrimitiveRemoveMiddle() {
 		Collection<Integer> list = createBoxedPrimitiveList();
 		assertEquals(3, list.size());
@@ -142,7 +143,7 @@ public class EqualsTest {
 		assertFalse(iterator.hasNext());
 	}
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void testPrimitiveRemoveEnd() {
 		Collection<Integer> list = createBoxedPrimitiveList();
 		assertEquals(3, list.size());
@@ -157,7 +158,7 @@ public class EqualsTest {
 		assertFalse(iterator.hasNext());
 	}
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void testNonPrimitiveRemoveFirst() {
 		Collection<BigDecimal> list = createNonPrimitiveList();
 		assertEquals(3, list.size());
@@ -172,7 +173,7 @@ public class EqualsTest {
 		assertFalse(iterator.hasNext());
 	}
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void testNonPrimitiveRemoveMiddle() {
 		Collection<BigDecimal> list = createNonPrimitiveList();
 		assertEquals(3, list.size());
@@ -187,7 +188,7 @@ public class EqualsTest {
 		assertFalse(iterator.hasNext());
 	}
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void testNonPrimitiveRemoveEnd() {
 		Collection<BigDecimal> list = createNonPrimitiveList();
 		assertEquals(3, list.size());

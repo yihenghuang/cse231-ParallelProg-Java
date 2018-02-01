@@ -28,6 +28,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
+
 import java.util.Map;
 
 /**
@@ -37,7 +39,7 @@ import java.util.Map;
 public abstract class AbstractRemoveTest {
 	protected abstract <K, V> Map<K, V> createMap();
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void test() {
 		Map<Integer, Double> map = this.createMap();
 

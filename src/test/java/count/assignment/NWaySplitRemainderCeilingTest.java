@@ -28,9 +28,9 @@ import java.nio.charset.StandardCharsets;
 import org.junit.Assert;
 import org.junit.Test;
 
-import count.assignment.NucleobaseCounting;
 import count.assignment.rubric.CountRubric;
 import edu.wustl.cse231s.bioinformatics.Nucleobase;
+import edu.wustl.cse231s.junit.JUnitUtils;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
@@ -39,7 +39,7 @@ import edu.wustl.cse231s.bioinformatics.Nucleobase;
  */
 @CountRubric(CountRubric.Category.NWAY)
 public class NWaySplitRemainderCeilingTest {
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void testRemainder() throws Exception {
 		launchApp(() -> {
 			byte[] chromosome = "AAAAAAA".getBytes(StandardCharsets.UTF_8);

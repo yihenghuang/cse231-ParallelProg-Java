@@ -25,6 +25,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import util.lab.collection.LinkedNodesCollection;
 import util.lab.rubric.UtilRubric;
 
@@ -34,7 +35,7 @@ import util.lab.rubric.UtilRubric;
 @UtilRubric(UtilRubric.Category.LIST_REMOVE)
 public class RemoveTest {
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void test() {
 		LinkedNodesCollection<Integer> list = new LinkedNodesCollection<Integer>();
 		for (int i = 1; i < 4; ++i) {

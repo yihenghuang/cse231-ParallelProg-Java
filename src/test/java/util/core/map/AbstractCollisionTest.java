@@ -32,6 +32,8 @@ import java.util.Objects;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.Test;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
+
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
@@ -84,7 +86,7 @@ public abstract class AbstractCollisionTest {
 
 	protected abstract <K, V> Map<K, V> createMap();
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void testPut() {
 		Map<ValidButPessimalHashObject, Integer> truthAndBeauty = new HashMap<>();
 		Map<ValidButPessimalHashObject, Integer> studentMap = this.createMap();
@@ -92,7 +94,7 @@ public abstract class AbstractCollisionTest {
 		putOnBoth(truthAndBeauty, studentMap, new ValidButPessimalHashObject("george"), 341);
 	}
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void testPutAndRemove() {
 		Map<ValidButPessimalHashObject, Integer> truthAndBeauty = new HashMap<>();
 		Map<ValidButPessimalHashObject, Integer> studentMap = this.createMap();

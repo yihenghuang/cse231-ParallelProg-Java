@@ -24,6 +24,7 @@ package util.lab.collection;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.Test;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import util.lab.collection.LinkedNodesCollection;
 
 import static org.junit.Assert.*;
@@ -37,19 +38,19 @@ import java.util.LinkedList;
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public abstract class AbstractComprehensiveRemoveTest<T> {
-	private static <T> String toString(Collection<T> list) {
-		StringBuilder sb = new StringBuilder();
-		String prefix = "[";
-
-		for (T item : list) {
-			sb.append(prefix);
-			sb.append(item);
-			prefix = ", ";
-		}
-
-		sb.append("]");
-		return sb.toString();
-	}
+//	private static <T> String toString(Collection<T> list) {
+//		StringBuilder sb = new StringBuilder();
+//		String prefix = "[";
+//
+//		for (T item : list) {
+//			sb.append(prefix);
+//			sb.append(item);
+//			prefix = ", ";
+//		}
+//
+//		sb.append("]");
+//		return sb.toString();
+//	}
 
 	protected abstract T createItem(char c);
 
@@ -97,7 +98,7 @@ public abstract class AbstractComprehensiveRemoveTest<T> {
 		return data;
 	}
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void testUnique() {
 		Deque<T> truthAndBeauty = new LinkedList<>();
 		char[] data = createReversed("ABCDE");
@@ -115,7 +116,7 @@ public abstract class AbstractComprehensiveRemoveTest<T> {
 		}
 	}
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void testDuplicates() {
 		Deque<T> truthAndBeauty = new LinkedList<>();
 		char[] data = createReversed("abracadabra");

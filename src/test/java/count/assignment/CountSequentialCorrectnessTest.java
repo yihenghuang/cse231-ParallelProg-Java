@@ -60,7 +60,7 @@ public class CountSequentialCorrectnessTest {
 		return JUnitUtils.toParameterizedArguments(Nucleobase.values());
 	}
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void testSequential() {
 		int count = NucleobaseCounting.countSequential(chromosome, nucleobase);
 		Assert.assertEquals(truthAndBeautyCount, count);

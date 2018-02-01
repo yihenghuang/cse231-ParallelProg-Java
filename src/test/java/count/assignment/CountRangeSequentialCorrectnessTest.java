@@ -26,6 +26,7 @@ import org.junit.Test;
 
 import count.assignment.rubric.CountRubric;
 import edu.wustl.cse231s.bioinformatics.Nucleobase;
+import edu.wustl.cse231s.junit.JUnitUtils;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
@@ -34,7 +35,7 @@ import edu.wustl.cse231s.bioinformatics.Nucleobase;
  */
 @CountRubric(CountRubric.Category.RANGE)
 public class CountRangeSequentialCorrectnessTest {
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void testAllAdenine() throws Exception {
 		byte[] chromosome = "AAAAAAAA".getBytes();
 

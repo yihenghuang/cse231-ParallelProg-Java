@@ -26,9 +26,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Map;
+
 import org.junit.Test;
 
-import java.util.Map;
+import edu.wustl.cse231s.junit.JUnitUtils;
 
 /**
  * @author Ben Choi (benjaminchoi@wustl.edu)
@@ -38,7 +40,7 @@ public abstract class AbstractPutTest {
 
 	protected abstract <K, V> Map<K, V> createMap();
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void test() {
 		Map<Integer, Double> map = this.createMap();
 

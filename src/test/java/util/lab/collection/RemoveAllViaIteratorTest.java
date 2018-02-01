@@ -33,11 +33,13 @@ import org.junit.Test;
 
 import com.google.common.collect.Lists;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
+
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class RemoveAllViaIteratorTest {
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void test() {
 		String s = "abcdefg";
 		List<Character> list = Lists.charactersOf(s);

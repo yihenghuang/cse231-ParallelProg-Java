@@ -21,9 +21,11 @@
  ******************************************************************************/
 package count.assignment;
 
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import edu.wustl.cse231s.bioinformatics.io.resource.ChromosomeResource;
 import midpoint.assignment.MidpointTest;
 
 /**
@@ -35,5 +37,9 @@ import midpoint.assignment.MidpointTest;
 		NWaySplitTest.class, NWaySplitRemainderCeilingTest.class, DivideAndConquerTest.class, ParallelismTest.class,
 		NoPrintingTest.class })
 public class CountTestSuite {
-
+	@BeforeClass
+	public static void setUp() {
+		@SuppressWarnings("unused")
+		byte[] unused = ChromosomeResource.HOMO_SAPIENS_Y.getData();
+	}
 }

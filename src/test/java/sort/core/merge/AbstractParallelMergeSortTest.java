@@ -25,6 +25,7 @@ import static edu.wustl.cse231s.v5.V5.launchApp;
 
 import org.junit.Test;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import sort.studio.merge.MergeSort;
 
 /**
@@ -33,7 +34,7 @@ import sort.studio.merge.MergeSort;
 public abstract class AbstractParallelMergeSortTest extends AbstractMergeSortTest {
 	protected abstract Combiner createCombiner(int arrayLength);
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void testParallel() {
 		launchApp(() -> {
 			this.testMergeSorter((int[] array) -> {

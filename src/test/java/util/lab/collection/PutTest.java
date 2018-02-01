@@ -21,11 +21,12 @@
  ******************************************************************************/
 package util.lab.collection;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import util.lab.collection.LinkedNodesCollection;
+import edu.wustl.cse231s.junit.JUnitUtils;
 import util.lab.rubric.UtilRubric;
 
 /**
@@ -33,8 +34,7 @@ import util.lab.rubric.UtilRubric;
  */
 @UtilRubric(UtilRubric.Category.LIST_ADD_FIRST)
 public class PutTest {
-
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void test() {
 		LinkedNodesCollection<Integer> list = new LinkedNodesCollection<Integer>();
 		for (int i = 1; i < 4; ++i) {

@@ -34,6 +34,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import slice.core.Slice;
 
 /**
@@ -49,7 +50,7 @@ public class SlicesTest {
 		this.numSlices = numSlices;
 	}
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void test() {
 		List<Slice<Object[]>> slices = Slices.createNSlices(data, numSlices);
 		assertNotNull(slices);

@@ -39,6 +39,7 @@ import count.assignment.rubric.CountRubric;
 import count.core.NucleobaseCountUtils;
 import edu.wustl.cse231s.bioinformatics.Nucleobase;
 import edu.wustl.cse231s.bioinformatics.io.resource.ChromosomeResource;
+import edu.wustl.cse231s.junit.JUnitUtils;
 
 /**
  * @author Finn Voichick
@@ -62,7 +63,7 @@ public class DivideAndConquerTest {
 		this.truthAndBeautyCount = NucleobaseCountUtils.countSequential(chromosome, targetNucleobase);
 	}
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void test() {
 		MutableInt count = new MutableInt();
 		launchApp(() -> {

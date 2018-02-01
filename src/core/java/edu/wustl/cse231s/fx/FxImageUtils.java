@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2018 Dennis Cosgrove
+ * Copyright (C) 2016-2017 Dennis Cosgrove
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,42 +19,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
+package edu.wustl.cse231s.fx;
 
-package util.lab.collection;
+import java.nio.ByteBuffer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import edu.wustl.cse231s.IntendedForStaticAccessOnlyError;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritablePixelFormat;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
-import org.junit.Test;
-
-import edu.wustl.cse231s.junit.JUnitUtils;
-
-/**
- * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
- */
-public class IteratorNextNoSuchElementExceptionTest {
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT, expected = NoSuchElementException.class)
-	public void testNextForEmpty() {
-		Collection<Void> collection = new LinkedNodesCollection<>();
-		Iterator<Void> iterator = collection.iterator();
-		assertFalse(iterator.hasNext());
-		iterator.next();
+public class FxImageUtils {
+	private FxImageUtils() {
+		throw new IntendedForStaticAccessOnlyError();
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT, expected = NoSuchElementException.class)
-	public void testNextAtEnd() {
-		int value = 71;
-		Collection<Integer> collection = new LinkedNodesCollection<>();
-		collection.add(value);
-		Iterator<Integer> iterator = collection.iterator();
-		assertTrue(iterator.hasNext());
-		assertEquals(value, iterator.next().intValue());
-		assertFalse(iterator.hasNext());
-		iterator.next();
+	public static byte[] getBuffer(PixelReader reader, int bytesPerPixel, int width, int height, WritablePixelFormat<ByteBuffer> pixelformat ) {
+		int x = 0;
+		int y = 0;
+		byte[] buffer = new byte[width * height * bytesPerPixel];
+		int offset = 0;
+		int scanlineStride = width * bytesPerPixel;
+		reader.getPixels(x, y, width, height, pixelformat, buffer, offset, scanlineStride);
+		return buffer;
 	}
+	
+	public static void copyBuffer(byte[] from, int bytesPerPixel, int width, int height, WritablePixelFormat<ByteBuffer> pixelformat, PixelWriter to) {
+		int x = 0;
+		int y = 0;
+		int offset = 0;
+		int scanlineStride = width * 4;
+		to.setPixels(x, y, width, height, pixelformat, from, offset, scanlineStride);
+	}
+	
 }

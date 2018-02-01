@@ -52,6 +52,15 @@ public class DownloadUtils {
 		File homeDirectory = new File(System.getProperty("user.home"));
 		File downloadsDirectory = new File(homeDirectory, "Downloads");
 		if (downloadsDirectory.exists()) {
+			// pass
+		} else {
+			if (downloadsDirectory.mkdir()) {
+				// pass
+			} else {
+				throw new RuntimeException(downloadsDirectory.getAbsolutePath() + " could not make directory.");
+			}
+		}
+		if (downloadsDirectory.exists()) {
 			if (downloadsDirectory.isDirectory()) {
 				return downloadsDirectory;
 			} else {

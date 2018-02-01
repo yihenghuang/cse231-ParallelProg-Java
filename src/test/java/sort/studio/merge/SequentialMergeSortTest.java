@@ -25,6 +25,7 @@ import java.util.concurrent.ExecutionException;
 
 import org.junit.Test;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import sort.core.merge.AbstractMergeSortTest;
 import sort.core.merge.Combiner;
 import sort.core.merge.SequentialTestCombiner;
@@ -35,7 +36,7 @@ import sort.core.merge.SequentialTestCombiner;
  *         {@link MergeSort#sequentialMergeSort(int[], Combiner)}
  */
 public class SequentialMergeSortTest extends AbstractMergeSortTest {
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void testSequential() throws InterruptedException, ExecutionException {
 		this.testMergeSorter((int[] array) -> {
 			MergeSort.sequentialMergeSort(array, new SequentialTestCombiner(array.length));

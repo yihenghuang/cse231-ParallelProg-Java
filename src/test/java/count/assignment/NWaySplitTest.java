@@ -24,56 +24,57 @@ package count.assignment;
 import static edu.wustl.cse231s.v5.V5.launchApp;
 import static edu.wustl.cse231s.v5.V5.numWorkerThreads;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import count.assignment.rubric.CountRubric;
 import count.core.NucleobaseCountUtils;
 import edu.wustl.cse231s.bioinformatics.Nucleobase;
 import edu.wustl.cse231s.bioinformatics.io.resource.ChromosomeResource;
+import edu.wustl.cse231s.junit.JUnitUtils;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  * 
  *         {@link NucleobaseCounting#countParallelNWaySplit(byte[], Nucleobase, int)}
  */
+@RunWith(Parameterized.class)
 @CountRubric(CountRubric.Category.NWAY)
 public class NWaySplitTest {
-	private static List<byte[]> chromosomes;
-	static {
-		chromosomes = new ArrayList<>(1);
-		chromosomes.add(ChromosomeResource.HOMO_SAPIENS_Y.getData());
+	private final byte[] chromosome;
+	private final Nucleobase targetNucleobase;
+	private final int numTasks;
+
+	public NWaySplitTest(ChromosomeResource chromosomeResource, Nucleobase targetNucleobase, int numTasks)
+			throws IOException {
+		this.chromosome = chromosomeResource.getData();
+		this.targetNucleobase = targetNucleobase;
+		this.numTasks = numTasks;
 	}
 
-	private void testNWayNucleobase(Nucleobase nucleobase) {
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	public void testNWay() {
+		int expectedCount = NucleobaseCountUtils.countSequential(chromosome, targetNucleobase);
 		launchApp(() -> {
-			int numWorkerThreads = numWorkerThreads();
-			for (int numTasks : new int[] { numWorkerThreads, numWorkerThreads * 2, numWorkerThreads * 10 }) {
-				for (byte[] chromosome : chromosomes) {
-					int expectedCount = NucleobaseCountUtils.countSequential(chromosome, nucleobase);
-					int actualCount = NucleobaseCounting.countParallelNWaySplit(chromosome, nucleobase, numTasks);
-					Assert.assertEquals(expectedCount, actualCount);
-				}
-			}
+			int actualCount = NucleobaseCounting.countParallelNWaySplit(chromosome, targetNucleobase, numTasks);
+			Assert.assertEquals(expectedCount, actualCount);
 		});
 	}
 
-	@Test
-	public void testNWay() {
-		for (Nucleobase nucleobase : Nucleobase.values()) {
-			if (nucleobase == Nucleobase.URACIL) {
-				// pass
-			} else {
-				this.testNWayNucleobase(nucleobase);
-			}
-		}
-	}
-
-	@Test
-	public void testNWayUracil() {
-		this.testNWayNucleobase(Nucleobase.URACIL);
+	@Parameters(name = "{0} {1} numTasks={2}")
+	public static Collection<Object[]> getConstructorArguments() {
+		int numWorkerThreads = numWorkerThreads();
+		List<Integer> list = Arrays.asList(numWorkerThreads, numWorkerThreads * 2, numWorkerThreads * 10, 71);
+		list.sort((a, b) -> a - b);
+		return JUnitUtils.toParameterizedArguments3(new ChromosomeResource[] { ChromosomeResource.HOMO_SAPIENS_Y },
+				Nucleobase.values(), list.toArray());
 	}
 }

@@ -29,6 +29,7 @@ import java.util.Collection;
 
 import org.junit.Test;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import util.lab.rubric.UtilRubric;
 
 /**
@@ -37,7 +38,7 @@ import util.lab.rubric.UtilRubric;
 @UtilRubric(UtilRubric.Category.LIST_UNCATEGORIZED)
 public class CollectionAddRemoveTest {
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void test() {
 		Collection<Integer> collection = new LinkedNodesCollection<>();
 

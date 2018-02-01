@@ -31,6 +31,7 @@ import org.junit.Test;
 
 import count.assignment.rubric.CountRubric;
 import edu.wustl.cse231s.bioinformatics.Nucleobase;
+import edu.wustl.cse231s.junit.JUnitUtils;
 import edu.wustl.cse231s.v5.api.CheckedRunnable;
 import edu.wustl.cse231s.v5.bookkeep.BookkeepingUtils;
 import edu.wustl.cse231s.v5.impl.BookkeepingV5Impl;
@@ -72,7 +73,7 @@ public class ParallelismTest {
 		return result;
 	}
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	@CountRubric(CountRubric.Category.LOWER_UPPER)
 	public void testUpperLower() {
 		Nucleobase nucleobase = Nucleobase.ADENINE;
@@ -82,7 +83,7 @@ public class ParallelismTest {
 		});
 	}
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	@CountRubric(CountRubric.Category.NWAY)
 	public void testNWaySplit() {
 		Nucleobase nucleobase = Nucleobase.ADENINE;

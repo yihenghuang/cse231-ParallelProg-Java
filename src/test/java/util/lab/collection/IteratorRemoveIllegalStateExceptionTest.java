@@ -31,11 +31,13 @@ import java.util.Iterator;
 
 import org.junit.Test;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
+
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class IteratorRemoveIllegalStateExceptionTest {
-	@Test(expected = IllegalStateException.class)
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT, expected = IllegalStateException.class)
 	public void testRemoveForEmpty() {
 		Collection<Void> collection = new LinkedNodesCollection<>();
 		Iterator<Void> iterator = collection.iterator();
@@ -43,7 +45,7 @@ public class IteratorRemoveIllegalStateExceptionTest {
 		iterator.remove();
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT, expected = IllegalStateException.class)
 	public void testRemoveAtBeginning() {
 		int value = 71;
 		Collection<Integer> collection = new LinkedNodesCollection<>();
@@ -53,7 +55,7 @@ public class IteratorRemoveIllegalStateExceptionTest {
 		iterator.remove();
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT, expected = IllegalStateException.class)
 	public void testRemoveTwice() {
 		Collection<Integer> collection = new LinkedNodesCollection<>();
 		collection.add(3);

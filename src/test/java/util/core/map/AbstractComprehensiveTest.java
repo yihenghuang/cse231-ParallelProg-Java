@@ -31,6 +31,8 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
+
 /**
  * @author Ben Choi (benjaminchoi@wustl.edu)
  */
@@ -38,7 +40,7 @@ import org.junit.Test;
 public abstract class AbstractComprehensiveTest {
 	protected abstract <K, V> Map<K, V> createMap();
 
-	@Test
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void test() {
 		Map<Integer, Double> map = this.createMap();
 
