@@ -23,11 +23,9 @@ package slice.studio;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import edu.wustl.cse231s.IntendedForStaticAccessOnlyError;
-import edu.wustl.cse231s.NotYetImplementedException;
 import slice.core.Slice;
 
 /**
@@ -36,15 +34,16 @@ import slice.core.Slice;
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class Slices {
+
 	private Slices() {
 		throw new IntendedForStaticAccessOnlyError();
 	}
 
 	/**
 	 * Should create a list of {@link Slice} objects of length numSlices. Each slice
-	 * in the returned result should be roughly data.length/numSlices in length. 
-	 * Any remaining data should be distributed one each to the front
-	 * slices. The sliceIndexId of each slice should be its index in the returned list.
+	 * in the returned result should be roughly data.length/numSlices in length. Any
+	 * remaining data should be distributed one each to the front slices. The
+	 * sliceIndexId of each slice should be its index in the returned list.
 	 * 
 	 * @param data
 	 *            the data to be broken up into a list of slices
@@ -53,7 +52,24 @@ public class Slices {
 	 * @return the created list of slices
 	 */
 	private static <T> List<Slice<T>> createNSlicesForArrayObject(T data, int numSlices) {
-		throw new NotYetImplementedException();
+		int totalNum = Array.getLength(data);
+		int leastNum = totalNum / numSlices;
+		int modeNum = totalNum % numSlices;
+		ArrayList<Slice<T>> finalVal = new ArrayList<Slice<T>>();
+
+		int start = 0;
+		for (int i = 0; i < numSlices; i++) {
+			if (i < modeNum) {
+				Slice<T> temp = new Slice<T>(data, i, start, start + leastNum + 1);
+				start += leastNum + 1;
+				finalVal.add(temp);
+			} else {
+				Slice<T> temp = new Slice<T>(data, i, start, start + leastNum);
+				start += leastNum;
+				finalVal.add(temp);
+			}
+		}
+		return finalVal;
 	}
 
 	public static <T> List<Slice<T[]>> createNSlices(T[] data, int numSlices) {
