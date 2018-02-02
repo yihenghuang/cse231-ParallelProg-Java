@@ -25,7 +25,6 @@ import java.util.AbstractCollection;
 import java.util.Deque;
 import java.util.Iterator;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import net.jcip.annotations.NotThreadSafe;
 
 /**
@@ -57,7 +56,7 @@ public class LinkedNodesCollection<E> extends AbstractCollection<E> {
 	 */
 	@Override
 	public Iterator<E> iterator() {
-		throw new NotYetImplementedException();
+		return new LinkedNodesIterator<E>(this);
 	}
 
 	/**
@@ -65,17 +64,21 @@ public class LinkedNodesCollection<E> extends AbstractCollection<E> {
 	 */
 	@Override
 	public int size() {
-		throw new NotYetImplementedException();
+		return size;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * Inserts item at the front of the collection as {{@link Deque#offerFirst(Object)}.
+	 * Inserts item at the front of the collection as
+	 * {{@link Deque#offerFirst(Object)}.
 	 */
 	@Override
 	public boolean add(E item) {
-		throw new NotYetImplementedException();
+		this.size++;
+		LinkedNode<E> temp = new LinkedNode<E>(item, this.head.getNext());
+		this.head.setNext(temp);
+		return true;
 	}
 
 	/* package-private */ LinkedNode<E> getHeadNode() {
