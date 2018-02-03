@@ -49,6 +49,7 @@ public class LinkedNodesCollection<E> extends AbstractCollection<E> {
 	public LinkedNodesCollection() {
 		size = 0;
 		head = new LinkedNode<E>(null, null);
+
 	}
 
 	/**

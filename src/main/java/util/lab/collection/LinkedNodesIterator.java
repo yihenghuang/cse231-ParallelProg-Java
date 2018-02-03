@@ -46,6 +46,7 @@ import net.jcip.annotations.NotThreadSafe;
 		Iterator<Integer> iterator = collection.iterator();
 		if (iterator.hasNext() == false) {
 			iterator.next();
+
 			return true;
 		}
 	}
