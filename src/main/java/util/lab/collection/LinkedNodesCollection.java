@@ -47,8 +47,8 @@ public class LinkedNodesCollection<E> extends AbstractCollection<E> {
 	 * safe.
 	 */
 	public LinkedNodesCollection() {
-		head = new LinkedNode<E>(null, null);
 		size = 0;
+		head = new LinkedNode<E>(null, null);
 	}
 
 	/**
@@ -75,8 +75,8 @@ public class LinkedNodesCollection<E> extends AbstractCollection<E> {
 	 */
 	@Override
 	public boolean add(E item) {
-		this.size++;
 		LinkedNode<E> temp = new LinkedNode<E>(item, this.head.getNext());
+		this.size++;
 		this.head.setNext(temp);
 		return true;
 	}

@@ -22,7 +22,6 @@
 package util.lab.collection;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 import edu.wustl.cse231s.NotYetImplementedException;
 import net.jcip.annotations.NotThreadSafe;
@@ -44,7 +43,11 @@ import net.jcip.annotations.NotThreadSafe;
 	 */
 	@Override
 	public boolean hasNext() {
-		throw new NotYetImplementedException();
+		Iterator<Integer> iterator = collection.iterator();
+		if (iterator.hasNext() == false) {
+			iterator.next();
+			return true;
+		}
 	}
 
 	/**
@@ -52,6 +55,7 @@ import net.jcip.annotations.NotThreadSafe;
 	 */
 	@Override
 	public E next() {
+
 		throw new NotYetImplementedException();
 	}
 
