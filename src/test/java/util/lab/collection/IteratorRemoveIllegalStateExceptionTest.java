@@ -32,10 +32,14 @@ import java.util.Iterator;
 import org.junit.Test;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
+import util.lab.rubric.UtilRubric;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link LinkedNodesIterator#remove()}
  */
+@UtilRubric(UtilRubric.Category.ITERATOR_REMOVE)
 public class IteratorRemoveIllegalStateExceptionTest {
 	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT, expected = IllegalStateException.class)
 	public void testRemoveForEmpty() {

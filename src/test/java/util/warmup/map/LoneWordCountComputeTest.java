@@ -22,11 +22,13 @@
 package util.warmup.map;
 
 import java.util.Map;
+
 import util.core.map.AbstractWordCountComputeTest;
-import util.warmup.map.LoneCollectionMap;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link LoneCollectionMap}
  */
 public class LoneWordCountComputeTest extends AbstractWordCountComputeTest {
 	@Override

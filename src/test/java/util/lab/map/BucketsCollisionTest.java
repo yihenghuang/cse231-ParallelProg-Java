@@ -22,12 +22,14 @@
 package util.lab.map;
 
 import java.util.Map;
+
 import util.core.map.AbstractCollisionTest;
-import util.lab.map.BucketsHashMap;
 import util.lab.rubric.UtilRubric;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link BucketsHashMap}
  */
 @UtilRubric(UtilRubric.Category.MAP_UNCATEGORIZED)
 public class BucketsCollisionTest extends AbstractCollisionTest {

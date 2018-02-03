@@ -25,8 +25,10 @@ import util.lab.rubric.UtilRubric;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link LinkedNodesIterator#remove()}
  */
-@UtilRubric(UtilRubric.Category.LIST_REMOVE)
+@UtilRubric(UtilRubric.Category.ITERATOR_REMOVE)
 public class NonPrimitiveComprehensiveRemoveTest extends AbstractComprehensiveRemoveTest<String> {
 	@Override
 	protected String createItem(char c) {

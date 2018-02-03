@@ -28,6 +28,8 @@ import util.lab.rubric.UtilRubric;
 
 /**
  * @author Ben Choi (benjaminchoi@wustl.edu)
+ * 
+ *         {@link BucketsHashMap}
  */
 @UtilRubric(UtilRubric.Category.MAP_UNCATEGORIZED)
 public class BucketsComprehensiveTest extends AbstractComprehensiveTest {

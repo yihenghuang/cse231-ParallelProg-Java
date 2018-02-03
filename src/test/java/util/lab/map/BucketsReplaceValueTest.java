@@ -28,6 +28,8 @@ import util.lab.rubric.UtilRubric;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link BucketsHashMap#put(Object,Object)}
  */
 @UtilRubric(UtilRubric.Category.MAP_PUT)
 public class BucketsReplaceValueTest extends AbstractReplaceValueTest {

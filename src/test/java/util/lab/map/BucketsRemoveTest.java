@@ -28,6 +28,8 @@ import util.lab.rubric.UtilRubric;
 
 /**
  * @author Ben Choi (benjaminchoi@wustl.edu)
+ * 
+ *         {@link BucketsHashMap#remove(Object)}
  */
 @UtilRubric(UtilRubric.Category.MAP_REMOVE)
 public class BucketsRemoveTest extends AbstractRemoveTest {

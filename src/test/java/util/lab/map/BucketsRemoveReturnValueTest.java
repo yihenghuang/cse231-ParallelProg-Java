@@ -19,32 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package util.lab.collection;
+package util.lab.map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import java.util.Map;
 
-import org.junit.Test;
-
-import edu.wustl.cse231s.junit.JUnitUtils;
+import util.core.map.AbstractRemoveReturnValueTest;
 import util.lab.rubric.UtilRubric;
 
 /**
- * @author Ben Choi (benjaminchoi@wustl.edu)
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link BucketsHashMap#remove(Object)}
  */
-@UtilRubric(UtilRubric.Category.LIST_ADD_FIRST)
-public class PutTest {
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
-	public void test() {
-		LinkedNodesCollection<Integer> list = new LinkedNodesCollection<Integer>();
-		for (int i = 1; i < 4; ++i) {
-			assertTrue("You are not adding to the list", list.add(i));
-		}
-		Integer count = 3;
-		for (Integer num : list) {
-			assertEquals("Your list is not putting in the correct item value", count, num);
-			--count;
-		}
+@UtilRubric(UtilRubric.Category.MAP_REMOVE)
+public class BucketsRemoveReturnValueTest extends AbstractRemoveReturnValueTest {
+	@Override
+	protected <K, V> Map<K, V> createMap() {
+		return new BucketsHashMap<>();
 	}
-
 }

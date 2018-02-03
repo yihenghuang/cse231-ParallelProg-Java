@@ -27,8 +27,9 @@ import util.warmup.map.LoneCollectionMap;
 
 /**
  * @author Ben Choi (benjaminchoi@wustl.edu)
+ * 
+ *         {@link LoneCollectionMap#put(Object, Object)}
  */
-
 public class LonePutTest extends AbstractPutTest {
 	@Override
 	protected <K, V> Map<K, V> createMap() {

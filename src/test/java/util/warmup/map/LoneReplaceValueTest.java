@@ -27,6 +27,8 @@ import util.warmup.map.LoneCollectionMap;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link LoneCollectionMap#put(Object, Object)}
  */
 public class LoneReplaceValueTest extends AbstractReplaceValueTest {
 	@Override

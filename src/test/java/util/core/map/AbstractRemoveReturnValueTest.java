@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2017 Dennis Cosgrove
+ * Copyright (C) 2016-2017 Dennis Cosgrove, Ben Choi
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,20 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package util.warmup.map;
+package util.core.map;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.Map;
 
-import util.core.map.AbstractEqualsTest;
+import org.junit.Test;
+
+import edu.wustl.cse231s.junit.JUnitUtils;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
- * 
- *         {@link LoneCollectionMap}
  */
-public class LoneEqualsTest extends AbstractEqualsTest {
-	@Override
-	protected <K, V> Map<K, V> createMap() {
-		return new LoneCollectionMap<>();
+public abstract class AbstractRemoveReturnValueTest {
+
+	protected abstract <K, V> Map<K, V> createMap();
+
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	public void test() {
+		String key = "Paddington";
+		String value = "Peru";
+		Map<String, String> map = this.createMap();
+		assertNull(map.remove(key));
+		map.put(key, value);
+		assertEquals(value, map.remove(key));
+		assertNull(map.get(key));
 	}
+
 }

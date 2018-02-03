@@ -30,7 +30,7 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UtilRubric {
 	public static enum SuperCatergory {
-		LIST("SinglyLinkedList subtotal"), MAP("ArrayOfBucketsHashMap subtotal");
+		ITERATOR("LinkedNodesIterator subtotal"), COLLECTION("LinkedNodesCollection subtotal"), MAP("BucketsHashMap subtotal");
 
 		private final String title;
 
@@ -44,19 +44,17 @@ public @interface UtilRubric {
 	}
 
 	public static enum Category {
-		LIST_SIZE(SuperCatergory.LIST, "Correct size"),
-		LIST_IS_EMPTY(SuperCatergory.LIST, "Correct isEmpty"),
-		LIST_ADD_FIRST(SuperCatergory.LIST, "Correct addFirst"),
-		LIST_REMOVE(SuperCatergory.LIST, "Correct remove"),
-		LIST_GET(SuperCatergory.LIST, "Correct get"),
-		LIST_INDEX_OF(SuperCatergory.LIST, "Correct indexOf"),
-		LIST_UNCATEGORIZED(SuperCatergory.LIST, null),
+		ITERATOR_HAS_NEXT(SuperCatergory.ITERATOR, "Correct hasNext"),
+		ITERATOR_NEXT(SuperCatergory.ITERATOR, "Correct next"),
+		ITERATOR_REMOVE(SuperCatergory.ITERATOR, "Correct remove"),
+		COLLECTION_ITERATOR(SuperCatergory.COLLECTION, "Correct iterator"),
+		COLLECTION_SIZE(SuperCatergory.COLLECTION, "Correct size"),
+		COLLECTION_ADD(SuperCatergory.COLLECTION, "Correct add"),
+		COLLECTION_UNCATEGORIZED(SuperCatergory.COLLECTION, null),
 		MAP_SIZE(SuperCatergory.MAP, "Correct size"),
-		MAP_IS_EMPTY(SuperCatergory.MAP, "Correct isEmpty"),
 		MAP_PUT(SuperCatergory.MAP, "Correct put"),
 		MAP_REMOVE(SuperCatergory.MAP, "Correct remove"),
 		MAP_GET(SuperCatergory.MAP, "Correct get"),
-		MAP_COMPUTE(SuperCatergory.MAP, "Correct compute"),
 		MAP_UNCATEGORIZED(SuperCatergory.MAP, null);
 
 		private final SuperCatergory superCatergory;

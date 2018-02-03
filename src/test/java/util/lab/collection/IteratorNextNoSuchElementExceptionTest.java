@@ -33,10 +33,14 @@ import java.util.NoSuchElementException;
 import org.junit.Test;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
+import util.lab.rubric.UtilRubric;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link LinkedNodesIterator#next()}
  */
+@UtilRubric(UtilRubric.Category.ITERATOR_NEXT)
 public class IteratorNextNoSuchElementExceptionTest {
 	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT, expected = NoSuchElementException.class)
 	public void testNextForEmpty() {

@@ -36,8 +36,10 @@ import util.lab.rubric.UtilRubric;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link LinkedNodesCollection}
  */
-@UtilRubric(UtilRubric.Category.LIST_UNCATEGORIZED)
+@UtilRubric(UtilRubric.Category.COLLECTION_UNCATEGORIZED)
 public class EqualsTest {
 	private Collection<Integer> createBoxedPrimitiveList() {
 		Collection<Integer> list = new LinkedNodesCollection<>();

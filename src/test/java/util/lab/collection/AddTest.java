@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2017 Dennis Cosgrove
+ * Copyright (C) 2016-2017 Dennis Cosgrove, Ben Choi
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,20 +19,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package util.warmup.map;
+package util.lab.collection;
 
-import java.util.Map;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import util.core.map.AbstractEqualsTest;
+import org.junit.Test;
+
+import edu.wustl.cse231s.junit.JUnitUtils;
+import util.lab.rubric.UtilRubric;
 
 /**
- * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * @author Ben Choi (benjaminchoi@wustl.edu)
  * 
- *         {@link LoneCollectionMap}
+ *         {@link LinkedNodesCollection#add(Object)}
  */
-public class LoneEqualsTest extends AbstractEqualsTest {
-	@Override
-	protected <K, V> Map<K, V> createMap() {
-		return new LoneCollectionMap<>();
+@UtilRubric(UtilRubric.Category.COLLECTION_ADD)
+public class AddTest {
+	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	public void test() {
+		LinkedNodesCollection<Integer> list = new LinkedNodesCollection<Integer>();
+		for (int i = 1; i < 4; ++i) {
+			assertTrue("You are not adding to the list", list.add(i));
+		}
+		Integer count = 3;
+		for (Integer num : list) {
+			assertEquals("Your list is not putting in the correct item value", count, num);
+			--count;
+		}
 	}
+
 }

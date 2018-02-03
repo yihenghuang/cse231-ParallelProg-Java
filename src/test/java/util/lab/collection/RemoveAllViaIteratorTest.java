@@ -34,10 +34,14 @@ import org.junit.Test;
 import com.google.common.collect.Lists;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
+import util.lab.rubric.UtilRubric;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link LinkedNodesIterator#remove()}
  */
+@UtilRubric(UtilRubric.Category.ITERATOR_REMOVE)
 public class RemoveAllViaIteratorTest {
 	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void test() {

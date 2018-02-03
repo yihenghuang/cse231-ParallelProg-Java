@@ -27,8 +27,9 @@ import util.warmup.map.LoneCollectionMap;
 
 /**
  * @author Ben Choi (benjaminchoi@wustl.edu)
+ * 
+ *         {@link LoneCollectionMap#remove(Object)}
  */
-
 public class LoneRemoveTest extends AbstractRemoveTest {
 	@Override
 	protected <K, V> Map<K, V> createMap() {

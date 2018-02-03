@@ -28,6 +28,8 @@ import util.lab.rubric.UtilRubric;
 
 /**
  * @author Ben Choi (benjaminchoi@wustl.edu)
+ * 
+ *         {@link BucketsHashMap#put(Object, Object)}
  */
 @UtilRubric(UtilRubric.Category.MAP_PUT)
 public class BucketsPutTest extends AbstractPutTest {

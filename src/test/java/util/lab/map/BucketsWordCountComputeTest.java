@@ -22,14 +22,16 @@
 package util.lab.map;
 
 import java.util.Map;
+
 import util.core.map.AbstractWordCountComputeTest;
-import util.lab.map.BucketsHashMap;
 import util.lab.rubric.UtilRubric;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link BucketsHashMap}
  */
-@UtilRubric(UtilRubric.Category.MAP_COMPUTE)
+@UtilRubric(UtilRubric.Category.MAP_UNCATEGORIZED)
 public class BucketsWordCountComputeTest extends AbstractWordCountComputeTest {
 	@Override
 	protected <K, V> Map<K, V> createMap() {

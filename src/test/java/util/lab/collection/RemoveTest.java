@@ -21,18 +21,19 @@
  ******************************************************************************/
 package util.lab.collection;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
-import util.lab.collection.LinkedNodesCollection;
 import util.lab.rubric.UtilRubric;
 
 /**
  * @author Ben Choi (benjaminchoi@wustl.edu)
+ * 
+ *         {@link LinkedNodesIterator#remove()}
  */
-@UtilRubric(UtilRubric.Category.LIST_REMOVE)
+@UtilRubric(UtilRubric.Category.ITERATOR_REMOVE)
 public class RemoveTest {
 
 	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)

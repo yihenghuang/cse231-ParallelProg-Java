@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2017 Dennis Cosgrove
+ * Copyright (C) 2016-2017 Dennis Cosgrove, Ben Choi
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,20 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package util.warmup.map;
+package util.lab.map;
 
 import java.util.Map;
 
-import util.core.map.AbstractEqualsTest;
+import util.core.map.AbstractPutReturnValueTest;
+import util.lab.rubric.UtilRubric;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  * 
- *         {@link LoneCollectionMap}
+ *         {@link BucketsHashMap#put(Object, Object)}
  */
-public class LoneEqualsTest extends AbstractEqualsTest {
+@UtilRubric(UtilRubric.Category.MAP_PUT)
+public class BucketsPutReturnValueTest extends AbstractPutReturnValueTest {
 	@Override
 	protected <K, V> Map<K, V> createMap() {
-		return new LoneCollectionMap<>();
+		return new BucketsHashMap<>();
 	}
 }

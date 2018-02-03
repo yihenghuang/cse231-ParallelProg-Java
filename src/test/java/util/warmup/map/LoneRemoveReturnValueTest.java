@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2017 Dennis Cosgrove
+ * Copyright (C) 2016-2017 Dennis Cosgrove, Ben Choi
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,14 +23,14 @@ package util.warmup.map;
 
 import java.util.Map;
 
-import util.core.map.AbstractEqualsTest;
+import util.core.map.AbstractRemoveReturnValueTest;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  * 
- *         {@link LoneCollectionMap}
+ *         {@link LoneCollectionMap#remove(Object)}
  */
-public class LoneEqualsTest extends AbstractEqualsTest {
+public class LoneRemoveReturnValueTest extends AbstractRemoveReturnValueTest {
 	@Override
 	protected <K, V> Map<K, V> createMap() {
 		return new LoneCollectionMap<>();

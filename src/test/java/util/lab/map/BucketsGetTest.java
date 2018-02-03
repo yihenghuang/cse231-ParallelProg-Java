@@ -28,6 +28,8 @@ import util.lab.rubric.UtilRubric;
 
 /**
  * @author Ben Choi (benjaminchoi@wustl.edu)
+ * 
+ *         {@link BucketsHashMap#get(Object)}
  */
 @UtilRubric(UtilRubric.Category.MAP_GET)
 public class BucketsGetTest extends AbstractGetTest {

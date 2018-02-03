@@ -34,8 +34,10 @@ import util.lab.rubric.UtilRubric;
 
 /**
  * @author Ben Choi (benjaminchoi@wustl.edu)
+ * 
+ *         {@link LinkedNodesCollection}
  */
-@UtilRubric(UtilRubric.Category.LIST_UNCATEGORIZED)
+@UtilRubric(UtilRubric.Category.COLLECTION_UNCATEGORIZED)
 public class CollectionAddRemoveTest {
 
 	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
