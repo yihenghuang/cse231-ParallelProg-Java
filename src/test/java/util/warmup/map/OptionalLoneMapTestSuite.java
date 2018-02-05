@@ -31,6 +31,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ LonePutTest.class, LonePutReturnValueTest.class, LoneRemoveTest.class,
 		LoneRemoveReturnValueTest.class, LoneGetTest.class, LoneCollisionTest.class, LoneComputeTest.class,
-		LoneWordCountComputeTest.class, LoneEqualsTest.class, LoneComprehensiveTest.class, })
+		LoneWordCountComputeTest.class, LoneEqualsTest.class, LoneComprehensiveTest.class,
+		LoneSizeAfterRemoveTest.class })
 public class OptionalLoneMapTestSuite {
 }

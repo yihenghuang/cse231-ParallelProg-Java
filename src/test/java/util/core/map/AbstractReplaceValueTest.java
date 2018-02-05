@@ -42,4 +42,19 @@ public abstract class AbstractReplaceValueTest {
 		Assert.assertNotEquals("Peru", mapNameToPlace.get(bearName));
 		Assert.assertEquals("London", mapNameToPlace.get(bearName));
 	}
+
+	@Test
+	public void testPutReplaceWithSameValue() {
+		Map<String, String> mapNameToPlace = this.createMap();
+		String key = "A";
+		String value = "B";
+		
+		mapNameToPlace.put(key, value);
+		Assert.assertEquals(1, mapNameToPlace.size());
+		Assert.assertEquals(value, mapNameToPlace.get(key));
+
+		mapNameToPlace.put(key, value);
+		Assert.assertEquals(1, mapNameToPlace.size());
+		Assert.assertEquals(value, mapNameToPlace.get(key));
+	}
 }
