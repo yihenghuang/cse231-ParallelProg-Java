@@ -31,7 +31,7 @@ import edu.wustl.cse231s.goldenratio.GoldenRatioUtils;
 import fibonacci.core.FibonacciCalculator;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class RoundPhiToTheNOverSqrt5SequentialFibonacciCalculator implements FibonacciCalculator {
