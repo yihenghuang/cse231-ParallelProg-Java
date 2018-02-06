@@ -22,12 +22,17 @@
 package edu.wustl.cse231s.v5.impl.executor;
 
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import edu.wustl.cse231s.v5.api.CheckedCallable;
 import edu.wustl.cse231s.v5.api.CheckedRunnable;
 import edu.wustl.cse231s.v5.impl.BookkeepingV5Impl;
 
-public class BookkeepingExecutorXV5Impl extends ExecutorV5Impl implements BookkeepingV5Impl {
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
+public class BookkeepingExecutorXV5Impl extends MetricsExecutorV5Impl implements BookkeepingV5Impl {
 	private final AtomicInteger launchInvocationCount = new AtomicInteger(0);
 
 	private final AtomicInteger asyncInvocationCount = new AtomicInteger(0);
@@ -39,12 +44,14 @@ public class BookkeepingExecutorXV5Impl extends ExecutorV5Impl implements Bookke
 	private final AtomicInteger forasync2dRegionInvocationCount = new AtomicInteger(0);
 	private final AtomicInteger forasync2dRegionChunkedInvocationCount = new AtomicInteger(0);
 
+	private final AtomicInteger futureInvocationCount = new AtomicInteger(0);
+
 	@Override
 	public void launch(CheckedRunnable body) throws InterruptedException, ExecutionException {
 		super.launch(body);
 		launchInvocationCount.incrementAndGet();
 	}
-	
+
 	@Override
 	public void async(CheckedRunnable body) {
 		super.async(body);
@@ -57,6 +64,13 @@ public class BookkeepingExecutorXV5Impl extends ExecutorV5Impl implements Bookke
 		finishInvocationCount.incrementAndGet();
 	}
 
+	@Override
+	public <R> Future<R> future(CheckedCallable<R> body) {
+		 Future<R> result = super.future(body);
+		 futureInvocationCount.incrementAndGet();
+		 return result;
+	}
+	
 	// @Override
 	// public void forasync(HjRegion1D hjRegion, HjSuspendingProcedureInt1D
 	// body) throws SuspendableException {
@@ -102,7 +116,7 @@ public class BookkeepingExecutorXV5Impl extends ExecutorV5Impl implements Bookke
 	public int getLaunchInvocationCount() {
 		return launchInvocationCount.get();
 	}
-	
+
 	@Override
 	public int getAsyncInvocationCount() {
 		return asyncInvocationCount.get();
@@ -135,14 +149,21 @@ public class BookkeepingExecutorXV5Impl extends ExecutorV5Impl implements Bookke
 
 	@Override
 	public int getTaskCount() {
+		//TODO: futureInvocationCount?
 		return asyncInvocationCount.get() + asyncViaForasyncRegionCount.get() + asyncAvoidedInContinuationCount.get();
 	}
 
+	@Override
+	public int getFutureInvocationCount() {
+		return futureInvocationCount.get();
+	}
+	
 	@Override
 	public void resetAllInvocationCounts() {
 		asyncInvocationCount.set(0);
 		finishInvocationCount.set(0);
 		forasyncRegionInvovationCount.set(0);
 		asyncViaForasyncRegionCount.set(0);
+		futureInvocationCount.set(0);
 	}
 }

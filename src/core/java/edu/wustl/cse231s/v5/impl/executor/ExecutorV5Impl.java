@@ -35,10 +35,14 @@ import java.util.concurrent.Future;
 import edu.wustl.cse231s.v5.api.CheckedCallable;
 import edu.wustl.cse231s.v5.api.CheckedIntConsumer;
 import edu.wustl.cse231s.v5.api.CheckedRunnable;
+import edu.wustl.cse231s.v5.api.Metrics;
 import edu.wustl.cse231s.v5.impl.AbstractV5Impl;
 import edu.wustl.cse231s.v5.options.AwaitFuturesOption;
 import edu.wustl.cse231s.v5.options.PhasedEmptyOption;
 
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
 public class ExecutorV5Impl extends AbstractV5Impl {
 	private static ExecutorService executorService = ForkJoinPool.commonPool();
 	private static final ThreadLocal<Deque<FinishContext>> contextStack = ThreadLocal.withInitial(() -> {
@@ -147,5 +151,20 @@ public class ExecutorV5Impl extends AbstractV5Impl {
 	
 	@Override
 	public void doWork(long n) {
+	}
+	
+	@Override
+	public Metrics getMetrics() {
+		return new Metrics() {
+			@Override
+			public long totalWork() {
+				throw new UnsupportedOperationException();
+			}
+			
+			@Override
+			public long criticalPathLength() {
+				throw new UnsupportedOperationException();
+			}
+		};
 	}
 }

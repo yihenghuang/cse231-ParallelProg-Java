@@ -29,10 +29,14 @@ import edu.wustl.cse231s.v5.api.CheckedConsumer;
 import edu.wustl.cse231s.v5.api.CheckedIntConsumer;
 import edu.wustl.cse231s.v5.api.CheckedIntIntConsumer;
 import edu.wustl.cse231s.v5.api.CheckedRunnable;
+import edu.wustl.cse231s.v5.api.Metrics;
 import edu.wustl.cse231s.v5.options.AwaitFuturesOption;
 import edu.wustl.cse231s.v5.options.ChunkedOption;
 import edu.wustl.cse231s.v5.options.PhasedEmptyOption;
 
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
 public interface V5Impl {
 	void launch(CheckedRunnable body) throws InterruptedException, ExecutionException;
 
@@ -119,4 +123,6 @@ public interface V5Impl {
 	<R> Future<R> future(AwaitFuturesOption awaitFuturesOption, CheckedCallable<R> body);
 	
 	void doWork(long n);
+	
+	Metrics getMetrics();
 }

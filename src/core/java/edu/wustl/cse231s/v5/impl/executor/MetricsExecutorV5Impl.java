@@ -19,13 +19,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *******************************************************************************/
-package edu.wustl.cse231s.v5.api;
+package edu.wustl.cse231s.v5.impl.executor;
 
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicLong;
+
+import edu.wustl.cse231s.v5.api.Metrics;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-public interface CheckedIntIntConsumer {
-	void accept(int i, int j) throws InterruptedException, ExecutionException;
+public class MetricsExecutorV5Impl extends ExecutorV5Impl {
+	private static class WorkMetrics implements Metrics {
+		private final long totalWork;
+
+		public WorkMetrics(long totalWork) {
+			this.totalWork = totalWork;
+		}
+
+		@Override
+		public long totalWork() {
+			return totalWork;
+		}
+
+		@Override
+		public long criticalPathLength() {
+			throw new UnsupportedOperationException();
+		}
+	}
+
+	private final AtomicLong work = new AtomicLong();
+
+	@Override
+	public void doWork(long n) {
+		work.addAndGet(n);
+	}
+
+	@Override
+	public Metrics getMetrics() {
+		return new WorkMetrics(work.get());
+	}
 }

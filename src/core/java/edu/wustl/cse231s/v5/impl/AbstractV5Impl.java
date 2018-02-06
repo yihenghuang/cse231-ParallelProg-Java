@@ -31,6 +31,9 @@ import edu.wustl.cse231s.v5.options.AwaitFuturesOption;
 import edu.wustl.cse231s.v5.options.ChunkedOption;
 import edu.wustl.cse231s.v5.options.PhasedEmptyOption;
 
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
 public abstract class AbstractV5Impl implements V5Impl {
 	@Override
 	public void launch(CheckedRunnable body) throws InterruptedException, ExecutionException {

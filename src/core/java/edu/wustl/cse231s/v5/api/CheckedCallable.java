@@ -24,6 +24,9 @@ package edu.wustl.cse231s.v5.api;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
 public interface CheckedCallable<V> extends Callable<V> {
 	V call() throws InterruptedException, ExecutionException;
 }

@@ -23,6 +23,9 @@ package edu.wustl.cse231s.v5.api;
 
 import java.util.concurrent.ExecutionException;
 
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
 public interface CheckedIntConsumer {
 	void accept(int t) throws InterruptedException, ExecutionException;
 }

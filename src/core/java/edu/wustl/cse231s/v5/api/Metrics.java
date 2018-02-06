@@ -21,12 +21,10 @@
  *******************************************************************************/
 package edu.wustl.cse231s.v5.api;
 
-public class Metrics {
-	public long criticalPathLength() {
-		throw new RuntimeException();
-	}
-
-	public long totalWork() {
-		throw new RuntimeException();
-	}
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
+public interface Metrics {
+	long criticalPathLength();
+	long totalWork();
 }

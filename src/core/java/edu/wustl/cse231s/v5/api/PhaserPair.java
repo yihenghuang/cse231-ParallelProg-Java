@@ -23,6 +23,9 @@ package edu.wustl.cse231s.v5.api;
 
 import java.util.concurrent.Phaser;
 
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
 public class PhaserPair {
 	private final Phaser phaser;
 	private final PhaserMode phaserMode;
