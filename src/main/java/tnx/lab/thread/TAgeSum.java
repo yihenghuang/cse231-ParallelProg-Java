@@ -29,7 +29,7 @@ import edu.wustl.cse231s.NotYetImplementedException;
  * An parallel array sum implementation that uses Java's {@link Thread} class to
  * sum each half of the array individually.
  * 
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class TAgeSum {
