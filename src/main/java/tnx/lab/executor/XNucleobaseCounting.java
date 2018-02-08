@@ -40,7 +40,7 @@ import slice.studio.Slices;
  * A parallel nucleobase counter that uses Java's {@link ExecutorService}
  * interface to count different sections of the chromosome in parallel.
  * 
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Finn Voichick
  */
 public class XNucleobaseCounting {
