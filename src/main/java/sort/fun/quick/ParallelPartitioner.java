@@ -32,7 +32,7 @@ import sort.core.quick.PivotLocation;
 import sort.core.quick.SequentialPartitioner;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class ParallelPartitioner implements Partitioner {
