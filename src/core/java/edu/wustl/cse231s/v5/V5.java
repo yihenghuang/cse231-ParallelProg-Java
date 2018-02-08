@@ -57,11 +57,16 @@ public class V5 {
 	private static AtomicReference<V5Impl> implAtom = new AtomicReference<V5Impl>(null);
 
 	private static V5Impl getImpl() {
-		return implAtom.get();
+		V5Impl impl = implAtom.get();
+		if (impl != null) {
+			return impl;
+		} else {
+			throw new IllegalStateException("launchApp() required");
+		}
 	}
 
 	private static void launch(CheckedRunnable body) throws InterruptedException, ExecutionException {
-		getImpl().launch(body);
+		implAtom.get().launch(body);
 	}
 
 	public static void launchApp(CheckedRunnable body) {
@@ -97,7 +102,7 @@ public class V5 {
 		// getImpl().launchHabaneroApp(systemPropertiesOption, body,
 		// preFinalizeCallback);
 	}
-	
+
 	public static void finish(CheckedRunnable body) throws InterruptedException, ExecutionException {
 		getImpl().finish(body);
 	}
@@ -243,12 +248,13 @@ public class V5 {
 		getImpl().forall(phasedEmptyOption, min, maxExclusive, body);
 	}
 
-	public static boolean isLaunched() {
-		return getImpl() != null;
+	public static int numWorkerThreads() {
+		// TODO
+		return Runtime.getRuntime().availableProcessors();
 	}
 
-	public static int numWorkerThreads() {
-		return Runtime.getRuntime().availableProcessors();
+	public static boolean isLaunched() {
+		return implAtom.get() != null;
 	}
 
 	public static void doWork(long n) {
