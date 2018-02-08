@@ -31,7 +31,7 @@ import edu.wustl.cse231s.NotYetImplementedException;
  * what code would be necessary for you to write if you aren't given a
  * ThreadFactory.
  * 
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class SimpleThreadFactory implements ThreadFactory {
