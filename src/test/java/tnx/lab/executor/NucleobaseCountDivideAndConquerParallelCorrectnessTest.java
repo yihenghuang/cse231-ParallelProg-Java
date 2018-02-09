@@ -77,10 +77,14 @@ public class NucleobaseCountDivideAndConquerParallelCorrectnessTest extends Abst
 	}
 
 	private static Map<Integer, List<Integer>> hardCodedSubmitCountsMap = new TreeMap<>();
+	
+	private static List<Integer> createAcceptableSubmitCountsList(int value) {
+		return Arrays.asList(value, value*2);
+	}
 	static {
-		hardCodedSubmitCountsMap.put(12, Arrays.asList(15));
-		hardCodedSubmitCountsMap.put(71, Arrays.asList(127));
-		hardCodedSubmitCountsMap.put(231, Arrays.asList(255));
+		hardCodedSubmitCountsMap.put(12, createAcceptableSubmitCountsList(15));
+		hardCodedSubmitCountsMap.put(71, createAcceptableSubmitCountsList(127));
+		hardCodedSubmitCountsMap.put(231, createAcceptableSubmitCountsList(255));
 	}
 
 	@Parameters(name = "{0}, threshold=chromosome.length/{1}")
