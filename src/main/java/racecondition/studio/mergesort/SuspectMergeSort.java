@@ -30,7 +30,7 @@ import sort.core.merge.Combiner;
 import sort.studio.merge.MergeSort;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  * 
  *         {@link MergeSort}
