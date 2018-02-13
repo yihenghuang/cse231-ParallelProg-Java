@@ -233,21 +233,6 @@ public class V5 {
 		getImpl().forall2d(chunkedOption, minA, maxExclusiveA, minB, maxExclusiveB, body);
 	}
 
-	public static void forseq(PhasedEmptyOption phasedEmptyOption, int min, int maxExclusive, CheckedIntConsumer body)
-			throws InterruptedException, ExecutionException {
-		getImpl().forseq(phasedEmptyOption, min, maxExclusive, body);
-	}
-
-	public static void forasync(PhasedEmptyOption phasedEmptyOption, int min, int maxExclusive, CheckedIntConsumer body)
-			throws InterruptedException, ExecutionException {
-		getImpl().forasync(phasedEmptyOption, min, maxExclusive, body);
-	}
-
-	public static void forall(PhasedEmptyOption phasedEmptyOption, int min, int maxExclusive, CheckedIntConsumer body)
-			throws InterruptedException, ExecutionException {
-		getImpl().forall(phasedEmptyOption, min, maxExclusive, body);
-	}
-
 	public static int numWorkerThreads() {
 		// TODO
 		return Runtime.getRuntime().availableProcessors();
@@ -379,6 +364,24 @@ public class V5 {
 
 	public static <T> FinishAccumulator<T> newReducerFinishAccumulator(AccumulatorReducer<T> reducer) {
 		return newReducerFinishAccumulator(reducer, ContentionLevel.HIGH);
+	}
+
+	@Deprecated
+	public static void forseq(PhasedEmptyOption phasedEmptyOption, int min, int maxExclusive, CheckedIntConsumer body)
+			throws InterruptedException, ExecutionException {
+		throw new UnsupportedOperationException();
+	}
+
+	@Deprecated
+	public static void forasync(PhasedEmptyOption phasedEmptyOption, int min, int maxExclusive, CheckedIntConsumer body)
+			throws InterruptedException, ExecutionException {
+		throw new UnsupportedOperationException();
+	}
+
+	@Deprecated
+	public static void forall(PhasedEmptyOption phasedEmptyOption, int min, int maxExclusive, CheckedIntConsumer body)
+			throws InterruptedException, ExecutionException {
+		throw new UnsupportedOperationException();
 	}
 
 	@Deprecated

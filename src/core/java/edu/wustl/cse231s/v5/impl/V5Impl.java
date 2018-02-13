@@ -32,7 +32,6 @@ import edu.wustl.cse231s.v5.api.CheckedRunnable;
 import edu.wustl.cse231s.v5.api.Metrics;
 import edu.wustl.cse231s.v5.options.AwaitFuturesOption;
 import edu.wustl.cse231s.v5.options.ChunkedOption;
-import edu.wustl.cse231s.v5.options.PhasedEmptyOption;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
@@ -109,20 +108,11 @@ public interface V5Impl {
 	void forall2d(ChunkedOption chunkedOption, int minA, int maxExclusiveA, int minB, int maxExclusiveB,
 			CheckedIntIntConsumer body) throws InterruptedException, ExecutionException;
 
-	void forseq(PhasedEmptyOption phasedEmptyOption, int min, int maxExclusive, CheckedIntConsumer body)
-			throws InterruptedException, ExecutionException;
-
-	void forasync(PhasedEmptyOption phasedEmptyOption, int min, int maxExclusive, CheckedIntConsumer body)
-			throws InterruptedException, ExecutionException;
-
-	void forall(PhasedEmptyOption phasedEmptyOption, int min, int maxExclusive, CheckedIntConsumer body)
-			throws InterruptedException, ExecutionException;
-
 	void async(AwaitFuturesOption awaitFuturesOption, CheckedRunnable body);
 
 	<R> Future<R> future(AwaitFuturesOption awaitFuturesOption, CheckedCallable<R> body);
-	
+
 	void doWork(long n);
-	
+
 	Metrics getMetrics();
 }

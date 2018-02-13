@@ -24,7 +24,9 @@ package edu.wustl.cse231s.v5.impl.executor;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Queue;
+import java.util.Spliterator;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
@@ -33,12 +35,11 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
 
 import edu.wustl.cse231s.v5.api.CheckedCallable;
-import edu.wustl.cse231s.v5.api.CheckedIntConsumer;
+import edu.wustl.cse231s.v5.api.CheckedConsumer;
 import edu.wustl.cse231s.v5.api.CheckedRunnable;
 import edu.wustl.cse231s.v5.api.Metrics;
 import edu.wustl.cse231s.v5.impl.AbstractV5Impl;
 import edu.wustl.cse231s.v5.options.AwaitFuturesOption;
-import edu.wustl.cse231s.v5.options.PhasedEmptyOption;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
@@ -80,9 +81,7 @@ public class ExecutorV5Impl extends AbstractV5Impl {
 		}
 	}
 
-	@Override
-	public void async(CheckedRunnable body) {
-		FinishContext context = contextStack.get().peek();
+	private void asyncRunnable(FinishContext context, CheckedRunnable body) {
 		Future<Void> task = executorService.submit(() -> {
 			Deque<FinishContext> stack = contextStack.get();
 			stack.push(context);
@@ -94,6 +93,128 @@ public class ExecutorV5Impl extends AbstractV5Impl {
 			return null;
 		});
 		context.offerTask(task);
+	}
+
+	private void asyncRangeOfTasks(FinishContext context, CheckedRunnable[] tasks, int min, int maxExclusive)
+			throws InterruptedException, ExecutionException {
+		int rangeLength = maxExclusive - min;
+		if (rangeLength > 1) {
+			int mid = (maxExclusive + min) / 2;
+			Future<Void> future = executorService.submit(() -> {
+				Deque<FinishContext> stack = contextStack.get();
+				stack.push(context);
+				try {
+					asyncRangeOfTasks(context, tasks, min, mid);
+				} finally {
+					stack.pop();
+				}
+				return null;
+			});
+			context.offerTask(future);
+			asyncRangeOfTasks(context, tasks, mid, maxExclusive);
+		} else {
+			tasks[min].run();
+		}
+	}
+
+	@Override
+	protected void asyncTasks(CheckedRunnable[] tasks) throws InterruptedException, ExecutionException {
+		Objects.requireNonNull(tasks);
+		for (CheckedRunnable task : tasks) {
+			Objects.requireNonNull(task);
+		}
+		FinishContext context = contextStack.get().peek();
+		asyncRangeOfTasks(context, tasks, 0, tasks.length);
+	}
+
+	private static class ChainedException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+
+		ChainedException(InterruptedException ie) {
+			super(ie);
+		}
+
+		ChainedException(ExecutionException ee) {
+			super(ee);
+		}
+	}
+
+	private static <T> void forEachRemaining(Spliterator<T> spliterator, CheckedConsumer<T> body)
+			throws InterruptedException, ExecutionException {
+		try {
+			spliterator.forEachRemaining((v) -> {
+				try {
+					body.accept(v);
+				} catch (InterruptedException ie) {
+					throw new ChainedException(ie);
+				} catch (ExecutionException ee) {
+					throw new ChainedException(ee);
+				}
+			});
+		} catch (ChainedException ce) {
+			Throwable cause = ce.getCause();
+			if (cause instanceof InterruptedException) {
+				InterruptedException ie = (InterruptedException) cause;
+				throw ie;
+			} else {
+				ExecutionException ee = (ExecutionException) cause;
+				throw ee;
+			}
+		}
+	}
+
+	@Override
+	protected <T> void split(Spliterator<T> spliterator, long threshold, CheckedConsumer<T> body)
+			throws InterruptedException, ExecutionException {
+		if (threshold > 1L) {
+			if (spliterator.estimateSize() <= threshold) {
+				forEachRemaining(spliterator, body);
+				return;
+			}
+		}
+		Spliterator<T> s = spliterator.trySplit();
+		if (s != null) {
+			FinishContext context = contextStack.get().peek();
+			Future<Void> task = executorService.submit(() -> {
+				Deque<FinishContext> stack = contextStack.get();
+				stack.push(context);
+				try {
+					split(spliterator, threshold, body);
+				} finally {
+					stack.pop();
+				}
+				return null;
+			});
+			context.offerTask(task);
+			split(s, threshold, body);
+		} else {
+			if (spliterator.getExactSizeIfKnown() == 1L) {
+				forEachRemaining(spliterator, body);
+			} else {
+				// TODO: handle threshold > 1L
+				FinishContext context = contextStack.get().peek();
+				spliterator.forEachRemaining((v) -> {
+					Future<Void> task = executorService.submit(() -> {
+						Deque<FinishContext> stack = contextStack.get();
+						stack.push(context);
+						try {
+							body.accept(v);
+						} finally {
+							stack.pop();
+						}
+						return null;
+					});
+					context.offerTask(task);
+				});
+			}
+		}
+	}
+
+	@Override
+	public void async(CheckedRunnable body) {
+		Objects.requireNonNull(body);
+		FinishContext context = contextStack.get().peek();
+		asyncRunnable(context, body);
 	}
 
 	@Override
@@ -144,15 +265,9 @@ public class ExecutorV5Impl extends AbstractV5Impl {
 	}
 
 	@Override
-	public void forasync(PhasedEmptyOption phasedEmptyOption, int min, int maxExclusive, CheckedIntConsumer body)
-			throws InterruptedException, ExecutionException {
-		throw new RuntimeException("todo");
-	}
-	
-	@Override
 	public void doWork(long n) {
 	}
-	
+
 	@Override
 	public Metrics getMetrics() {
 		return new Metrics() {
@@ -160,7 +275,7 @@ public class ExecutorV5Impl extends AbstractV5Impl {
 			public long totalWork() {
 				throw new UnsupportedOperationException();
 			}
-			
+
 			@Override
 			public long criticalPathLength() {
 				throw new UnsupportedOperationException();

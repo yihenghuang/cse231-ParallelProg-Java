@@ -26,8 +26,11 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import edu.wustl.cse231s.v5.api.CheckedCallable;
+import edu.wustl.cse231s.v5.api.CheckedIntConsumer;
+import edu.wustl.cse231s.v5.api.CheckedIntIntConsumer;
 import edu.wustl.cse231s.v5.api.CheckedRunnable;
 import edu.wustl.cse231s.v5.impl.BookkeepingV5Impl;
+import edu.wustl.cse231s.v5.options.ChunkedOption;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
@@ -37,12 +40,13 @@ public class BookkeepingExecutorXV5Impl extends MetricsExecutorV5Impl implements
 
 	private final AtomicInteger asyncInvocationCount = new AtomicInteger(0);
 	private final AtomicInteger finishInvocationCount = new AtomicInteger(0);
-	private final AtomicInteger forasyncRegionInvovationCount = new AtomicInteger(0);
-	private final AtomicInteger asyncViaForasyncRegionCount = new AtomicInteger(0);
-	private final AtomicInteger asyncAvoidedInContinuationCount = new AtomicInteger(0);
 
-	private final AtomicInteger forasync2dRegionInvocationCount = new AtomicInteger(0);
-	private final AtomicInteger forasync2dRegionChunkedInvocationCount = new AtomicInteger(0);
+	private final AtomicInteger forasyncInvovationCount = new AtomicInteger(0);
+	private final AtomicInteger forasyncChunkedInvovationCount = new AtomicInteger(0);
+	private final AtomicInteger asyncViaForasyncCount = new AtomicInteger(0);
+
+	private final AtomicInteger forasync2dInvocationCount = new AtomicInteger(0);
+	private final AtomicInteger forasync2dChunkedInvocationCount = new AtomicInteger(0);
 
 	private final AtomicInteger futureInvocationCount = new AtomicInteger(0);
 
@@ -66,51 +70,42 @@ public class BookkeepingExecutorXV5Impl extends MetricsExecutorV5Impl implements
 
 	@Override
 	public <R> Future<R> future(CheckedCallable<R> body) {
-		 Future<R> result = super.future(body);
-		 futureInvocationCount.incrementAndGet();
-		 return result;
+		Future<R> result = super.future(body);
+		futureInvocationCount.incrementAndGet();
+		return result;
 	}
-	
-	// @Override
-	// public void forasync(HjRegion1D hjRegion, HjSuspendingProcedureInt1D
-	// body) throws SuspendableException {
-	// super.forasync(hjRegion, body);
-	// forasyncRegionInvovationCount.incrementAndGet();
-	// asyncViaForasyncRegionCount.addAndGet(hjRegion.numElements());
-	// }
-	//
-	// @Override
-	// protected <T> void forasync(Iterator<T> iterator,
-	// HjSuspendingProcedure<T> body) throws SuspendableException {
-	// if(iterator.hasNext()) {
-	// asyncAvoidedInContinuationCount.incrementAndGet();
-	// }
-	// super.forasync(iterator, body);
-	// }
-	//
-	// @Override
-	// public <T> void forasync(T[] array, HjSuspendingProcedure<T> body) throws
-	// SuspendableException {
-	// if( array.length > 0 ) {
-	// asyncAvoidedInContinuationCount.incrementAndGet();
-	// }
-	// super.forasync(array, body);
-	// }
-	//
-	// @Override
-	// public void forasync2d(HjRegion2D hjRegion, HjSuspendingProcedureInt2D
-	// body) {
-	// super.forasync2d(hjRegion, body);
-	// forasync2dRegionInvocationCount.incrementAndGet();
-	// }
-	//
-	// @Override
-	// public void forasync2d(ChunkedOption chunkedOption, HjRegion2D hjRegion,
-	// HjSuspendingProcedureInt2D body)
-	// throws SuspendableException {
-	// super.forasync2d(chunkedOption, hjRegion, body);
-	// forasync2dRegionChunkedInvocationCount.incrementAndGet();
-	// }
+
+	@Override
+	public void forasync(int min, int maxExclusive, CheckedIntConsumer body)
+			throws InterruptedException, ExecutionException {
+		super.forasync(min, maxExclusive, body);
+		forasyncInvovationCount.incrementAndGet();
+		asyncViaForasyncCount.addAndGet(maxExclusive - min);
+	}
+
+	@Override
+	public void forasync(ChunkedOption chunkedOption, int min, int maxExclusive, CheckedIntConsumer body)
+			throws InterruptedException, ExecutionException {
+		super.forasync(chunkedOption, min, maxExclusive, body);
+		forasyncChunkedInvovationCount.incrementAndGet();
+		// TODO: asyncViaForasyncCount?
+	}
+
+	@Override
+	public void forasync2d(int minA, int maxExclusiveA, int minB, int maxExclusiveB, CheckedIntIntConsumer body)
+			throws InterruptedException, ExecutionException {
+		super.forasync2d(minA, maxExclusiveA, minB, maxExclusiveB, body);
+		forasync2dInvocationCount.incrementAndGet();
+		asyncViaForasyncCount.addAndGet((maxExclusiveA - minA) * (maxExclusiveB - minB));
+	}
+
+	@Override
+	public void forasync2d(ChunkedOption chunkedOption, int minA, int maxExclusiveA, int minB, int maxExclusiveB,
+			CheckedIntIntConsumer body) throws InterruptedException, ExecutionException {
+		super.forasync2d(chunkedOption, minA, maxExclusiveA, minB, maxExclusiveB, body);
+		forasync2dChunkedInvocationCount.incrementAndGet();
+		// TODO: asyncViaForasyncCount?
+	}
 
 	@Override
 	public int getLaunchInvocationCount() {
@@ -128,42 +123,47 @@ public class BookkeepingExecutorXV5Impl extends MetricsExecutorV5Impl implements
 	}
 
 	@Override
-	public int getForasyncRegionInvocationCount() {
-		return forasyncRegionInvovationCount.get();
+	public int getForasyncInvocationCount() {
+		return forasyncInvovationCount.get();
 	}
 
 	@Override
-	public int getForasync2dRegionInvocationCount() {
-		return forasync2dRegionInvocationCount.get();
+	public int getForasyncChunkedInvovationCount() {
+		return forasyncChunkedInvovationCount.get();
 	}
 
 	@Override
-	public int getForasync2dRegionChunkedInvocationCount() {
-		return forasync2dRegionChunkedInvocationCount.get();
+	public int getForasync2dInvocationCount() {
+		return forasync2dInvocationCount.get();
 	}
 
 	@Override
-	public int getAsyncViaForasyncRegionCount() {
-		return asyncViaForasyncRegionCount.get();
+	public int getForasync2dChunkedInvocationCount() {
+		return forasync2dChunkedInvocationCount.get();
+	}
+
+	@Override
+	public int getAsyncViaForasyncCount() {
+		return asyncViaForasyncCount.get();
 	}
 
 	@Override
 	public int getTaskCount() {
-		//TODO: futureInvocationCount?
-		return asyncInvocationCount.get() + asyncViaForasyncRegionCount.get() + asyncAvoidedInContinuationCount.get();
+		// TODO: futureInvocationCount?
+		return asyncInvocationCount.get() + asyncViaForasyncCount.get();
 	}
 
 	@Override
 	public int getFutureInvocationCount() {
 		return futureInvocationCount.get();
 	}
-	
+
 	@Override
 	public void resetAllInvocationCounts() {
 		asyncInvocationCount.set(0);
 		finishInvocationCount.set(0);
-		forasyncRegionInvovationCount.set(0);
-		asyncViaForasyncRegionCount.set(0);
+		forasyncInvovationCount.set(0);
+		asyncViaForasyncCount.set(0);
 		futureInvocationCount.set(0);
 	}
 }
