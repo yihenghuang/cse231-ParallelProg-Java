@@ -67,8 +67,9 @@ public class SuspectMergeSortTest {
 
 	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
 	public void testParallel() {
-		int numProcessors = Runtime.getRuntime().availableProcessors();
-		int threshold = this.original.length / (numProcessors * 10);
+		//int numProcessors = Runtime.getRuntime().availableProcessors();
+		int numTasks = 80; //TODO
+		int threshold = this.original.length / numTasks;
 		BookkeepingV5Impl bookkeeping = BookkeepingUtils.bookkeep(() -> {
 			int[] actual = Arrays.copyOf(this.original, this.original.length);
 			SuspectMergeSort.parallelMergeSort(actual, threshold, new SequentialCombiner(actual.length));
