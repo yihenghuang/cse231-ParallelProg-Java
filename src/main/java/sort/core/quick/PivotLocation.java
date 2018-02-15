@@ -40,22 +40,22 @@ public final class PivotLocation {
 	}
 
 	/**
-	 * Gets the index of the minimum value in the partitioned array that is
-	 * greater than the partition value. You can think of this as the left side
-	 * of the upper range of the array.
+	 * Gets the index of the maximum value in the partitioned array that is less
+	 * than the partition value. You can think of this as the right side of the
+	 * lower range of the array.
 	 * 
-	 * @return the left side of the upper range of the array
+	 * @return the maximum index (exclusive) of the range left of the pivot
 	 */
 	public int getLeftSidesUpperExclusive() {
 		return this.leftSidesUpperExclusive;
 	}
 
 	/**
-	 * Gets the index of the maximum value in the partitioned array that is less
-	 * than the partition value. You can think of this as the right side of the
-	 * lower range of the array.
+	 * Gets the index of the minimum value in the partitioned array that is
+	 * greater than the partition value. You can think of this as the left side
+	 * of the upper range of the array.
 	 * 
-	 * @return the right side of the lower range of the array
+	 * @return the minimum index (inclusive) of the range right of the pivot
 	 */
 	public int getRightSidesLowerInclusive() {
 		return this.rightSidesLowerInclusive;
