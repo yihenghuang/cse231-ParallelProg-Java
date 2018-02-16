@@ -130,7 +130,9 @@ public class BucketsHashMap<K, V> extends AbstractMap<K, V> {
 	 * test with my test files in here it turns out that theirs cannot pass here as
 	 * well while theirs passed with their own tests in their own package
 	 * 
-	 * -----------And my code was passed in my friend's package
+	 * -----------And my code was passed in my friend's package ------------I tried
+	 * to substitute the test files with uncorrupted ones but it wouldnt let me
+	 * paste into it
 	 * 
 	 * ----------Therefore the test file was corrupted by me :( But the code is
 	 * alright. ---------------------
