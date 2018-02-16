@@ -130,8 +130,10 @@ public class BucketsHashMap<K, V> extends AbstractMap<K, V> {
 	 * test with my test files in here it turns out that theirs cannot pass here as
 	 * well while theirs passed with their own tests in their own package
 	 * 
-	 * ----------Therefore the file might have been corrupted by me
-	 * ---------------------
+	 * -----------And my code was passed in my friend's package
+	 * 
+	 * ----------Therefore the test file was corrupted by me :( But the code is
+	 * alright. ---------------------
 	 */
 	@Override
 	public V remove(Object key) {

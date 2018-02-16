@@ -44,7 +44,6 @@ import net.jcip.annotations.NotThreadSafe;
 	 */
 	public LinkedNode<E> getNext() {
 		return next;
-
 	}
 
 	/**

@@ -48,6 +48,7 @@ import net.jcip.annotations.NotThreadSafe;
 		nex = i.getNext();
 		pre = null;
 		// this.index = 0;
+
 	}
 
 	/**
