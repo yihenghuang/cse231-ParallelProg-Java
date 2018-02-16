@@ -138,7 +138,6 @@ public class BucketsHashMap<K, V> extends AbstractMap<K, V> {
 		Collection<Entry<K, V>> bucket = getBucketFor(key);
 		Iterator<Entry<K, V>> i = bucket.iterator();
 		Entry<K, V> r = new KeyMutableValuePair<K, V>(null, null);
-
 		while (i.hasNext()) {
 			Entry<K, V> temp = i.next();
 			if (temp.getKey().equals(key)) {

@@ -80,6 +80,7 @@ public class LinkedNodesCollection<E> extends AbstractCollection<E> {
 		this.size++;
 		this.head.setNext(tempItem);
 		return true;
+
 	}
 
 	/* package-private */ LinkedNode<E> getHeadNode() {

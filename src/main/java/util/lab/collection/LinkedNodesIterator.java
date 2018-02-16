@@ -47,7 +47,6 @@ import net.jcip.annotations.NotThreadSafe;
 		i = collection.getHeadNode();
 		nex = i.getNext();
 		pre = null;
-
 		// this.index = 0;
 	}
 
