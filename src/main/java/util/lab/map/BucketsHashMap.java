@@ -30,13 +30,12 @@ import java.util.Set;
 
 import org.apache.commons.collections4.iterators.LazyIteratorChain;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import edu.wustl.cse231s.util.KeyMutableValuePair;
 import net.jcip.annotations.NotThreadSafe;
 import util.lab.collection.LinkedNodesCollection;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Ben Choi (benjaminchoi@wustl.edu)
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
@@ -72,7 +71,7 @@ public class BucketsHashMap<K, V> extends AbstractMap<K, V> {
 	 * @return the index of the bucket the entry should go into
 	 */
 	private int hash(Object key) {
-		throw new NotYetImplementedException();
+		return Math.floorMod(key.hashCode(), buckets.length);
 	}
 
 	/**
@@ -82,7 +81,7 @@ public class BucketsHashMap<K, V> extends AbstractMap<K, V> {
 	 * @return the bucket the key is in
 	 */
 	private Collection<Entry<K, V>> getBucketFor(Object key) {
-		throw new NotYetImplementedException();
+		return buckets[hash(key)];
 	}
 
 	/**
@@ -90,7 +89,11 @@ public class BucketsHashMap<K, V> extends AbstractMap<K, V> {
 	 */
 	@Override
 	public int size() {
-		throw new NotYetImplementedException();
+		int size = 0;
+		for (int i = 0; i < buckets.length; i++) {
+			size += buckets[i].size();
+		}
+		return size;
 	}
 
 	/**
@@ -98,15 +101,54 @@ public class BucketsHashMap<K, V> extends AbstractMap<K, V> {
 	 */
 	@Override
 	public V put(K key, V value) {
-		throw new NotYetImplementedException();
+		Collection<Entry<K, V>> bucket = getBucketFor(key);
+		Iterator<Entry<K, V>> i = bucket.iterator();
+
+		while (i.hasNext()) {
+			Entry<K, V> temp = i.next();
+			if (temp.getKey().equals(key)) {
+				V v = temp.getValue();
+				temp.setValue(value);
+				return v;
+			}
+		}
+
+		KeyMutableValuePair<K, V> a = new KeyMutableValuePair<K, V>(key, value);
+		bucket.add(a);
+		return null;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+
+	/*
+	 * ------------------------------------------- the bucketsSizeAfterRemoveTest
+	 * cannot pass for some reason. And also the testReturnValueSimply subtest
+	 * cannot pass I cannot find out why
+	 * -------------------------------------------- but I used two friends' code to
+	 * test with my test files in here it turns out that theirs cannot pass here as
+	 * well while theirs passed with their own tests in their own package
+	 * 
+	 * ----------Therefore the file might have been corrupted by me
+	 * ---------------------
+	 */
 	@Override
 	public V remove(Object key) {
-		throw new NotYetImplementedException();
+		Collection<Entry<K, V>> bucket = getBucketFor(key);
+		Iterator<Entry<K, V>> i = bucket.iterator();
+		Entry<K, V> r = new KeyMutableValuePair<K, V>(null, null);
+
+		while (i.hasNext()) {
+			Entry<K, V> temp = i.next();
+			if (temp.getKey().equals(key)) {
+				r = temp;
+				V rv = r.getValue();
+				i.remove();
+				return rv;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -114,7 +156,15 @@ public class BucketsHashMap<K, V> extends AbstractMap<K, V> {
 	 */
 	@Override
 	public V get(Object key) {
-		throw new NotYetImplementedException();
+		Collection<Entry<K, V>> bucket = getBucketFor(key);
+		Iterator<Entry<K, V>> i = bucket.iterator();
+		while (i.hasNext()) {
+			Entry<K, V> temp = i.next();
+			if (temp.getKey().equals(key)) {
+				return temp.getValue();
+			}
+		}
+		return null;
 	}
 
 	/**

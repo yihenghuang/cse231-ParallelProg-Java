@@ -22,20 +22,33 @@
 package util.lab.collection;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import net.jcip.annotations.NotThreadSafe;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Ben Choi (benjaminchoi@wustl.edu)
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 @NotThreadSafe
 /* package-private */ class LinkedNodesIterator<E> implements Iterator<E> {
 
+	private final LinkedNodesCollection<E> collection;
+	private LinkedNode<E> i;
+	private LinkedNode<E> nex;
+	private LinkedNode<E> pre;
+	boolean removed = true;
+	// private final E value;
+	// private int index;
+
 	public LinkedNodesIterator(LinkedNodesCollection<E> collection) {
-		throw new NotYetImplementedException();
+		this.collection = collection;
+		i = collection.getHeadNode();
+		nex = i.getNext();
+		pre = null;
+
+		// this.index = 0;
 	}
 
 	/**
@@ -43,10 +56,11 @@ import net.jcip.annotations.NotThreadSafe;
 	 */
 	@Override
 	public boolean hasNext() {
-		Iterator<Integer> iterator = collection.iterator();
-		if (iterator.hasNext() == false) {
-			iterator.next();
-
+		// LinkedNodesCollection<E> collection = null;
+		// Iterator<Integer> iterator = collection.iterator();
+		if (i.getNext() == null) {
+			return false;
+		} else {
 			return true;
 		}
 	}
@@ -56,8 +70,16 @@ import net.jcip.annotations.NotThreadSafe;
 	 */
 	@Override
 	public E next() {
-
-		throw new NotYetImplementedException();
+		removed = false;
+		if (this.hasNext()) {
+			LinkedNode<E> temp = i;
+			i = this.nex;
+			this.nex = i.getNext();
+			this.pre = temp;
+			return i.getValue();
+		} else {
+			throw new NoSuchElementException();
+		}
 	}
 
 	/**
@@ -65,6 +87,12 @@ import net.jcip.annotations.NotThreadSafe;
 	 */
 	@Override
 	public void remove() {
-		throw new NotYetImplementedException();
+		if (!i.equals(null) && removed != true) {
+			pre.setNext(i.getNext());
+			collection.decrementSize();
+			removed = true;
+		} else {
+			throw new IllegalStateException();
+		}
 	}
 }

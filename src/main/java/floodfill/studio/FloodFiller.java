@@ -34,6 +34,7 @@ import javafx.scene.paint.Color;
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class FloodFiller {
+
 	/**
 	 * @param mutablePixels
 	 *            The set of pixels that you are supposed to manipulate. See the

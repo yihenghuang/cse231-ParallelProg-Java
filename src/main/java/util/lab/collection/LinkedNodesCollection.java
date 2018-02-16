@@ -28,7 +28,7 @@ import java.util.Iterator;
 import net.jcip.annotations.NotThreadSafe;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Ben Choi (benjaminchoi@wustl.edu)
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
@@ -76,9 +76,9 @@ public class LinkedNodesCollection<E> extends AbstractCollection<E> {
 	 */
 	@Override
 	public boolean add(E item) {
-		LinkedNode<E> temp = new LinkedNode<E>(item, this.head.getNext());
+		LinkedNode<E> tempItem = new LinkedNode<E>(item, this.head.getNext());
 		this.size++;
-		this.head.setNext(temp);
+		this.head.setNext(tempItem);
 		return true;
 	}
 
