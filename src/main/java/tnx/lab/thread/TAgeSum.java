@@ -23,8 +23,6 @@ package tnx.lab.thread;
 
 import java.util.concurrent.ThreadFactory;
 
-import edu.wustl.cse231s.NotYetImplementedException;
-
 /**
  * An parallel array sum implementation that uses Java's {@link Thread} class to
  * sum each half of the array individually.
@@ -51,7 +49,23 @@ public class TAgeSum {
 	 *             if the current thread was interrupted while waiting
 	 */
 	public static int sumUpperLowerSplit(int[] ages, ThreadFactory threadFactory) throws InterruptedException {
-		throw new NotYetImplementedException();
+		int[] total = new int[2];
+		Thread a = threadFactory.newThread(() -> {
+			for (int i = 0; i < ages.length / 2; i++) {
+				total[0] += ages[i];
+			}
+		});
+		Thread b = threadFactory.newThread(() -> {
+			for (int i = ages.length / 2; i < ages.length; i++) {
+				total[1] += ages[i];
+			}
+		});
+		a.start();
+		b.start();
+		a.join();
+		b.join();
+		return total[0] + total[1];
+
 	}
 
 }

@@ -22,9 +22,6 @@
 package tnx.lab.executor;
 
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -33,8 +30,6 @@ import count.assignment.NucleobaseCounting;
 import edu.wustl.cse231s.IntendedForStaticAccessOnlyError;
 import edu.wustl.cse231s.NotYetImplementedException;
 import edu.wustl.cse231s.bioinformatics.Nucleobase;
-import slice.core.Slice;
-import slice.studio.Slices;
 
 /**
  * A parallel nucleobase counter that uses Java's {@link ExecutorService}
@@ -70,7 +65,17 @@ public class XNucleobaseCounting {
 	 */
 	public static int countLowerUpperSplit(ExecutorService executor, byte[] chromosome, Nucleobase nucleobase)
 			throws InterruptedException, ExecutionException {
-		throw new NotYetImplementedException();
+
+		Future<Integer> first = executor.submit(() -> {
+
+			return NucleobaseCounting.countRangeSequential(chromosome, nucleobase, 0, chromosome.length / 2);
+
+		});
+
+		int second = NucleobaseCounting.countRangeSequential(chromosome, nucleobase, chromosome.length / 2,
+				chromosome.length);
+
+		return first.get() + second;
 	}
 
 	/**

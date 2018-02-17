@@ -23,8 +23,6 @@ package tnx.lab.thread;
 
 import java.util.concurrent.ThreadFactory;
 
-import edu.wustl.cse231s.NotYetImplementedException;
-
 /**
  * The simplest {@code ThreadFactory} imaginable. This class exists just so that
  * you understand what a {@code ThreadFactory} is, and so that you understand
@@ -45,7 +43,7 @@ public class SimpleThreadFactory implements ThreadFactory {
 	 */
 	@Override
 	public Thread newThread(Runnable target) {
-		throw new NotYetImplementedException();
+		return new Thread(target);
 	}
 
 }
