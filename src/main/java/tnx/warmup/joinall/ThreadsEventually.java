@@ -35,8 +35,9 @@ public class ThreadsEventually {
 		if (i < maxExclusive) {
 			Thread thread = new Thread(() -> {
 				SleepUtils.sleep(100);
-				startThread(queue, i + 1, maxExclusive);
+
 			});
+			startThread(queue, i + 1, maxExclusive);
 			thread.start();
 			queue.offer(thread);
 		}

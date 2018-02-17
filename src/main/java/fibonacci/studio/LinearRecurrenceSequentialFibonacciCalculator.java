@@ -21,11 +21,8 @@
  ******************************************************************************/
 package fibonacci.studio;
 
-import static edu.wustl.cse231s.v5.V5.doWork;
-
 import java.math.BigInteger;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import edu.wustl.cse231s.asymptoticanalysis.OrderOfGrowth;
 import fibonacci.core.FibonacciCalculator;
 
@@ -36,7 +33,21 @@ import fibonacci.core.FibonacciCalculator;
 public class LinearRecurrenceSequentialFibonacciCalculator implements FibonacciCalculator {
 	@Override
 	public BigInteger fibonacci(int n) {
-		throw new NotYetImplementedException();
+		if (n == 0)
+			return BigInteger.valueOf(0);
+		if (n == 1)
+			return BigInteger.valueOf(1);
+
+		if (n % 2 == 1) {
+			int i = (n + 1) / 2;
+			BigInteger st_2 = fibonacci(i).multiply(fibonacci(i));
+			BigInteger st1 = fibonacci(i - 1);
+			return st_2.add(st1.multiply(st1));
+		} else {
+			int i = n / 2;
+			BigInteger st = fibonacci(i);
+			return fibonacci(i - 1).multiply(BigInteger.valueOf(2)).add(st).multiply(st);
+		}
 	}
 
 	@Override

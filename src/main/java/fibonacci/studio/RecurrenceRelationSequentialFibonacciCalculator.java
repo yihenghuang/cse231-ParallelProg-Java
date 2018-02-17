@@ -25,7 +25,6 @@ import static edu.wustl.cse231s.v5.V5.doWork;
 
 import java.math.BigInteger;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import edu.wustl.cse231s.asymptoticanalysis.OrderOfGrowth;
 import fibonacci.core.FibonacciCalculator;
 
@@ -37,7 +36,11 @@ public class RecurrenceRelationSequentialFibonacciCalculator implements Fibonacc
 	@Override
 	public BigInteger fibonacci(int n) {
 		doWork(1);
-		throw new NotYetImplementedException();
+
+		if (n <= 1) {
+			return new BigInteger("" + n);
+		}
+		return fibonacci(n - 1).add(fibonacci(n - 2));
 	}
 
 	@Override
@@ -45,12 +48,12 @@ public class RecurrenceRelationSequentialFibonacciCalculator implements Fibonacc
 		// WORK: O(Phi^n)
 		return OrderOfGrowth.EXPONENTIAL;
 	}
-	
+
 	@Override
 	public boolean isSusceptibleToStackOverflowError() {
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName();

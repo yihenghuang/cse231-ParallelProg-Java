@@ -21,14 +21,13 @@
  ******************************************************************************/
 package fibonacci.studio;
 
-import static edu.wustl.cse231s.v5.V5.future;
 import static edu.wustl.cse231s.v5.V5.doWork;
+import static edu.wustl.cse231s.v5.V5.future;
 
 import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import edu.wustl.cse231s.asymptoticanalysis.OrderOfGrowth;
 import fibonacci.core.FibonacciCalculator;
 
@@ -40,7 +39,17 @@ public class RecurrenceRelationParallelFibonacciCalculator implements FibonacciC
 	@Override
 	public BigInteger fibonacci(int n) throws InterruptedException, ExecutionException {
 		doWork(1);
-		throw new NotYetImplementedException();
+
+		if (n == 0) {
+			return BigInteger.valueOf(0);
+		}
+		if (n == 1) {
+			return BigInteger.valueOf(1);
+		}
+		Future<BigInteger> a = future(() -> {
+			return fibonacci(n - 2);
+		});
+		return fibonacci(n - 1).add(a.get());
 	}
 
 	@Override
