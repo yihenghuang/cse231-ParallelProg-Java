@@ -61,7 +61,7 @@ import edu.wustl.cse231s.NotYetImplementedException;
  * @param <R>
  *            the result of the reduction
  * 
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Finn Voichick
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
