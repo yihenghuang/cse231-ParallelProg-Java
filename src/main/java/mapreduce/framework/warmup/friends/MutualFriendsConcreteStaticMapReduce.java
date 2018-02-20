@@ -45,7 +45,7 @@ import mapreduce.collector.studio.ClassicReducer;
 import mapreduce.framework.lab.simple.SimpleMapReduceFramework;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Finn Voichick
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
