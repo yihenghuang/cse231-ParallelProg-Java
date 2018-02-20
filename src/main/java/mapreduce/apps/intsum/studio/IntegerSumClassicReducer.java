@@ -35,7 +35,7 @@ import mapreduce.collector.studio.ClassicReducer;
  * a {@code Collector}, and the other {@code Collector} methods are defined in
  * the {@code ClassicReducer} interface.
  * 
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Finn Voichick
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
