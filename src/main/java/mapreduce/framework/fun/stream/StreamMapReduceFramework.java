@@ -36,7 +36,7 @@ import mapreduce.framework.core.MapReduceFramework;
 import mapreduce.framework.core.Mapper;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Finn Voichick
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
