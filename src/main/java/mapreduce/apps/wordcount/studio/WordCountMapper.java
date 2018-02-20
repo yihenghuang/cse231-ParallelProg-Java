@@ -32,7 +32,7 @@ import mapreduce.framework.core.Mapper;
  * objects to key-value pairs, where the keys are words and the values are
  * counts. This is used as the mapper for word count.
  * 
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Finn Voichick
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
