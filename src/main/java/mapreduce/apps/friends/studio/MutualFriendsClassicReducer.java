@@ -39,7 +39,7 @@ import mapreduce.collector.studio.ClassicReducer;
  * and a set of B's friends, it will find the accounts that are friends of both
  * A and B.
  * 
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Finn Voichick
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
