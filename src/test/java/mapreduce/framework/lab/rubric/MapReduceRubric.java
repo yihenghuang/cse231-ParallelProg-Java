@@ -1,0 +1,78 @@
+/*******************************************************************************
+ * Copyright (C) 2016-2017 Dennis Cosgrove
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ ******************************************************************************/
+
+package mapreduce.framework.lab.rubric;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MapReduceRubric {
+	public static enum SuperCatergory {
+		SIMPLE_FRAMEWORK("Simple framework subtotal"),
+		MATRIX_FRAMEWORK("Matrix framework subtotal"),
+		SANITY_CHECK(null),
+		UNCATEGORIZED(null);
+		
+		private final String title;
+		private SuperCatergory(String title) {
+			this.title = title;
+		}
+		
+		public String getTitle() {
+			return title;
+		}
+	}
+	
+	public static enum Category {
+		SANITY_CHECK(SuperCatergory.SANITY_CHECK, null),
+		SIMPLE_MAP_ALL(SuperCatergory.SIMPLE_FRAMEWORK, "Correct mapAll"),
+		SIMPLE_ACCUMULATE_ALL(SuperCatergory.SIMPLE_FRAMEWORK, "Correct accumulateAll"),
+		SIMPLE_FINISH_ALL(SuperCatergory.SIMPLE_FRAMEWORK, "Correct finishAll"),
+		MATRIX_MAP_AND_ACCUMULATE_ALL(SuperCatergory.MATRIX_FRAMEWORK, "Correct mapAndAccumulateAll"),
+		MATRIX_COMBINE_AND_FINISH_ALL(SuperCatergory.MATRIX_FRAMEWORK, "Correct combineAndFinishAll"),
+		COLLECTOR_UNCATEGORIZED(SuperCatergory.UNCATEGORIZED, null),
+		SIMPLE_UNCATEGORIZED(SuperCatergory.UNCATEGORIZED, null),
+		MATRIX_UNCATEGORIZED(SuperCatergory.UNCATEGORIZED, null),
+		UNCATEGORIZED(SuperCatergory.UNCATEGORIZED, null);
+		
+		private final SuperCatergory superCatergory;
+		private final String title;
+		private Category(SuperCatergory superCatergory, String title) {
+			this.superCatergory = superCatergory;
+			this.title = title;
+		}
+
+		public SuperCatergory getSuperCatergory() {
+			return superCatergory;
+		}
+		
+		public String getTitle() {
+			return title;
+		}
+	}
+
+	Category[] value();
+}
