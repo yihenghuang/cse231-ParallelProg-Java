@@ -59,7 +59,7 @@ import net.jcip.annotations.Immutable;
  * @param <R>
  *            the final result of the collector
  * 
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Finn Voichick
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
