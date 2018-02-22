@@ -20,16 +20,24 @@
  * SOFTWARE.
  ******************************************************************************/
 
-package mapreduce;
+package racecondition.studio.bettersafethansorry;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+
+import racecondition.studio.wordcount.SuspectWordCountTest;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ ClassicReducerTestSuite.class, IntSumCollectorTestSuite.class })
-public class CollectorStudioTestSuite {
-
+@RunWith(Parameterized.class)
+public class RepeatSuspectWordCountTest extends SuspectWordCountTest {
+	@Parameters
+	public static Collection<Object[]> getConstructorArguments() {
+		return Arrays.asList(new Object[11][0]);
+	}
 }

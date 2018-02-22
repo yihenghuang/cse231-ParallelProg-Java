@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2018 Dennis Cosgrove
+ * Copyright (C) 2016-2017 Dennis Cosgrove
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,17 +19,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
+package mapreduce.collector.studio;
 
-package mapreduce;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import org.junit.Test;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link ClassicReducer#supplier()}
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ ClassicReducerTestSuite.class, IntSumCollectorTestSuite.class })
-public class CollectorStudioTestSuite {
+public class ClassicReducerSupplierTest {
+	@Test
+	public void test() {
+		ClassicReducer<Void, Void> reducer = new ClassicReducer<Void, Void>() {
+			@Override
+			public Function<List<Void>, Void> finisher() {
+				throw new Error();
+			}
+		};
 
+		Supplier<List<Void>> supplier = reducer.supplier();
+		assertNotNull(supplier);
+
+		List<Void> mutableContainer = supplier.get();
+		assertNotNull(mutableContainer);
+		assertTrue(mutableContainer.isEmpty());
+
+		List<Void> other = supplier.get();
+		assertNotNull(other);
+		assertTrue(other.isEmpty());
+
+		assertTrue("supplier().get() should return a new mutableContainer", mutableContainer != other);
+	}
 }

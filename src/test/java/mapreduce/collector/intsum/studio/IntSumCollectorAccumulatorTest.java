@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2018 Dennis Cosgrove
+ * Copyright (C) 2016-2017 Dennis Cosgrove
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,17 +19,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
+package mapreduce.collector.intsum.studio;
 
-package mapreduce;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Supplier;
+
+import org.apache.commons.lang3.mutable.MutableInt;
+import org.junit.Test;
+
+import mapreduce.collector.studio.ClassicReducer;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link IntSumCollector#accumulator()}
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ ClassicReducerTestSuite.class, IntSumCollectorTestSuite.class })
-public class CollectorStudioTestSuite {
+public class IntSumCollectorAccumulatorTest {
+	@Test
+	public void test() {
+		IntSumCollector collector = new IntSumCollector();
 
+		Supplier<MutableInt> supplier = collector.supplier();
+		assertNotNull(supplier);
+
+		BiConsumer<MutableInt, Integer> accumulator = collector.accumulator();
+		assertNotNull(accumulator);
+
+		BinaryOperator<MutableInt> combiner = collector.combiner();
+		assertNotNull(combiner);
+
+		MutableInt a = supplier.get();
+		assertNotNull(a);
+		assertEquals(0, a.intValue());
+
+		accumulator.accept(a, 4);
+		assertEquals(4, a.intValue());
+
+		accumulator.accept(a, 66);
+		assertEquals(70, a.intValue());
+
+		accumulator.accept(a, 99);
+		assertEquals(169, a.intValue());
+	}
 }

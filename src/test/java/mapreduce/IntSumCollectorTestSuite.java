@@ -25,11 +25,16 @@ package mapreduce;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import mapreduce.collector.intsum.studio.IntSumCollectorAccumulatorTest;
+import mapreduce.collector.intsum.studio.IntSumCollectorCombinerTest;
+import mapreduce.collector.intsum.studio.IntSumCollectorFinisherTest;
+import mapreduce.collector.intsum.studio.IntSumCollectorSupplierTest;
+
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ ClassicReducerTestSuite.class, IntSumCollectorTestSuite.class })
-public class CollectorStudioTestSuite {
-
+@Suite.SuiteClasses({ IntSumCollectorSupplierTest.class, IntSumCollectorAccumulatorTest.class,
+		IntSumCollectorCombinerTest.class, IntSumCollectorFinisherTest.class })
+public class IntSumCollectorTestSuite {
 }

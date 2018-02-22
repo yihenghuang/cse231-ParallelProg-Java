@@ -25,11 +25,16 @@ package mapreduce;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import mapreduce.apps.wordcount.studio.WordCountCollectorStressTest;
+import mapreduce.collector.studio.ClassicReducerAccumulatorTest;
+import mapreduce.collector.studio.ClassicReducerSupplierTest;
+import mapreduce.collector.studio.ClassicReducerTest;
+
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ ClassicReducerTestSuite.class, IntSumCollectorTestSuite.class })
-public class CollectorStudioTestSuite {
-
+@Suite.SuiteClasses({ ClassicReducerSupplierTest.class, ClassicReducerAccumulatorTest.class, ClassicReducerTest.class,
+		WordCountCollectorStressTest.class })
+public class ClassicReducerTestSuite {
 }
