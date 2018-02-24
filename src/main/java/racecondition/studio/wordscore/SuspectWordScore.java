@@ -41,13 +41,14 @@ public class SuspectWordScore {
 		final int N = sourceLines.size();
 		String[] result = new String[N];
 		finish(() -> {
-			int[] i = { 0 };
+			int i = 0;
 			for (String sourceLine : sourceLines) {
+				final int newi = i;
 				async(() -> {
 					String word = WordScoreUtils.toCleanedWord(sourceLine);
-					result[i[0]] = word;
+					result[newi] = word;
 				});
-				i[0]++;
+				i++;
 			}
 		});
 		return Arrays.asList(result);

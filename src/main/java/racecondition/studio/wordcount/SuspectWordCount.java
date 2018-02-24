@@ -25,7 +25,6 @@ package racecondition.studio.wordcount;
 import static edu.wustl.cse231s.v5.V5.async;
 import static edu.wustl.cse231s.v5.V5.finish;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
@@ -37,17 +36,11 @@ import java.util.concurrent.ExecutionException;
 public class SuspectWordCount {
 	public static Map<String, Integer> countWords(Iterable<String> words)
 			throws InterruptedException, ExecutionException {
-		Map<String, Integer> map = new HashMap<>();
+		Map<String, Integer> map = new ConcurrentHashMap<>();
 		finish(() -> {
 			for (String word : words) {
 				async(() -> {
-					Integer count = map.get(word);
-					if (count != null) {
-						count = count + 1;
-					} else {
-						count = 1;
-					}
-					map.put(word, count);
+					map.compute(word, (k, v) -> (v == null) ? v = 1 : ++v);
 				});
 			}
 		});

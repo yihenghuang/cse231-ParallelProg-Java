@@ -65,7 +65,7 @@ public class SuspectMergeSort {
 			});
 			combiner.combineRange(data, lowInclusive, mid, highExclusive);
 		} else {
-			sequentialMergeSort(data, combiner);
+			sequentialMergeSortKernel(data, lowInclusive, highExclusive, combiner);
 		}
 	}
 

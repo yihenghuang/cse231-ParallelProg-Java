@@ -21,12 +21,11 @@
  ******************************************************************************/
 package matrixmultiply.studio;
 
-import static edu.wustl.cse231s.v5.V5.forall2d;
 import static edu.wustl.cse231s.v5.V5.chunked;
+import static edu.wustl.cse231s.v5.V5.forall2d;
 
 import java.util.concurrent.ExecutionException;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import matrixmultiply.core.MatrixMultiplier;
 import matrixmultiply.core.MatrixUtils;
 
@@ -47,7 +46,12 @@ public class Forall2dChunkedMatrixMultiplier implements MatrixMultiplier {
 		int n = a.length;
 		int m = b[0].length;
 		int p = a[0].length;
-		throw new NotYetImplementedException();
+		forall2d(chunked(), 0, n, 0, m, (i, j) -> {
+			for (int k = 0; k < p; k++) {
+				result[i][j] += a[i][k] * b[k][j];
+			}
+		});
+		return result;
 	}
 
 	@Override
