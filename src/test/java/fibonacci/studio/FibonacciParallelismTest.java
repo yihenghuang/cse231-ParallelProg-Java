@@ -31,7 +31,9 @@ import java.util.List;
 
 import org.hamcrest.Matcher;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
 import edu.wustl.cse231s.v5.bookkeep.BookkeepingUtils;
@@ -45,7 +47,10 @@ import fibonacci.core.FibonacciUtils;
  *         {@link RecurrenceRelationParallelFibonacciCalculator}
  */
 public class FibonacciParallelismTest {
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test
 	public void test() {
 		FibonacciCalculator fibonacciCalculator = new RecurrenceRelationParallelFibonacciCalculator();
 		int n = 10;

@@ -27,8 +27,11 @@ import java.util.Map;
 import java.util.function.Function;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import edu.wustl.cse231s.util.KeyValuePair;
 import mapreduce.collector.studio.ClassicReducer;
 import mapreduce.framework.lab.rubric.MapReduceRubric;
@@ -42,6 +45,9 @@ import mapreduce.framework.lab.simple.SimpleMapReduceFramework;
  */
 @MapReduceRubric(MapReduceRubric.Category.SIMPLE_ACCUMULATE_ALL)
 public class AccumulateAllSimpleFrameworkPointedTest {
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
 	@Test
 	public void test() {
 		@SuppressWarnings("unchecked")

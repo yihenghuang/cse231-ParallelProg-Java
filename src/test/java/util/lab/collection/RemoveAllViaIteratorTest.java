@@ -29,7 +29,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import com.google.common.collect.Lists;
 
@@ -43,7 +45,10 @@ import util.lab.rubric.UtilRubric;
  */
 @UtilRubric(UtilRubric.Category.ITERATOR_REMOVE)
 public class RemoveAllViaIteratorTest {
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test
 	public void test() {
 		String s = "abcdefg";
 		List<Character> list = Lists.charactersOf(s);

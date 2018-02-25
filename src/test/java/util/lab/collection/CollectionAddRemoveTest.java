@@ -27,7 +27,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
 import util.lab.rubric.UtilRubric;
@@ -39,8 +41,10 @@ import util.lab.rubric.UtilRubric;
  */
 @UtilRubric(UtilRubric.Category.COLLECTION_UNCATEGORIZED)
 public class CollectionAddRemoveTest {
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Test
 	public void test() {
 		Collection<Integer> collection = new LinkedNodesCollection<>();
 

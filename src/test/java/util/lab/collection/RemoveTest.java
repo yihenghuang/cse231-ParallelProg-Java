@@ -23,7 +23,9 @@ package util.lab.collection;
 
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
 import util.lab.rubric.UtilRubric;
@@ -35,8 +37,10 @@ import util.lab.rubric.UtilRubric;
  */
 @UtilRubric(UtilRubric.Category.ITERATOR_REMOVE)
 public class RemoveTest {
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Test
 	public void test() {
 		LinkedNodesCollection<Integer> list = new LinkedNodesCollection<Integer>();
 		for (int i = 1; i < 4; ++i) {

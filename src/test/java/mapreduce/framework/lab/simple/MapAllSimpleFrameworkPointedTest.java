@@ -28,8 +28,11 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import edu.wustl.cse231s.util.KeyValuePair;
 import mapreduce.framework.core.Mapper;
 import mapreduce.framework.lab.rubric.MapReduceRubric;
@@ -53,6 +56,9 @@ public class MapAllSimpleFrameworkPointedTest {
 		}
 		return true;
 	}
+
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
 	@Test
 	public void testResultArrayNotNull() {

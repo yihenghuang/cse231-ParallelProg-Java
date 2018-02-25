@@ -30,7 +30,9 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
 import edu.wustl.cse231s.v5.bookkeep.BookkeepingUtils;
@@ -57,7 +59,10 @@ public class SuspectMergeSortTest {
 		Arrays.sort(this.expected);
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test
 	public void testSequential() throws InterruptedException, ExecutionException {
 		int[] actual = Arrays.copyOf(this.original, this.original.length);
 		SuspectMergeSort.sequentialMergeSort(actual, new SequentialCombiner(actual.length));
@@ -65,7 +70,7 @@ public class SuspectMergeSortTest {
 		assertArrayEquals(this.expected, actual);
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Test
 	public void testParallel() {
 		//int numProcessors = Runtime.getRuntime().availableProcessors();
 		int numTasks = 80; //TODO

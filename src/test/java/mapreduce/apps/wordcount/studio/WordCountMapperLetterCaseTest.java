@@ -21,8 +21,11 @@
  ******************************************************************************/
 package mapreduce.apps.wordcount.studio;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import mapreduce.apps.wordcount.core.TextSection;
 import mapreduce.core.AbstractMRTest;
 import mapreduce.core.CollectorSolution;
@@ -44,6 +47,9 @@ public class WordCountMapperLetterCaseTest<A> extends AbstractMRTest<TextSection
 	private void testSingle(String text) {
 		this.testInput(new TextSection[] { new TextSection(text) });
 	}
+
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
 	@Test
 	public void testMixedCase() {

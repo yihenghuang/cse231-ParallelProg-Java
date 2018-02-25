@@ -27,7 +27,9 @@ import java.io.IOException;
 import java.util.Collection;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -54,7 +56,10 @@ public class LowerUpperTest {
 		this.targetNucleobase = targetNucleobase;
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test
 	@CountRubric(CountRubric.Category.LOWER_UPPER)
 	public void testUpperLower() {
 		int expectedCount = NucleobaseCountUtils.countSequential(chromosome, targetNucleobase);

@@ -30,7 +30,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -52,7 +54,10 @@ public class OptionalFunFibonacciTest {
 		this.n = n;
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test
 	public void test() {
 		BigInteger expected = FibonacciUtils.fibonacci(n);
 		launchApp(() -> {

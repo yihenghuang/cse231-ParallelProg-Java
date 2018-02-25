@@ -23,8 +23,11 @@ package mapreduce.warmup;
 
 import static edu.wustl.cse231s.v5.V5.launchApp;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import mapreduce.core.InstructorMapReduceTestUtils;
 import mapreduce.core.TestApplication;
 import mapreduce.framework.core.Mapper;
@@ -42,6 +45,9 @@ public abstract class AbstractMapItemComprehensiveTest<E, K, V> {
 		this.application = application;
 		this.mapper = mapper;
 	}
+
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
 	@Test
 	public void test() {

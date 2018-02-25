@@ -28,7 +28,11 @@ import static org.junit.Assert.assertTrue;
 import java.util.function.Supplier;
 
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
+
+import edu.wustl.cse231s.junit.JUnitUtils;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
@@ -36,6 +40,9 @@ import org.junit.Test;
  *         {@link IntSumCollector#supplier()}
  */
 public class IntSumCollectorSupplierTest {
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
 	@Test
 	public void test() {
 		IntSumCollector collector = new IntSumCollector();

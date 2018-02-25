@@ -29,7 +29,9 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
 import util.lab.rubric.UtilRubric;
@@ -41,7 +43,10 @@ import util.lab.rubric.UtilRubric;
  */
 @UtilRubric(UtilRubric.Category.ITERATOR_REMOVE)
 public class IteratorRemoveIllegalStateExceptionTest {
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT, expected = IllegalStateException.class)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test(expected = IllegalStateException.class)
 	public void testRemoveForEmpty() {
 		Collection<Void> collection = new LinkedNodesCollection<>();
 		Iterator<Void> iterator = collection.iterator();
@@ -49,7 +54,7 @@ public class IteratorRemoveIllegalStateExceptionTest {
 		iterator.remove();
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT, expected = IllegalStateException.class)
+	@Test(expected = IllegalStateException.class)
 	public void testRemoveAtBeginning() {
 		int value = 71;
 		Collection<Integer> collection = new LinkedNodesCollection<>();
@@ -59,7 +64,7 @@ public class IteratorRemoveIllegalStateExceptionTest {
 		iterator.remove();
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT, expected = IllegalStateException.class)
+	@Test(expected = IllegalStateException.class)
 	public void testRemoveTwice() {
 		Collection<Integer> collection = new LinkedNodesCollection<>();
 		collection.add(3);

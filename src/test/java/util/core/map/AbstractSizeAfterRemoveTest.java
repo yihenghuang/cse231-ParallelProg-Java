@@ -28,7 +28,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import com.google.common.collect.Lists;
 
@@ -52,7 +54,10 @@ public abstract class AbstractSizeAfterRemoveTest {
 		return result;
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test
 	public void testRemoveSinglePresentKey() {
 		String s = "abcde";
 		for (Character c : Lists.charactersOf(s)) {
@@ -65,7 +70,7 @@ public abstract class AbstractSizeAfterRemoveTest {
 		}
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Test
 	public void testRemoveAllPresentKeys() {
 		String s = "abcde";
 		Map<Character, Integer> map = createMap(s);
@@ -81,7 +86,7 @@ public abstract class AbstractSizeAfterRemoveTest {
 		assertTrue(expectedSize == 0);
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Test
 	public void testRemoveSingleAbsentKey() {
 		String s = "abcde";
 		char absentCharacter = 'f';

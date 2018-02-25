@@ -26,7 +26,9 @@ import static edu.wustl.cse231s.v5.V5.launchApp;
 import java.nio.charset.StandardCharsets;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import count.assignment.rubric.CountRubric;
 import edu.wustl.cse231s.bioinformatics.Nucleobase;
@@ -39,7 +41,10 @@ import edu.wustl.cse231s.junit.JUnitUtils;
  */
 @CountRubric(CountRubric.Category.NWAY)
 public class NWaySplitRemainderCeilingTest {
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test
 	public void testRemainder() throws Exception {
 		launchApp(() -> {
 			byte[] chromosome = "AAAAAAA".getBytes(StandardCharsets.UTF_8);

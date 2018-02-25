@@ -28,8 +28,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import mapreduce.apps.friends.core.Account;
 import mapreduce.apps.friends.core.AccountId;
 import mapreduce.apps.friends.util.AccountDatabase;
@@ -41,6 +44,9 @@ import mapreduce.framework.warmup.friends.MutualFriendsConcreteStaticMapReduce;
  *         {@link MutualFriendsConcreteStaticMapReduce#reduceCombine(List, List)}
  */
 public class ReduceCombineTest {
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
 	@Test
 	public void test() {
 		Account[] accounts = AccountDatabase.MUTUAL_FRIENDS_STEVE_KRENZEL_EXAMPLE.getAccounts();

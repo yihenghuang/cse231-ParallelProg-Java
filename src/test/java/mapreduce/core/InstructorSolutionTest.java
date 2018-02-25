@@ -23,8 +23,11 @@ package mapreduce.core;
 
 import java.io.IOException;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import mapreduce.apps.wordcount.core.TextSection;
 import mapreduce.apps.wordcount.core.WordCountUtils;
 import mapreduce.apps.wordcount.core.io.WordsResource;
@@ -36,6 +39,9 @@ import mapreduce.framework.lab.rubric.MapReduceRubric;
  */
 @MapReduceRubric(MapReduceRubric.Category.SANITY_CHECK)
 public class InstructorSolutionTest {
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
 	@Test
 	public void test() throws IOException {
 		TextSection[] data = WordCountUtils.readAllLinesOfWords(WordsResource.ALICES_ADVENTURES_IN_WONDERLAND);

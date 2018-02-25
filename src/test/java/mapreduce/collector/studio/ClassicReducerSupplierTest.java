@@ -28,7 +28,11 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
+
+import edu.wustl.cse231s.junit.JUnitUtils;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
@@ -36,6 +40,9 @@ import org.junit.Test;
  *         {@link ClassicReducer#supplier()}
  */
 public class ClassicReducerSupplierTest {
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
 	@Test
 	public void test() {
 		ClassicReducer<Void, Void> reducer = new ClassicReducer<Void, Void>() {

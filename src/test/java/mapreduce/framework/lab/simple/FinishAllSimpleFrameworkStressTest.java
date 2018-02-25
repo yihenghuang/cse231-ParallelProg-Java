@@ -27,11 +27,14 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import mapreduce.core.CollectorSolution;
 import mapreduce.core.InstructorMapReduceTestUtils;
 import mapreduce.core.TestApplication;
@@ -57,6 +60,9 @@ public class FinishAllSimpleFrameworkStressTest<E> {
 		this.input = FrameworkTestUtils.getInput(resource);
 		this.application = FrameworkTestUtils.getApplication(resource);
 	}
+
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
 	@Test
 	public void testMapAll() throws InterruptedException, ExecutionException {

@@ -29,11 +29,14 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import mapreduce.apps.cards.core.Card;
 import mapreduce.apps.cards.core.Deck;
 import mapreduce.apps.cards.core.Rank;
@@ -52,6 +55,9 @@ public class CardMapperNumericOnlyTest {
 		this.suit = suit;
 		this.rank = rank;
 	}
+
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
 	@Test
 	public void test() {

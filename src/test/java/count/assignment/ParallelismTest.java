@@ -27,7 +27,9 @@ import static org.hamcrest.Matchers.is;
 import java.util.Arrays;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import count.assignment.rubric.CountRubric;
 import edu.wustl.cse231s.bioinformatics.Nucleobase;
@@ -73,7 +75,10 @@ public class ParallelismTest {
 		return result;
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test
 	@CountRubric(CountRubric.Category.LOWER_UPPER)
 	public void testUpperLower() {
 		Nucleobase nucleobase = Nucleobase.ADENINE;
@@ -83,7 +88,7 @@ public class ParallelismTest {
 		});
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Test
 	@CountRubric(CountRubric.Category.NWAY)
 	public void testNWaySplit() {
 		Nucleobase nucleobase = Nucleobase.ADENINE;

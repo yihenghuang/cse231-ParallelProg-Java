@@ -26,7 +26,9 @@ import static org.junit.Assert.assertNull;
 
 import java.math.BigDecimal;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
 
@@ -38,7 +40,10 @@ import java.util.Map;
 public abstract class AbstractEqualsTest {
 	protected abstract <K, V> Map<K, V> createMap();
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test
 	public void testPrimitiveGet() {
 		Map<Integer, String> map = this.createMap();
 		assertEquals(0, map.size());
@@ -47,7 +52,7 @@ public abstract class AbstractEqualsTest {
 		assertEquals("one", map.get(1));
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Test
 	public void testNonPrimitiveGet() {
 		Map<BigDecimal, String> map = this.createMap();
 		assertEquals(0, map.size());
@@ -56,7 +61,7 @@ public abstract class AbstractEqualsTest {
 		assertEquals("one", map.get(new BigDecimal(1)));
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Test
 	public void testPrimitivePut() {
 		Map<Integer, String> map = this.createMap();
 		assertEquals(0, map.size());
@@ -67,7 +72,7 @@ public abstract class AbstractEqualsTest {
 		assertEquals("uno", map.get(1));
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Test
 	public void testNonPrimitivePut() {
 		Map<BigDecimal, String> map = this.createMap();
 		assertEquals(0, map.size());
@@ -78,7 +83,7 @@ public abstract class AbstractEqualsTest {
 		assertEquals("uno", map.get(new BigDecimal(1)));
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Test
 	public void testPrimitiveRemove() {
 		Map<Integer, String> map = this.createMap();
 		assertEquals(0, map.size());
@@ -89,7 +94,7 @@ public abstract class AbstractEqualsTest {
 		assertNull(map.get(1));
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Test
 	public void testNonPrimitiveRemove() {
 		Map<BigDecimal, String> map = this.createMap();
 		assertEquals(0, map.size());

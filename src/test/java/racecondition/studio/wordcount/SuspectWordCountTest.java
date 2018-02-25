@@ -31,7 +31,9 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
 import edu.wustl.cse231s.v5.bookkeep.BookkeepingUtils;
@@ -43,7 +45,10 @@ import edu.wustl.cse231s.v5.impl.BookkeepingV5Impl;
  *         {@link SuspectWordCount#countWords(Iterable)}}
  */
 public class SuspectWordCountTest {
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test
 	public void test() {
 		Collection<String> words = createWords(10_000);
 		Map<String, Integer> expected = new HashMap<>();

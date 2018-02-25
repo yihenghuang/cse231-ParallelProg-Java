@@ -30,7 +30,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -63,7 +65,10 @@ public class DivideAndConquerTest {
 		this.truthAndBeautyCount = NucleobaseCountUtils.countSequential(chromosome, targetNucleobase);
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test
 	public void test() {
 		MutableInt count = new MutableInt();
 		launchApp(() -> {

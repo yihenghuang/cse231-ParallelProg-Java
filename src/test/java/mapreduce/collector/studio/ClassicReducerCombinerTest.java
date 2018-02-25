@@ -23,7 +23,6 @@ package mapreduce.collector.studio;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -33,7 +32,11 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
+
+import edu.wustl.cse231s.junit.JUnitUtils;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
@@ -41,6 +44,9 @@ import org.junit.Test;
  *         {@link ClassicReducer#combiner()}
  */
 public class ClassicReducerCombinerTest {
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
 	@Test
 	public void test() {
 		ClassicReducer<Integer, Integer> reducer = new ClassicReducer<Integer, Integer>() {
@@ -52,46 +58,45 @@ public class ClassicReducerCombinerTest {
 
 		Supplier<List<Integer>> supplier = reducer.supplier();
 		assertNotNull(supplier);
-		
+
 		BiConsumer<List<Integer>, Integer> accumulator = reducer.accumulator();
 		assertNotNull(accumulator);
-		
+
 		BinaryOperator<List<Integer>> combiner = reducer.combiner();
 		assertNotNull(combiner);
 
 		List<Integer> a = supplier.get();
 		assertNotNull(a);
 		assertTrue(a.isEmpty());
-		
+
 		accumulator.accept(a, 4);
 		assertEquals(1, a.size());
 		assertEquals(a, Arrays.asList(4));
 
 		accumulator.accept(a, 66);
 		assertEquals(2, a.size());
-		assertEquals(a, Arrays.asList(4,66));
+		assertEquals(a, Arrays.asList(4, 66));
 
 		accumulator.accept(a, 99);
 		assertEquals(3, a.size());
-		assertEquals(a, Arrays.asList(4,66,99));
+		assertEquals(a, Arrays.asList(4, 66, 99));
 
-	
 		List<Integer> b = supplier.get();
 		assertNotNull(b);
 		assertTrue(b.isEmpty());
-		
+
 		accumulator.accept(b, 6);
 		assertEquals(1, b.size());
 		assertEquals(b, Arrays.asList(6));
 
 		accumulator.accept(b, 23);
 		assertEquals(2, b.size());
-		assertEquals(b, Arrays.asList(6,23));
+		assertEquals(b, Arrays.asList(6, 23));
 
 		List<Integer> ab = combiner.apply(a, b);
-		assertTrue(ab==a || ab==b);
+		assertTrue(ab == a || ab == b);
 
 		assertEquals(5, ab.size());
-		assertTrue(ab.containsAll(Arrays.asList(4,66,99,6,23)));
+		assertTrue(ab.containsAll(Arrays.asList(4, 66, 99, 6, 23)));
 	}
 }

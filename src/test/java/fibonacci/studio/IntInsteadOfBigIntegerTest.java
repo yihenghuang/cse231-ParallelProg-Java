@@ -30,7 +30,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -67,7 +69,10 @@ public class IntInsteadOfBigIntegerTest {
 		this.fibonacciCalculator = fibonacciCalculator;
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test
 	public void test() {
 		BigInteger expected46 = FibonacciUtils.fibonacci(46); // just below Integer.MAX_VALUE
 		BigInteger expected47 = FibonacciUtils.fibonacci(47); // just above Integer.MAX_VALUE

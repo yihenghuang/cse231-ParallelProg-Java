@@ -27,8 +27,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import mapreduce.framework.warmup.wordcount.WordCountConcreteStaticMapReduce;
 
 /**
@@ -43,6 +46,9 @@ public class ReduceFinishTest {
 		int actual = WordCountConcreteStaticMapReduce.reduceFinish(list);
 		Assert.assertEquals(expected, actual);
 	}
+
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
 	@Test
 	public void test42() {

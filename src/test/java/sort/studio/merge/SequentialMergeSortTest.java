@@ -23,7 +23,9 @@ package sort.studio.merge;
 
 import java.util.concurrent.ExecutionException;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
 import sort.core.merge.AbstractMergeSortTest;
@@ -36,7 +38,10 @@ import sort.core.merge.SequentialTestCombiner;
  *         {@link MergeSort#sequentialMergeSort(int[], Combiner)}
  */
 public class SequentialMergeSortTest extends AbstractMergeSortTest {
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test
 	public void testSequential() throws InterruptedException, ExecutionException {
 		this.testMergeSorter((int[] array) -> {
 			MergeSort.sequentialMergeSort(array, new SequentialTestCombiner(array.length));

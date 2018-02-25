@@ -32,8 +32,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.mutable.MutableObject;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import mapreduce.apps.intsum.studio.IntegerSumClassicReducer;
 import mapreduce.collector.studio.ClassicReducer;
 import mapreduce.framework.lab.rubric.MapReduceRubric;
@@ -68,6 +71,9 @@ public class FinishAllSimpleFrameworkPointedTest {
 		assertTrue(actual.containsKey(key));
 		assertEquals(expectedValue, actual.get(key).intValue());
 	}
+
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
 	@Test
 	public void test42() {

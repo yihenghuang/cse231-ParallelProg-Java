@@ -26,8 +26,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import mapreduce.apps.intsum.studio.IntegerSumClassicReducer;
 import mapreduce.collector.studio.ClassicReducer;
 
@@ -46,6 +49,9 @@ public class IntegerSumClassicReducerPointedTest {
 		}
 		Assert.assertEquals(actualReduction, expectedReduction);
 	}
+
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
 	@Test
 	public void testNotJustOnes() {

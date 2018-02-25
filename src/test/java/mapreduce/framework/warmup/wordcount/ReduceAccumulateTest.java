@@ -26,8 +26,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import mapreduce.framework.warmup.wordcount.WordCountConcreteStaticMapReduce;
 
 /**
@@ -36,6 +39,9 @@ import mapreduce.framework.warmup.wordcount.WordCountConcreteStaticMapReduce;
  *         {@link WordCountConcreteStaticMapReduce#reduceAccumulate(List, int)}
  */
 public class ReduceAccumulateTest {
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
 	@Test
 	public void test() {
 		List<Integer> expected = Arrays.asList(1, 1, 2, 3, 5, 8, 13, 21);

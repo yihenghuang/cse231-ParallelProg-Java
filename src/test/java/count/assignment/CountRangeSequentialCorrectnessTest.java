@@ -22,7 +22,9 @@
 package count.assignment;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import count.assignment.rubric.CountRubric;
 import edu.wustl.cse231s.bioinformatics.Nucleobase;
@@ -35,7 +37,10 @@ import edu.wustl.cse231s.junit.JUnitUtils;
  */
 @CountRubric(CountRubric.Category.RANGE)
 public class CountRangeSequentialCorrectnessTest {
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test
 	public void testAllAdenine() throws Exception {
 		byte[] chromosome = "AAAAAAAA".getBytes();
 

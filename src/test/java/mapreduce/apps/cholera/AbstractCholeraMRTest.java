@@ -22,8 +22,11 @@
 
 package mapreduce.apps.cholera;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import mapreduce.apps.cholera.core.CholeraDeath;
 import mapreduce.apps.cholera.core.SohoCholeraOutbreak1854;
 import mapreduce.apps.cholera.core.WaterPump;
@@ -41,6 +44,9 @@ public abstract class AbstractCholeraMRTest<A> extends AbstractMRTest<CholeraDea
 			CollectorSolution collectorSolution) {
 		super(TestApplication.CHOLERA, frameworkSolution, mapperSolution, collectorSolution);
 	}
+
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
 	@Test
 	public void test() {

@@ -27,8 +27,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import mapreduce.framework.warmup.wordcount.WordCountConcreteStaticMapReduce;
 
 /**
@@ -37,6 +40,9 @@ import mapreduce.framework.warmup.wordcount.WordCountConcreteStaticMapReduce;
  *         {@link WordCountConcreteStaticMapReduce#reduceCombine(List, List)}
  */
 public class ReduceCombineTest {
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
 	@Test
 	public void test() {
 		List<Integer> a = Arrays.asList(1, 1, 2, 3);

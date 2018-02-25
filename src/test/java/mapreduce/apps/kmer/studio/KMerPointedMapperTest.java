@@ -29,11 +29,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import mapreduce.apps.kmer.studio.KMerMapper;
 import mapreduce.framework.core.Mapper;
 
@@ -49,6 +52,9 @@ public class KMerPointedMapperTest {
 		this.chromosomeText = chromosomeText;
 		this.kMerLength = kMerLength;
 	}
+
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
 	@Test
 	public void test() {

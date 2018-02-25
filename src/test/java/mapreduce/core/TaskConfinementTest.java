@@ -26,8 +26,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import mapreduce.apps.wordcount.core.TextSection;
 import mapreduce.apps.wordcount.core.WordCountUtils;
 import mapreduce.apps.wordcount.core.io.WordsResource;
@@ -97,6 +100,9 @@ public class TaskConfinementTest {
 		// framework.mapReduceAll(data);
 		// });
 	}
+
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
 	@Test
 	public void testTaskConfinementForSmallDataSetOnOneMapTask() {

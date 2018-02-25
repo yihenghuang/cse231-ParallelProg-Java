@@ -28,8 +28,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import mapreduce.apps.friends.core.Account;
 import mapreduce.apps.friends.core.AccountId;
 import mapreduce.apps.friends.core.MutualFriendIds;
@@ -43,6 +46,9 @@ import mapreduce.framework.warmup.friends.MutualFriendsConcreteStaticMapReduce;
  *         {@link MutualFriendsConcreteStaticMapReduce#reduceFinish(List)}
  */
 public class ReduceFinishTest {
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
 	@Test
 	public void test() {
 		Account[] accounts = AccountDatabase.MUTUAL_FRIENDS_STEVE_KRENZEL_EXAMPLE.getAccounts();

@@ -31,7 +31,9 @@ import java.util.Queue;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import edu.wustl.cse231s.color.ColorUtil;
 import edu.wustl.cse231s.fx.FxImageUtils;
@@ -52,7 +54,10 @@ import javafx.scene.paint.Color;
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class FloodFillTest {
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test
 	public void test() {
 		WritableImage original = FloodFillVizApp.loadClampedToBlackAndWhiteWritableImage();
 

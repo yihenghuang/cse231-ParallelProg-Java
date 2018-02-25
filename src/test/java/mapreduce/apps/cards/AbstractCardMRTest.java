@@ -21,8 +21,11 @@
  ******************************************************************************/
 package mapreduce.apps.cards;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import mapreduce.apps.cards.core.Deck;
 import mapreduce.apps.cards.core.Suit;
 import mapreduce.apps.cards.util.DeckTestUtils;
@@ -42,6 +45,8 @@ public abstract class AbstractCardMRTest<A> extends AbstractMRTest<Deck, Suit, I
 		super(TestApplication.CARDS, frameworkSolution, mapperSolution, collectorSolution);
 		this.numDecks = numDecks;
 	}
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
 	@Test
 	public void testShuffledDecks() {

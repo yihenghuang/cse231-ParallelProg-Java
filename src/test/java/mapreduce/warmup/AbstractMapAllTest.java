@@ -25,8 +25,11 @@ import static edu.wustl.cse231s.v5.V5.launchApp;
 
 import java.util.concurrent.ExecutionException;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import mapreduce.core.InstructorMapReduceTestUtils;
 import mapreduce.core.MapperSolution;
 import mapreduce.core.TestApplication;
@@ -43,6 +46,9 @@ public abstract class AbstractMapAllTest<E> {
 		this.input = input;
 		this.application = application;
 	}
+
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
 	@Test
 	public void testMapAll() throws InterruptedException, ExecutionException {

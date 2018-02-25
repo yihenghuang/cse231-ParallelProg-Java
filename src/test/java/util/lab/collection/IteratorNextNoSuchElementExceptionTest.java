@@ -30,7 +30,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
 import util.lab.rubric.UtilRubric;
@@ -42,7 +44,10 @@ import util.lab.rubric.UtilRubric;
  */
 @UtilRubric(UtilRubric.Category.ITERATOR_NEXT)
 public class IteratorNextNoSuchElementExceptionTest {
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT, expected = NoSuchElementException.class)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test(expected = NoSuchElementException.class)
 	public void testNextForEmpty() {
 		Collection<Void> collection = new LinkedNodesCollection<>();
 		Iterator<Void> iterator = collection.iterator();
@@ -50,7 +55,7 @@ public class IteratorNextNoSuchElementExceptionTest {
 		iterator.next();
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT, expected = NoSuchElementException.class)
+	@Test(expected = NoSuchElementException.class)
 	public void testNextAtEnd() {
 		int value = 71;
 		Collection<Integer> collection = new LinkedNodesCollection<>();

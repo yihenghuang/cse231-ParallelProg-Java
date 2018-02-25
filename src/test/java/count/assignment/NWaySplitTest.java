@@ -30,7 +30,9 @@ import java.util.Collection;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -60,7 +62,10 @@ public class NWaySplitTest {
 		this.numTasks = numTasks;
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test
 	public void testNWay() {
 		int expectedCount = NucleobaseCountUtils.countSequential(chromosome, targetNucleobase);
 		launchApp(() -> {

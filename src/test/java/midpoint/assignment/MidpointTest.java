@@ -22,7 +22,9 @@
 package midpoint.assignment;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import count.assignment.rubric.CountRubric;
 import edu.wustl.cse231s.junit.JUnitUtils;
@@ -49,7 +51,10 @@ public class MidpointTest {
 		assertWithinRange(message, expected - 1, expected, expected + 1, actual);
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test
 	public void lowerBoundZero() {
 		assertWithinOneOfExpected("The midpoint does not work with a lower bound of zero and an even upper bound!", 0,
 				100);
@@ -57,7 +62,7 @@ public class MidpointTest {
 				77);
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Test
 	public void lowerBoundNotZero() {
 		assertWithinOneOfExpected("The midpoint does not work with a non-zero lower bound and even numbers!", 90, 100);
 		assertWithinOneOfExpected("The midpoint does not work with a non-zero lower bound and odd numbers!", 95, 105);

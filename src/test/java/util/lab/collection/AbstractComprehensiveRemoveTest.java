@@ -22,7 +22,9 @@
 package util.lab.collection;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
 import util.lab.collection.LinkedNodesCollection;
@@ -98,7 +100,10 @@ public abstract class AbstractComprehensiveRemoveTest<T> {
 		return data;
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test
 	public void testUnique() {
 		Deque<T> truthAndBeauty = new LinkedList<>();
 		char[] data = createReversed("ABCDE");
@@ -116,7 +121,7 @@ public abstract class AbstractComprehensiveRemoveTest<T> {
 		}
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Test
 	public void testDuplicates() {
 		Deque<T> truthAndBeauty = new LinkedList<>();
 		char[] data = createReversed("abracadabra");

@@ -30,8 +30,11 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collector;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import mapreduce.framework.core.Mapper;
 import mapreduce.framework.core.NoOpCollector;
 import mapreduce.framework.lab.matrix.AccessMatrixFrameworkUtils;
@@ -70,6 +73,9 @@ public class MapAccumulateAllMatrixFrameworkPointedTest {
 		}
 		return true;
 	}
+
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
 	@Test
 	public void testResultArrayNotNull() {

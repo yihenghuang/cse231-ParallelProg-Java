@@ -23,7 +23,9 @@ package sort.core.merge;
 
 import static edu.wustl.cse231s.v5.V5.launchApp;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
 import sort.studio.merge.MergeSort;
@@ -33,8 +35,10 @@ import sort.studio.merge.MergeSort;
  */
 public abstract class AbstractParallelMergeSortTest extends AbstractMergeSortTest {
 	protected abstract Combiner createCombiner(int arrayLength);
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Test
 	public void testParallel() {
 		launchApp(() -> {
 			this.testMergeSorter((int[] array) -> {

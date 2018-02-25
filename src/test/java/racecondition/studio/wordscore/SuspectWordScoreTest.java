@@ -32,7 +32,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import edu.wustl.cse231s.download.DownloadUtils;
 import edu.wustl.cse231s.junit.JUnitUtils;
@@ -56,7 +58,10 @@ public class SuspectWordScoreTest {
 		this.sourceLines = DataCleaningUtils.toUnique(lines);
 	}
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test
 	public void testSuspectClean() {
 		BookkeepingV5Impl bookkeeping = BookkeepingUtils.bookkeep(() -> {
 			List<String> actual = SuspectWordScore.toCleanedWordsViaArray(this.sourceLines);

@@ -24,8 +24,11 @@ package mapreduce.apps.friends;
 
 import java.util.Set;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import edu.wustl.cse231s.util.OrderedPair;
 import mapreduce.apps.friends.core.Account;
 import mapreduce.apps.friends.core.AccountId;
@@ -49,6 +52,9 @@ public abstract class AbstractMutualFriendsMRTest<A>
 		super(TestApplication.MUTUAL_FRIENDS, frameworkSolution, mapperSolution, collectorSolution);
 		this.accountDatabase = accountDatabase;
 	}
+
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
 	@Test
 	public void test() {

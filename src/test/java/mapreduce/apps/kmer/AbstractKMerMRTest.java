@@ -24,9 +24,12 @@ package mapreduce.apps.kmer;
 import java.io.IOException;
 import java.util.List;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import edu.wustl.cse231s.bioinformatics.io.FastaSplitUtils;
+import edu.wustl.cse231s.junit.JUnitUtils;
 import edu.wustl.cse231s.kmer.io.ChromosomeResourceTestUtils;
 import mapreduce.core.AbstractMRTest;
 import mapreduce.core.CollectorSolution;
@@ -42,6 +45,9 @@ public abstract class AbstractKMerMRTest<A> extends AbstractMRTest<byte[], Strin
 			CollectorSolution collectorSolution) {
 		super(TestApplication.TWELVE_MER, frameworkSolution, mapperSolution, collectorSolution);
 	}
+
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
 	@Test
 	public void testHomoSapiensMitochondrion() throws IOException {

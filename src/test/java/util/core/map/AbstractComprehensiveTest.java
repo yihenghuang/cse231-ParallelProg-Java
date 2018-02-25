@@ -29,7 +29,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
 
@@ -40,7 +42,10 @@ import edu.wustl.cse231s.junit.JUnitUtils;
 public abstract class AbstractComprehensiveTest {
 	protected abstract <K, V> Map<K, V> createMap();
 
-	@Test(timeout = JUnitUtils.DEFAULT_TIMEOUT)
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	@Test
 	public void test() {
 		Map<Integer, Double> map = this.createMap();
 

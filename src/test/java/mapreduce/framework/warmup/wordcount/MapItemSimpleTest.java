@@ -26,8 +26,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import edu.wustl.cse231s.util.KeyValuePair;
 import mapreduce.apps.wordcount.core.TextSection;
 import mapreduce.framework.warmup.wordcount.WordCountConcreteStaticMapReduce;
@@ -38,6 +41,9 @@ import mapreduce.framework.warmup.wordcount.WordCountConcreteStaticMapReduce;
  *         {@link WordCountConcreteStaticMapReduce#map(TextSection, java.util.function.BiConsumer)}
  */
 public class MapItemSimpleTest {
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
 	@Test
 	public void test() {
 		TextSection textSection = new TextSection("a b c d");
