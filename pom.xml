@@ -10,26 +10,6 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<additionalparam>-Xdoclint:none</additionalparam>
 	</properties>
-	<repositories>
-		<repository>
-			<id>hjlib-maven-repo-mvn-repo</id>
-			<url>https://raw.github.com/habanero-maven/hjlib-maven-repo/mvn-repo-${hjlib.version}/</url>
-		</repository>
-	</repositories>
-      <reporting>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <version>2.10.4</version>
-            <configuration>
-              <links>
-                <link>http://www.cs.rice.edu/~vs3/hjlib/doc/</link>
-              </links>
-            </configuration>
-          </plugin>
-        </plugins>
-      </reporting>
 	<build>
 		<plugins>
 			<plugin>
@@ -154,7 +134,6 @@
 			<artifactId>guava</artifactId>
 			<version>23.0</version>
 		</dependency>
-<!--
 		<dependency>
 			<groupId>edu.wustl.cse231s</groupId>
 			<artifactId>instructor_solution</artifactId>
@@ -162,6 +141,7 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/instructor_solution.jar</systemPath>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>org.opencv</groupId>
 			<artifactId>opencv3</artifactId>
@@ -169,6 +149,6 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/dist/java/opencv-331.jar</systemPath>
 		</dependency>
--->
+		-->
 	</dependencies>
 </project>
