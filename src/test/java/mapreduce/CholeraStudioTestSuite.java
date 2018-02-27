@@ -24,12 +24,14 @@ package mapreduce;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import mapreduce.apps.cholera.studio.CholeraCollectorTest;
+import mapreduce.apps.cholera.studio.CholeraMapperAndCollectorTest;
 import mapreduce.apps.cholera.studio.CholeraMapperTest;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ CholeraMapperTest.class })
+@Suite.SuiteClasses({ CholeraMapperTest.class, CholeraCollectorTest.class, CholeraMapperAndCollectorTest.class })
 public class CholeraStudioTestSuite {
 }

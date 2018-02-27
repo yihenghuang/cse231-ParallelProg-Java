@@ -28,6 +28,8 @@ import mapreduce.core.MapperSolution;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link CholeraApp#createMapper()}
  */
 public class CholeraMapperTest<A> extends AbstractCholeraMRTest<A> {
 	public CholeraMapperTest() {

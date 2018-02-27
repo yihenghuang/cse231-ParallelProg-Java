@@ -25,7 +25,7 @@ package mapreduce.core;
 import java.util.stream.Collector;
 
 import mapreduce.apps.cards.studio.CardMapper;
-import mapreduce.apps.cholera.studio.CholeraMapper;
+import mapreduce.apps.cholera.studio.CholeraApp;
 import mapreduce.apps.friends.core.Account;
 import mapreduce.apps.friends.studio.MutualFriendsClassicReducer;
 import mapreduce.apps.friends.studio.MutualFriendsMapper;
@@ -54,12 +54,12 @@ public enum TestApplication {
 	CHOLERA() {
 		@Override
 		public <E, K, V> Mapper<E, K, V> createStudentMapper() {
-			return (Mapper<E, K, V>) new CholeraMapper();
+			return (Mapper<E, K, V>) CholeraApp.createMapper();
 		}
 
 		@Override
 		public <E, V, A, R> Collector<V, A, R> createStudentCollector(E[] input) {
-			return (Collector<V, A, R>) new IntegerSumClassicReducer();
+			return (Collector<V, A, R>) CholeraApp.createCollector();
 		}
 	},
 	TWELVE_MER() {

@@ -22,29 +22,31 @@
 
 package mapreduce.apps.cholera.viz;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import mapreduce.apps.cholera.core.WaterPump;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-public class WaterPumpDeathCountRow extends AbstractWaterPumpRow {
-	private final IntegerProperty instructorValueProperty = new SimpleIntegerProperty(this,
+public class WaterPumpDistanceRow extends AbstractWaterPumpRow {
+	private final DoubleProperty instructorValueProperty = new SimpleDoubleProperty(this,
 			INSTRUCTOR_VALUE_PROPERTY_NAME);
-	private final IntegerProperty studentValueProperty = new SimpleIntegerProperty(this, STUDENT_VALUE_PROPERTY_NAME);
+	private final DoubleProperty studentValueProperty = new SimpleDoubleProperty(this, STUDENT_VALUE_PROPERTY_NAME);
 
-	public WaterPumpDeathCountRow(WaterPump waterPump, Number instructorValue, Number studentValue) {
-		super(waterPump, studentValue.intValue() == instructorValue.intValue());
-		instructorValueProperty.set(instructorValue.intValue());
-		studentValueProperty.set(studentValue.intValue());
+	private static final double EPSILON = 0.000001;
+
+	public WaterPumpDistanceRow(WaterPump waterPump, Number instructorValue, Number studentValue) {
+		super(waterPump, Math.abs(studentValue.doubleValue() - instructorValue.doubleValue()) < EPSILON);
+		instructorValueProperty.set(instructorValue.doubleValue());
+		studentValueProperty.set(studentValue.doubleValue());
 	}
 
-	public IntegerProperty instructorValueProperty() {
+	public DoubleProperty instructorValueProperty() {
 		return instructorValueProperty;
 	}
 
-	public IntegerProperty studentValueProperty() {
+	public DoubleProperty studentValueProperty() {
 		return studentValueProperty;
 	}
 }

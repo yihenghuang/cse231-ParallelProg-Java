@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2017 Dennis Cosgrove
+ * Copyright (C) 2016-2018 Dennis Cosgrove
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -55,18 +55,18 @@ import mapreduce.apps.cholera.core.CholeraDeath;
 import mapreduce.apps.cholera.core.Location;
 import mapreduce.apps.cholera.core.SohoCholeraOutbreak1854;
 import mapreduce.apps.cholera.core.WaterPump;
-import mapreduce.apps.cholera.studio.CholeraMapper;
+import mapreduce.apps.cholera.studio.CholeraApp;
+import mapreduce.apps.cholera.studio.CholeraAppValueRepresentation;
 import mapreduce.core.InstructorMapReduceTestUtils;
+import mapreduce.framework.core.Mapper;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class CholeraOutbreakVisualizationApp extends Application {
 	private static Point2D transformLocationToImageSpace(Location location, double imageScale) {
-		// convert to close to 0.0-1.0
-		// as you can tell from the overlay, these constants do not line things
-		// up
-		// perfectly
+		// convert to close to 0.0-1.0 as you can tell from the overlay,
+		// these constants sadly do not line things up perfectly
 		double xMin = 3.0;
 		double xMax = 19.0;
 		double yMin = 3.0;
@@ -85,50 +85,96 @@ public class CholeraOutbreakVisualizationApp extends Application {
 		return new Point2D(x, y);
 	}
 
-	private static double calculateFontSizeBasedOnDeathCount(Integer deathCount) {
+	private static double calculateFontSize(Number value, double smallValue, double largeValue) {
 		double size = 8.0;
-		if (deathCount != null) {
-			size += deathCount / 12;
+		if (value != null) {
+			double v;
+			if (smallValue > largeValue) {
+				double range = smallValue - largeValue;
+				v = (value.doubleValue() - largeValue) / range;
+			} else {
+				double range = largeValue - smallValue;
+				v = 1.0 - ((value.doubleValue() - smallValue) / range);
+			}
+			size += 24 * v;
 		}
 		return size;
 	}
 
-	private static double calculateCircleRadiusBasedOnDeathCount(Integer deathCount) {
+	private static double calculateCircleRadius(Number value, double smallValue, double largeValue) {
 		double size = 4.0;
-		if (deathCount != null) {
-			size += deathCount / 12;
+		if (value != null) {
+			double v;
+			if (smallValue > largeValue) {
+				double range = smallValue - largeValue;
+				v = (value.doubleValue() - largeValue) / range;
+			} else {
+				double range = largeValue - smallValue;
+				v = 1.0 - ((value.doubleValue() - smallValue) / range);
+			}
+			size += 24 * v;
 		}
 		return size;
+
 	}
 
-	private static List<WaterPumpDeathCountRow> createEntriesSortedByDeathCount(
-			Map<WaterPump, Integer> instructorPumpToDeathCountDictionary,
-			Map<WaterPump, Integer> studentPumpToDeathCountDictionary) {
+	private static List<WaterPumpDeathCountRow> createDeathCountRows(Map<WaterPump, Number> instructorDictionary,
+			Map<WaterPump, Number> studentDictionary) {
 
-		MapDifference<WaterPump, Integer> difference = Maps.difference(instructorPumpToDeathCountDictionary,
-				studentPumpToDeathCountDictionary);
+		MapDifference<WaterPump, Number> difference = Maps.difference(instructorDictionary, studentDictionary);
 
 		List<WaterPumpDeathCountRow> result = new LinkedList<>();
-		for (Entry<WaterPump, Integer> entry : difference.entriesInCommon().entrySet()) {
+		for (Entry<WaterPump, Number> entry : difference.entriesInCommon().entrySet()) {
 			result.add(new WaterPumpDeathCountRow(entry.getKey(), entry.getValue(), entry.getValue()));
 		}
-		for (Entry<WaterPump, ValueDifference<Integer>> entry : difference.entriesDiffering().entrySet()) {
+		for (Entry<WaterPump, ValueDifference<Number>> entry : difference.entriesDiffering().entrySet()) {
 			result.add(new WaterPumpDeathCountRow(entry.getKey(), entry.getValue().leftValue(),
 					entry.getValue().rightValue()));
 		}
-		for (Entry<WaterPump, Integer> entry : difference.entriesOnlyOnLeft().entrySet()) {
+		for (Entry<WaterPump, Number> entry : difference.entriesOnlyOnLeft().entrySet()) {
 			result.add(new WaterPumpDeathCountRow(entry.getKey(), entry.getValue(), 0));
 		}
-		for (Entry<WaterPump, Integer> entry : difference.entriesOnlyOnRight().entrySet()) {
+		for (Entry<WaterPump, Number> entry : difference.entriesOnlyOnRight().entrySet()) {
 			result.add(new WaterPumpDeathCountRow(entry.getKey(), 0, entry.getValue()));
 		}
 		result.sort((entryA, entryB) -> {
-			int comp = entryB.instructorDeathCountProperty().intValue()
-					- entryA.instructorDeathCountProperty().intValue();
+			int comp = entryB.instructorValueProperty().intValue() - entryA.instructorValueProperty().intValue();
 			if (comp != 0) {
 				return comp;
 			} else {
-				return entryB.studentDeathCountProperty().intValue() - entryA.studentDeathCountProperty().intValue();
+				return entryB.studentValueProperty().intValue() - entryA.studentValueProperty().intValue();
+			}
+		});
+		return result;
+	}
+
+	private static List<WaterPumpDistanceRow> createDistanceRows(Map<WaterPump, Number> instructorDictionary,
+			Map<WaterPump, Number> studentDictionary) {
+
+		MapDifference<WaterPump, Number> difference = Maps.difference(instructorDictionary, studentDictionary);
+
+		List<WaterPumpDistanceRow> result = new LinkedList<>();
+		for (Entry<WaterPump, Number> entry : difference.entriesInCommon().entrySet()) {
+			result.add(new WaterPumpDistanceRow(entry.getKey(), entry.getValue(), entry.getValue()));
+		}
+		for (Entry<WaterPump, ValueDifference<Number>> entry : difference.entriesDiffering().entrySet()) {
+			result.add(new WaterPumpDistanceRow(entry.getKey(), entry.getValue().leftValue(),
+					entry.getValue().rightValue()));
+		}
+		for (Entry<WaterPump, Number> entry : difference.entriesOnlyOnLeft().entrySet()) {
+			result.add(new WaterPumpDistanceRow(entry.getKey(), entry.getValue(), 0));
+		}
+		for (Entry<WaterPump, Number> entry : difference.entriesOnlyOnRight().entrySet()) {
+			result.add(new WaterPumpDistanceRow(entry.getKey(), 0, entry.getValue()));
+		}
+		result.sort((entryA, entryB) -> {
+			int comp = -Double.compare(entryB.instructorValueProperty().doubleValue(),
+					entryA.instructorValueProperty().doubleValue());
+			if (comp != 0) {
+				return comp;
+			} else {
+				return -Double.compare(entryB.studentValueProperty().doubleValue(),
+						entryA.studentValueProperty().doubleValue());
 			}
 		});
 		return result;
@@ -136,7 +182,7 @@ public class CholeraOutbreakVisualizationApp extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		CholeraMapper mapper = new CholeraMapper();
+		Mapper<CholeraDeath, WaterPump, Number> mapper = CholeraApp.createMapper();
 		boolean isImplemented;
 		try {
 			mapper.map(SohoCholeraOutbreak1854.getDeaths()[0], (k, v) -> {
@@ -149,11 +195,10 @@ public class CholeraOutbreakVisualizationApp extends Application {
 			isImplemented = false;
 		}
 
-		Map<WaterPump, Integer> studentPumpToDeathCountDictionary;
+		Map<WaterPump, Number> studentPumpToDeathCountDictionary;
 		if (isImplemented) {
 			try {
-				studentPumpToDeathCountDictionary = InstructorMapReduceTestUtils.mapReduceCholeraStudent(this,
-						primaryStage);
+				studentPumpToDeathCountDictionary = InstructorMapReduceTestUtils.mapReduceCholeraStudent();
 			} catch (Throwable t) {
 				studentPumpToDeathCountDictionary = Collections.emptyMap();
 			}
@@ -161,9 +206,6 @@ public class CholeraOutbreakVisualizationApp extends Application {
 			studentPumpToDeathCountDictionary = Collections.emptyMap();
 		}
 		double scale = 800;
-
-		Map<WaterPump, Integer> instructorPumpToDeathCountDictionary = InstructorMapReduceTestUtils
-				.mapReduceCholeraInstructor(this, primaryStage);
 
 		BorderPane pane = new BorderPane();
 
@@ -173,23 +215,21 @@ public class CholeraOutbreakVisualizationApp extends Application {
 		imageView.setSmooth(true);
 		imageView.setPreserveRatio(true);
 
-		TableView<WaterPumpDeathCountRow> table = new TableView<>();
+		TableView<AbstractWaterPumpRow> table = new TableView<>();
 
-		List<WaterPumpDeathCountRow> rows = createEntriesSortedByDeathCount(instructorPumpToDeathCountDictionary,
-				studentPumpToDeathCountDictionary);
-
-		ObservableList<WaterPumpDeathCountRow> observableList = FXCollections.observableArrayList();
-		for (WaterPumpDeathCountRow row : rows) {
-			observableList.add(row);
+		int intCount = 0;
+		for (Number value : studentPumpToDeathCountDictionary.values()) {
+			if (value instanceof Integer) {
+				intCount++;
+			}
 		}
-		table.setItems(observableList);
 
 		int columnCount = 4;
-		TableColumn<WaterPumpDeathCountRow, Boolean> isCorrectCol = new TableColumn<>("correct?");
-		isCorrectCol.setCellValueFactory(new PropertyValueFactory<>("isCorrect"));
-		isCorrectCol.prefWidthProperty().bind(table.widthProperty().divide(columnCount));
-		isCorrectCol.setCellFactory((column) -> {
-			return new CheckBoxTableCell<WaterPumpDeathCountRow, Boolean>() {
+		TableColumn<AbstractWaterPumpRow, Boolean> isMatchCol = new TableColumn<>("match?");
+		isMatchCol.setCellValueFactory(new PropertyValueFactory<>(AbstractWaterPumpRow.IS_MATCH_PROPERTY_NAME));
+		isMatchCol.prefWidthProperty().bind(table.widthProperty().divide(columnCount));
+		isMatchCol.setCellFactory((column) -> {
+			return new CheckBoxTableCell<AbstractWaterPumpRow, Boolean>() {
 				@Override
 				public void updateItem(Boolean item, boolean isEmpty) {
 					super.updateItem(item, isEmpty);
@@ -200,38 +240,75 @@ public class CholeraOutbreakVisualizationApp extends Application {
 							// pass
 						} else {
 							setTextFill(Color.RED);
-							setText("ERROR");
+							setText("!!!");
 						}
 					}
 				}
 			};
 		});
 
-		TableColumn<WaterPumpDeathCountRow, WaterPump> waterPumpCol = new TableColumn<>("Water Pump");
-		waterPumpCol.setCellValueFactory(new PropertyValueFactory<>("waterPump"));
+		TableColumn<AbstractWaterPumpRow, WaterPump> waterPumpCol = new TableColumn<>("Water Pump");
+		waterPumpCol.setCellValueFactory(new PropertyValueFactory<>(AbstractWaterPumpRow.WATER_PUMP_PROPERTY_NAME));
 		waterPumpCol.prefWidthProperty().bind(table.widthProperty().divide(columnCount));
-		TableColumn<WaterPumpDeathCountRow, Integer> instructorDeathCountCol = new TableColumn<>(
-				"(Instructor Result) Death Count");
-		instructorDeathCountCol.setCellValueFactory(new PropertyValueFactory<>("instructorDeathCount"));
-		instructorDeathCountCol.prefWidthProperty().bind(table.widthProperty().divide(columnCount));
-		TableColumn<WaterPumpDeathCountRow, Integer> studentDeathCountCol = new TableColumn<>(
-				"(Student Result) Death Count");
-		studentDeathCountCol.setCellValueFactory(new PropertyValueFactory<>("studentDeathCount"));
-		studentDeathCountCol.prefWidthProperty().bind(table.widthProperty().divide(columnCount));
+		TableColumn<AbstractWaterPumpRow, Integer> instructorValueCol = new TableColumn<>("Instructor Result");
+		instructorValueCol
+				.setCellValueFactory(new PropertyValueFactory<>(AbstractWaterPumpRow.INSTRUCTOR_VALUE_PROPERTY_NAME));
+		instructorValueCol.prefWidthProperty().bind(table.widthProperty().divide(columnCount));
+		instructorValueCol.setStyle("-fx-alignment: center-right;");
+
+		TableColumn<AbstractWaterPumpRow, Integer> studentValueCol = new TableColumn<>("Student Result");
+		studentValueCol
+				.setCellValueFactory(new PropertyValueFactory<>(AbstractWaterPumpRow.STUDENT_VALUE_PROPERTY_NAME));
+		studentValueCol.prefWidthProperty().bind(table.widthProperty().divide(columnCount));
+		studentValueCol.setStyle("-fx-alignment: center-right;");
 
 		table.getColumns().add(waterPumpCol);
-		table.getColumns().add(instructorDeathCountCol);
-		table.getColumns().add(studentDeathCountCol);
-		table.getColumns().add(isCorrectCol);
+		table.getColumns().add(instructorValueCol);
+		table.getColumns().add(studentValueCol);
+		table.getColumns().add(isMatchCol);
+
+		List<? extends AbstractWaterPumpRow> rows;
+		if (intCount > 0) {
+			Map<WaterPump, Number> instructorPumpToDeathCountDictionary = InstructorMapReduceTestUtils
+					.mapReduceCholeraInstructorDeathCount();
+			rows = createDeathCountRows(instructorPumpToDeathCountDictionary, studentPumpToDeathCountDictionary);
+		} else {
+			Map<WaterPump, Number> instructorPumpToDeathCountDictionary = InstructorMapReduceTestUtils
+					.mapReduceCholeraInstructorDistance(CholeraApp
+							.getValueRepresentation() == CholeraAppValueRepresentation.LOW_NUMBERS_SUSPECT_SQUARED);
+			rows = createDistanceRows(instructorPumpToDeathCountDictionary, studentPumpToDeathCountDictionary);
+		}
+		ObservableList<AbstractWaterPumpRow> observableList = FXCollections.observableArrayList();
+		for (AbstractWaterPumpRow row : rows) {
+			observableList.add(row);
+		}
+		table.setItems(observableList);
 		table.setPrefWidth(300);
 
 		pane.setLeft(imageView);
 		pane.setCenter(table);
 
+		double min = Double.MAX_VALUE;
+		double max = -Double.MAX_VALUE;
+		for (Number value : studentPumpToDeathCountDictionary.values()) {
+			min = Math.min(min, value.doubleValue());
+			max = Math.max(max, value.doubleValue());
+		}
+
+		double big;
+		double small;
+		if (CholeraApp.getValueRepresentation() == CholeraAppValueRepresentation.HIGH_NUMBERS_SUSPECT) {
+			big = max;
+			small = min;
+		} else {
+			big = min;
+			small = max;
+		}
+
 		for (WaterPump pump : WaterPump.values()) {
-			Integer deathCount = studentPumpToDeathCountDictionary.get(pump);
-			double fontSize = calculateFontSizeBasedOnDeathCount(deathCount);
-			double circleRadius = calculateCircleRadiusBasedOnDeathCount(deathCount);
+			Number deathCount = studentPumpToDeathCountDictionary.get(pump);
+			double fontSize = calculateFontSize(deathCount, big, small);
+			double circleRadius = calculateCircleRadius(deathCount, big, small);
 
 			Point2D center = transformLocationToImageSpace(pump.getLocation(), scale);
 			Circle circle = new Circle(center.getX(), center.getY(), circleRadius);

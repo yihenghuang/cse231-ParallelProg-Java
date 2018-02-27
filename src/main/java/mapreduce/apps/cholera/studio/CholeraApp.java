@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2018 Dennis Cosgrove
+ * Copyright (C) 2016-2017 Dennis Cosgrove
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,32 +19,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
+package mapreduce.apps.cholera.studio;
 
-package mapreduce.apps.cholera.viz;
+import java.util.EnumSet;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import org.apache.commons.lang3.mutable.MutableDouble;
+
+import edu.wustl.cse231s.NotYetImplementedException;
+import mapreduce.apps.cholera.core.CholeraDeath;
 import mapreduce.apps.cholera.core.WaterPump;
+import mapreduce.collector.intsum.studio.IntSumCollector;
+import mapreduce.framework.core.Mapper;
 
 /**
+ * @author __STUDENT_NAME__
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-public class WaterPumpDeathCountRow extends AbstractWaterPumpRow {
-	private final IntegerProperty instructorValueProperty = new SimpleIntegerProperty(this,
-			INSTRUCTOR_VALUE_PROPERTY_NAME);
-	private final IntegerProperty studentValueProperty = new SimpleIntegerProperty(this, STUDENT_VALUE_PROPERTY_NAME);
-
-	public WaterPumpDeathCountRow(WaterPump waterPump, Number instructorValue, Number studentValue) {
-		super(waterPump, studentValue.intValue() == instructorValue.intValue());
-		instructorValueProperty.set(instructorValue.intValue());
-		studentValueProperty.set(studentValue.intValue());
+public class CholeraApp {
+	public static CholeraAppValueRepresentation getValueRepresentation() {
+		throw new NotYetImplementedException();
 	}
 
-	public IntegerProperty instructorValueProperty() {
-		return instructorValueProperty;
+	public static Mapper<CholeraDeath, WaterPump, Number> createMapper() {
+		throw new NotYetImplementedException();
 	}
 
-	public IntegerProperty studentValueProperty() {
-		return studentValueProperty;
+	public static Collector<? extends Number, ?, ? extends Number> createCollector() {
+		throw new NotYetImplementedException();
 	}
 }

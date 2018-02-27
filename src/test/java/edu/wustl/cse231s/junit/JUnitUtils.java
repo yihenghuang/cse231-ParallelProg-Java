@@ -34,10 +34,12 @@ import org.junit.rules.Timeout;
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class JUnitUtils {
-	//public static final long DEFAULT_TIMEOUT = 1000L;
-	
 	public static TestRule createTimeoutRule() {
-		return new DisableOnDebug(new Timeout(1, TimeUnit.SECONDS));
+		return createTimeoutRule(1L);
+	}
+
+	public static TestRule createTimeoutRule(long scale) {
+		return new DisableOnDebug(new Timeout(scale, TimeUnit.SECONDS));
 	}
 	
 	public static <A> Collection<Object[]> toParameterizedArguments(Object argA0, Object... argAs) {

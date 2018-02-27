@@ -22,29 +22,35 @@
 
 package mapreduce.apps.cholera.viz;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import mapreduce.apps.cholera.core.WaterPump;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-public class WaterPumpDeathCountRow extends AbstractWaterPumpRow {
-	private final IntegerProperty instructorValueProperty = new SimpleIntegerProperty(this,
-			INSTRUCTOR_VALUE_PROPERTY_NAME);
-	private final IntegerProperty studentValueProperty = new SimpleIntegerProperty(this, STUDENT_VALUE_PROPERTY_NAME);
+public abstract class AbstractWaterPumpRow {
+	public static final String WATER_PUMP_PROPERTY_NAME = "waterPump";
+	public static final String INSTRUCTOR_VALUE_PROPERTY_NAME = "instructorValue";
+	public static final String STUDENT_VALUE_PROPERTY_NAME = "studentValue";
+	public static final String IS_MATCH_PROPERTY_NAME = "isMatch";
 
-	public WaterPumpDeathCountRow(WaterPump waterPump, Number instructorValue, Number studentValue) {
-		super(waterPump, studentValue.intValue() == instructorValue.intValue());
-		instructorValueProperty.set(instructorValue.intValue());
-		studentValueProperty.set(studentValue.intValue());
+	private final ObjectProperty<WaterPump> waterPumpProperty = new SimpleObjectProperty<>(this,
+			WATER_PUMP_PROPERTY_NAME);
+	private final BooleanProperty isMatchProperty = new SimpleBooleanProperty(this, IS_MATCH_PROPERTY_NAME);
+
+	public AbstractWaterPumpRow(WaterPump waterPump, boolean isMatch) {
+		waterPumpProperty.set(waterPump);
+		isMatchProperty.set(isMatch);
 	}
 
-	public IntegerProperty instructorValueProperty() {
-		return instructorValueProperty;
+	public ObjectProperty<WaterPump> waterPumpProperty() {
+		return waterPumpProperty;
 	}
 
-	public IntegerProperty studentValueProperty() {
-		return studentValueProperty;
+	public BooleanProperty isMatchProperty() {
+		return isMatchProperty;
 	}
 }

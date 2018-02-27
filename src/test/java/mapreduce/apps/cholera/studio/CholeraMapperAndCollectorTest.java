@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2018 Dennis Cosgrove
+ * Copyright (C) 2016-2017 Dennis Cosgrove
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,32 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
+package mapreduce.apps.cholera.studio;
 
-package mapreduce.apps.cholera.viz;
-
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import mapreduce.apps.cholera.core.WaterPump;
+import mapreduce.apps.cholera.AbstractCholeraMRTest;
+import mapreduce.core.CollectorSolution;
+import mapreduce.core.FrameworkSolution;
+import mapreduce.core.MapperSolution;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link CholeraApp}
  */
-public class WaterPumpDeathCountRow extends AbstractWaterPumpRow {
-	private final IntegerProperty instructorValueProperty = new SimpleIntegerProperty(this,
-			INSTRUCTOR_VALUE_PROPERTY_NAME);
-	private final IntegerProperty studentValueProperty = new SimpleIntegerProperty(this, STUDENT_VALUE_PROPERTY_NAME);
-
-	public WaterPumpDeathCountRow(WaterPump waterPump, Number instructorValue, Number studentValue) {
-		super(waterPump, studentValue.intValue() == instructorValue.intValue());
-		instructorValueProperty.set(instructorValue.intValue());
-		studentValueProperty.set(studentValue.intValue());
-	}
-
-	public IntegerProperty instructorValueProperty() {
-		return instructorValueProperty;
-	}
-
-	public IntegerProperty studentValueProperty() {
-		return studentValueProperty;
+public class CholeraMapperAndCollectorTest<A> extends AbstractCholeraMRTest<A> {
+	public CholeraMapperAndCollectorTest() {
+		super(FrameworkSolution.INSTRUCTOR, MapperSolution.STUDENT, CollectorSolution.STUDENT_COMPLETE);
 	}
 }
