@@ -26,6 +26,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.stream.Collector;
 
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.MapDifference.ValueDifference;
@@ -182,29 +184,26 @@ public class CholeraOutbreakVisualizationApp extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		Mapper<CholeraDeath, WaterPump, Number> mapper = CholeraApp.createMapper();
 		boolean isImplemented;
+		CholeraAppValueRepresentation valueRepr;
 		try {
+			valueRepr = CholeraApp.getValueRepresentation();
+			Objects.requireNonNull(valueRepr);
+			Mapper<CholeraDeath, WaterPump, Number> mapper = CholeraApp.createMapper();
+			Objects.requireNonNull(mapper);
 			mapper.map(SohoCholeraOutbreak1854.getDeaths()[0], (k, v) -> {
 
 			});
+			
+			Collector<? extends Number, ? , ? extends Number> collector = CholeraApp.createCollector();
+			Objects.requireNonNull(collector);
 			isImplemented = true;
-
 		} catch (NotYetImplementedException nyie) {
-			nyie.printStackTrace();
+			valueRepr = null;
 			isImplemented = false;
 		}
 
 		Map<WaterPump, Number> studentPumpToDeathCountDictionary;
-		if (isImplemented) {
-			try {
-				studentPumpToDeathCountDictionary = InstructorMapReduceTestUtils.mapReduceCholeraStudent();
-			} catch (Throwable t) {
-				studentPumpToDeathCountDictionary = Collections.emptyMap();
-			}
-		} else {
-			studentPumpToDeathCountDictionary = Collections.emptyMap();
-		}
 		double scale = 800;
 
 		BorderPane pane = new BorderPane();
@@ -217,6 +216,15 @@ public class CholeraOutbreakVisualizationApp extends Application {
 
 		TableView<AbstractWaterPumpRow> table = new TableView<>();
 
+		if (isImplemented) {
+			try {
+				studentPumpToDeathCountDictionary = InstructorMapReduceTestUtils.mapReduceCholeraStudent();
+			} catch (Throwable t) {
+				studentPumpToDeathCountDictionary = Collections.emptyMap();
+			}
+		} else {
+			studentPumpToDeathCountDictionary = Collections.emptyMap();
+		}
 		int intCount = 0;
 		for (Number value : studentPumpToDeathCountDictionary.values()) {
 			if (value instanceof Integer) {
@@ -267,22 +275,24 @@ public class CholeraOutbreakVisualizationApp extends Application {
 		table.getColumns().add(studentValueCol);
 		table.getColumns().add(isMatchCol);
 
-		List<? extends AbstractWaterPumpRow> rows;
-		if (intCount > 0) {
-			Map<WaterPump, Number> instructorPumpToDeathCountDictionary = InstructorMapReduceTestUtils
-					.mapReduceCholeraInstructorDeathCount();
-			rows = createDeathCountRows(instructorPumpToDeathCountDictionary, studentPumpToDeathCountDictionary);
-		} else {
-			Map<WaterPump, Number> instructorPumpToDeathCountDictionary = InstructorMapReduceTestUtils
-					.mapReduceCholeraInstructorDistance(CholeraApp
-							.getValueRepresentation() == CholeraAppValueRepresentation.LOW_NUMBERS_SUSPECT_SQUARED);
-			rows = createDistanceRows(instructorPumpToDeathCountDictionary, studentPumpToDeathCountDictionary);
+		if(isImplemented) {
+			List<? extends AbstractWaterPumpRow> rows;
+			if (intCount > 0) {
+				Map<WaterPump, Number> instructorPumpToDeathCountDictionary = InstructorMapReduceTestUtils
+						.mapReduceCholeraInstructorDeathCount();
+				rows = createDeathCountRows(instructorPumpToDeathCountDictionary, studentPumpToDeathCountDictionary);
+			} else {
+				Map<WaterPump, Number> instructorPumpToDeathCountDictionary = InstructorMapReduceTestUtils
+						.mapReduceCholeraInstructorDistance(CholeraApp
+								.getValueRepresentation() == CholeraAppValueRepresentation.LOW_NUMBERS_SUSPECT_SQUARED);
+				rows = createDistanceRows(instructorPumpToDeathCountDictionary, studentPumpToDeathCountDictionary);
+			}
+			ObservableList<AbstractWaterPumpRow> observableList = FXCollections.observableArrayList();
+			for (AbstractWaterPumpRow row : rows) {
+				observableList.add(row);
+			}
+			table.setItems(observableList);
 		}
-		ObservableList<AbstractWaterPumpRow> observableList = FXCollections.observableArrayList();
-		for (AbstractWaterPumpRow row : rows) {
-			observableList.add(row);
-		}
-		table.setItems(observableList);
 		table.setPrefWidth(300);
 
 		pane.setLeft(imageView);
@@ -297,7 +307,7 @@ public class CholeraOutbreakVisualizationApp extends Application {
 
 		double big;
 		double small;
-		if (CholeraApp.getValueRepresentation() == CholeraAppValueRepresentation.HIGH_NUMBERS_SUSPECT) {
+		if (valueRepr == CholeraAppValueRepresentation.HIGH_NUMBERS_SUSPECT) {
 			big = max;
 			small = min;
 		} else {
