@@ -62,7 +62,7 @@ public class MapAllSimpleFrameworkStressTest<E> {
 	}
 
 	@Rule
-	public TestRule timeout = JUnitUtils.createTimeoutRule(4);
+	public TestRule timeout = JUnitUtils.createTimeoutRule(10);
 
 	@Test
 	public void testMapAll() throws InterruptedException, ExecutionException {
