@@ -24,7 +24,7 @@ package mapreduce.apps.cholera.studio;
 import edu.wustl.cse231s.NotYetImplementedException;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class CholeraThreshold {
