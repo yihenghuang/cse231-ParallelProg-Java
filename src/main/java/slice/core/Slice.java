@@ -22,6 +22,9 @@
 package slice.core;
 
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
+
+import edu.wustl.cse231s.v5.api.CheckedIntConsumer;
 
 /**
  * @author Finn Voichick
@@ -39,7 +42,7 @@ public final class Slice<T> {
 	 * 
 	 * @param originalUnslicedData
 	 *            context of what was sliced
-	 * @param sliceId
+	 * @param sliceIndexId
 	 *            the id/index of the slice, negative values indicate invalidity
 	 * @param minInclusive
 	 *            the inclusive lower bound
@@ -99,6 +102,19 @@ public final class Slice<T> {
 	 */
 	public int getMaxExclusive() {
 		return this.maxExclusive;
+	}
+
+	/**
+	 * Performs the given consumer for each index [min, maxExclusive).
+	 * 
+	 * @param body
+	 * @throws ExecutionException 
+	 * @throws InterruptedException 
+	 */
+	public void forEachIndex(CheckedIntConsumer body) throws InterruptedException, ExecutionException {
+		for (int i = minInclusive; i < maxExclusive; i++) {
+			body.accept(i);
+		}
 	}
 
 	@Override
