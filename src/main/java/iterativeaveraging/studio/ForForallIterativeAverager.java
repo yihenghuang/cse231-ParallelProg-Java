@@ -27,7 +27,6 @@ import static edu.wustl.cse231s.v5.V5.forall;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import iterativeaveraging.core.IterativeAverager;
 import slice.core.Slice;
 
@@ -39,7 +38,16 @@ public class ForForallIterativeAverager implements IterativeAverager {
 	@Override
 	public void iterativelyAverage(List<Slice<double[]>> slices, double[] a, double[] b, int iterationCount)
 			throws InterruptedException, ExecutionException {
-		throw new NotYetImplementedException();
+		for (int iteration = 0; iteration < iterationCount; iteration++) {
+			double[] arrayPrev = ((iteration & 1) == 0) ? a : b;
+			double[] arrayNext = ((iteration & 1) == 0) ? b : a;
+			forall(slices, (slice) -> {
+				for (int index = slice.getMinInclusive(); index < slice.getMaxExclusive(); index++) {
+					arrayNext[index] = (arrayPrev[index - 1] + arrayPrev[index + 1]) * 0.5;
+				}
+			});
+		}
+
 	}
 
 	@Override
