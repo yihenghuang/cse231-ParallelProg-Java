@@ -31,8 +31,6 @@ import java.util.stream.Collector;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 
-import edu.wustl.cse231s.NotYetImplementedException;
-
 /**
  * @author Yiheng Huang
  * @author Finn Voichick
@@ -41,22 +39,47 @@ import edu.wustl.cse231s.NotYetImplementedException;
 public class IntSumCollector implements Collector<Integer, MutableInt, Integer> {
 	@Override
 	public Supplier<MutableInt> supplier() {
-		throw new NotYetImplementedException();
+		return new Supplier<MutableInt>() {
+
+			@Override
+			public MutableInt get() {
+				return new MutableInt();
+
+			}
+		};
 	}
 
 	@Override
 	public BiConsumer<MutableInt, Integer> accumulator() {
-		throw new NotYetImplementedException();
+		return new BiConsumer<MutableInt, Integer>() {
+			@Override
+			public void accept(MutableInt mut, Integer i) {
+				mut.add(i);
+			}
+		};
+
 	}
 
 	@Override
 	public BinaryOperator<MutableInt> combiner() {
-		throw new NotYetImplementedException();
+		return new BinaryOperator<MutableInt>() {
+			@Override
+			public MutableInt apply(MutableInt a, MutableInt b) {
+				a.getAndAdd(b);
+				return a;
+			}
+		};
 	}
 
 	@Override
 	public Function<MutableInt, Integer> finisher() {
-		throw new NotYetImplementedException();
+		return new Function<MutableInt, Integer>() {
+
+			@Override
+			public Integer apply(MutableInt t) {
+				return t.getValue();
+			}
+		};
 	}
 
 	@Override

@@ -30,7 +30,7 @@ import java.util.function.BinaryOperator;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 
-import edu.wustl.cse231s.NotYetImplementedException;
+import mapreduce.apps.intsum.studio.IntegerSumClassicReducer;
 
 /**
  * An interface used for {@code Collector}s that are similar to Hadoop's
@@ -78,7 +78,8 @@ public interface ClassicReducer<V, R> extends Collector<V, List<V>, R> {
 
 			@Override
 			public List<V> get() {
-				throw new NotYetImplementedException();
+				return new LinkedList<V>();
+
 			}
 
 		};
@@ -96,8 +97,8 @@ public interface ClassicReducer<V, R> extends Collector<V, List<V>, R> {
 		return new BiConsumer<List<V>, V>() {
 
 			@Override
-			public void accept(List<V> list, V item) {
-				throw new NotYetImplementedException();
+			public void accept(List<V> v, V item) {
+				v.add(item);
 			}
 
 		};
@@ -117,7 +118,11 @@ public interface ClassicReducer<V, R> extends Collector<V, List<V>, R> {
 
 			@Override
 			public List<V> apply(List<V> a, List<V> b) {
-				throw new NotYetImplementedException();
+				List<V> val = new LinkedList<V>(b);
+				for (V v : a) {
+					val.add(v);
+				}
+				return val;
 			}
 
 		};
