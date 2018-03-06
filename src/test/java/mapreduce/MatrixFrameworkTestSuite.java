@@ -21,9 +21,13 @@
  ******************************************************************************/
 package mapreduce;
 
+import java.io.IOException;
+
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import mapreduce.apps.wordcount.core.WordCountUtils;
 import mapreduce.framework.lab.matrix.CombineAndFinishAllMatrixFrameworkPointedTest;
 import mapreduce.framework.lab.matrix.CombineAndFinishAllMatrixFrameworkStressTest;
 import mapreduce.framework.lab.matrix.MapAccumulateAllMatrixFrameworkPointedTest;
@@ -38,4 +42,8 @@ import mapreduce.framework.lab.matrix.MatrixWordCountStressTest;
 		CombineAndFinishAllMatrixFrameworkPointedTest.class, CombineAndFinishAllMatrixFrameworkStressTest.class,
 		MatrixWordCountStressTest.class, })
 public class MatrixFrameworkTestSuite {
+	@BeforeClass
+	public static void setUp() throws IOException {
+		WordCountUtils.downloadWordResources();
+	}
 }

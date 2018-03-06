@@ -19,30 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
+package iterativeaveraging.studio;
 
-package mapreduce;
-
-import java.io.IOException;
-
-import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-
-import mapreduce.apps.wordcount.core.WordCountUtils;
-import mapreduce.apps.wordcount.studio.WordCountCollectorStressTest;
-import mapreduce.collector.studio.ClassicReducerAccumulatorTest;
-import mapreduce.collector.studio.ClassicReducerSupplierTest;
-import mapreduce.collector.studio.ClassicReducerTest;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ ClassicReducerSupplierTest.class, ClassicReducerAccumulatorTest.class, ClassicReducerTest.class,
-		WordCountCollectorStressTest.class })
-public class ClassicReducerTestSuite {
-	@BeforeClass
-	public static void setUp() throws IOException {
-		WordCountUtils.downloadWordResources();
-	}
+@Suite.SuiteClasses({ IterativeAveragerTest.class, IterativeAveragerParallelismTest.class, NoPrintingTest.class })
+public class IterativeAveragingTestSuite {
 }

@@ -21,9 +21,13 @@
  ******************************************************************************/
 package mapreduce;
 
+import java.io.IOException;
+
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import mapreduce.apps.wordcount.core.WordCountUtils;
 import mapreduce.framework.fun.single.OneConcurrentHashMapWordCountStressTest;
 
 /**
@@ -32,4 +36,8 @@ import mapreduce.framework.fun.single.OneConcurrentHashMapWordCountStressTest;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ OneConcurrentHashMapWordCountStressTest.class })
 public class OneConcurrentHashMapToRuleThemAllFrameworkTestSuite {
+	@BeforeClass
+	public static void setUp() throws IOException {
+		WordCountUtils.downloadWordResources();
+	}
 }

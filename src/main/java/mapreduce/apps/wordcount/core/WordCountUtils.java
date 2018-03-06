@@ -67,6 +67,17 @@ public class WordCountUtils {
 		return textSections;
 	}
 
+	public static void downloadWordResources(WordsResource... wordResources) throws IOException {
+		for (WordsResource wordsResource : WordsResource.values()) {
+			@SuppressWarnings("unused")
+			File unused = DownloadUtils.getDownloadedFile(wordsResource.getUrl());
+		}
+	}
+
+	public static void downloadWordResources() throws IOException {
+		downloadWordResources(WordsResource.values());
+	}
+
 	public static void printWordsToCountsSortedByCounts(Map<String, Integer> mapWordToCount) {
 		List<Entry<String, Integer>> list = new ArrayList<>(mapWordToCount.entrySet());
 		list.sort((a, b) -> {

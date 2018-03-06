@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2017 Dennis Cosgrove
+ * Copyright (C) 2016-2018 Dennis Cosgrove
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,25 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package mapreduce;
 
-import java.io.IOException;
+package iterativeaveraging.core;
 
-import org.junit.BeforeClass;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-import mapreduce.apps.wordcount.core.WordCountUtils;
-import mapreduce.framework.fun.stream.StreamMapReduceWordCountStressTest;
+import slice.core.Slice;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ StreamMapReduceWordCountStressTest.class })
-public class StreamFrameworkTestSuite {
-	@BeforeClass
-	public static void setUp() throws IOException {
-		WordCountUtils.downloadWordResources();
-	}
+public interface IterativeAverager {
+	void iterativelyAverage(List<Slice<double[]>> slices, double[] a, double b[], int iterationCount)
+			throws InterruptedException, ExecutionException;
 }

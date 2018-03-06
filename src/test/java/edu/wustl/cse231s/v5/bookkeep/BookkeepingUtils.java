@@ -24,6 +24,9 @@ package edu.wustl.cse231s.v5.bookkeep;
 
 import static edu.wustl.cse231s.v5.V5.launchApp;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ForkJoinPool;
+
 import edu.wustl.cse231s.v5.api.CheckedRunnable;
 import edu.wustl.cse231s.v5.impl.BookkeepingV5Impl;
 import edu.wustl.cse231s.v5.impl.executor.BookkeepingExecutorXV5Impl;
@@ -32,9 +35,13 @@ import edu.wustl.cse231s.v5.impl.executor.BookkeepingExecutorXV5Impl;
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class BookkeepingUtils {
-	public static BookkeepingV5Impl bookkeep(CheckedRunnable body) {
-		BookkeepingExecutorXV5Impl bookkeeping = new BookkeepingExecutorXV5Impl();
+	public static BookkeepingV5Impl bookkeep(ExecutorService executorService, CheckedRunnable body) {
+		BookkeepingExecutorXV5Impl bookkeeping = new BookkeepingExecutorXV5Impl(executorService);
 		launchApp(bookkeeping, body);
 		return bookkeeping;
+	}
+
+	public static BookkeepingV5Impl bookkeep(CheckedRunnable body) {
+		return bookkeep(ForkJoinPool.commonPool(), body);
 	}
 }

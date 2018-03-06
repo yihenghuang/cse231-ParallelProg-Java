@@ -21,11 +21,14 @@
  *******************************************************************************/
 package edu.wustl.cse231s.v5.impl.executor;
 
+import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import edu.wustl.cse231s.v5.api.CheckedCallable;
+import edu.wustl.cse231s.v5.api.CheckedConsumer;
 import edu.wustl.cse231s.v5.api.CheckedIntConsumer;
 import edu.wustl.cse231s.v5.api.CheckedIntIntConsumer;
 import edu.wustl.cse231s.v5.api.CheckedRunnable;
@@ -49,6 +52,10 @@ public class BookkeepingExecutorXV5Impl extends MetricsExecutorV5Impl implements
 	private final AtomicInteger forasync2dChunkedInvocationCount = new AtomicInteger(0);
 
 	private final AtomicInteger futureInvocationCount = new AtomicInteger(0);
+
+	public BookkeepingExecutorXV5Impl(ExecutorService executorService) {
+		super(executorService);
+	}
 
 	@Override
 	public void launch(CheckedRunnable body) throws InterruptedException, ExecutionException {
@@ -81,6 +88,27 @@ public class BookkeepingExecutorXV5Impl extends MetricsExecutorV5Impl implements
 		super.forasync(min, maxExclusive, body);
 		forasyncInvovationCount.incrementAndGet();
 		asyncViaForasyncCount.addAndGet(maxExclusive - min);
+	}
+	
+	@Override
+	public <T> void forasync(T[] array, CheckedConsumer<T> body) throws InterruptedException, ExecutionException {
+		super.forasync(array, body);
+		forasyncInvovationCount.incrementAndGet();
+		asyncViaForasyncCount.addAndGet(array.length);
+	}
+	
+	@Override
+	public <T> void forasync(Iterable<T> iterable, CheckedConsumer<T> body)
+			throws InterruptedException, ExecutionException {
+		super.forasync(iterable, body);
+		forasyncInvovationCount.incrementAndGet();
+		Iterator<T> iterator = iterable.iterator();
+		int taskCount = 0;
+		while(iterator.hasNext()) {
+			iterator.next();
+			taskCount++;
+		}
+		asyncViaForasyncCount.addAndGet(taskCount);
 	}
 
 	@Override

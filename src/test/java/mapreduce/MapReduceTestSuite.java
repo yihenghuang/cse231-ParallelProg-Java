@@ -25,7 +25,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 import mapreduce.apps.cards.assignment.CardMapReduceAllTest;
-import mapreduce.apps.cholera.application.CholeraMapReduceAllTest;
 import mapreduce.apps.friends.studio.MutualFriendsMapReduceAllTest;
 import mapreduce.core.InstructorSolutionTest;
 
@@ -35,6 +34,6 @@ import mapreduce.core.InstructorSolutionTest;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ InstructorSolutionTest.class, IntSumStudioTestSuite.class, CollectorStudioTestSuite.class,
 		MutualFriendsStudioTestSuite.class, FrameworksLabTestSuite.class, MutualFriendsMapReduceAllTest.class,
-		CardMapReduceAllTest.class, CholeraMapReduceAllTest.class })
+		CardMapReduceAllTest.class/* , CholeraMapReduceAllTest.class */ })
 public class MapReduceTestSuite {
 }

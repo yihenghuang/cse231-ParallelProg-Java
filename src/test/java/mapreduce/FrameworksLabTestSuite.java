@@ -31,5 +31,4 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ SimpleFrameworkTestSuite.class, MatrixFrameworkTestSuite.class })
 public class FrameworksLabTestSuite {
-
 }

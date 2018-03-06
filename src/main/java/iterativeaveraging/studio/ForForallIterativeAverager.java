@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2017 Dennis Cosgrove
+ * Copyright (C) 2016-2018 Dennis Cosgrove
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,25 +19,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package mapreduce;
 
-import java.io.IOException;
+package iterativeaveraging.studio;
 
-import org.junit.BeforeClass;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import static edu.wustl.cse231s.v5.V5.forall;
 
-import mapreduce.apps.wordcount.core.WordCountUtils;
-import mapreduce.framework.fun.stream.StreamMapReduceWordCountStressTest;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import edu.wustl.cse231s.NotYetImplementedException;
+import iterativeaveraging.core.IterativeAverager;
+import slice.core.Slice;
 
 /**
+ * @author __STUDENT_NAME__
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ StreamMapReduceWordCountStressTest.class })
-public class StreamFrameworkTestSuite {
-	@BeforeClass
-	public static void setUp() throws IOException {
-		WordCountUtils.downloadWordResources();
+public class ForForallIterativeAverager implements IterativeAverager {
+	@Override
+	public void iterativelyAverage(List<Slice<double[]>> slices, double[] a, double[] b, int iterationCount)
+			throws InterruptedException, ExecutionException {
+		throw new NotYetImplementedException();
+	}
+
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName();
 	}
 }

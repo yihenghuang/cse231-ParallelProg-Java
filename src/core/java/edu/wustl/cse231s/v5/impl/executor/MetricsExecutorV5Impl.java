@@ -21,6 +21,7 @@
  *******************************************************************************/
 package edu.wustl.cse231s.v5.impl.executor;
 
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicLong;
 
 import edu.wustl.cse231s.v5.api.Metrics;
@@ -29,6 +30,22 @@ import edu.wustl.cse231s.v5.api.Metrics;
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class MetricsExecutorV5Impl extends ExecutorV5Impl {
+	private final AtomicLong work = new AtomicLong();
+
+	public MetricsExecutorV5Impl(ExecutorService executorService) {
+		super(executorService);
+	}
+
+	@Override
+	public void doWork(long n) {
+		work.addAndGet(n);
+	}
+
+	@Override
+	public Metrics getMetrics() {
+		return new WorkMetrics(work.get());
+	}
+
 	private static class WorkMetrics implements Metrics {
 		private final long totalWork;
 
@@ -45,17 +62,5 @@ public class MetricsExecutorV5Impl extends ExecutorV5Impl {
 		public long criticalPathLength() {
 			throw new UnsupportedOperationException();
 		}
-	}
-
-	private final AtomicLong work = new AtomicLong();
-
-	@Override
-	public void doWork(long n) {
-		work.addAndGet(n);
-	}
-
-	@Override
-	public Metrics getMetrics() {
-		return new WorkMetrics(work.get());
 	}
 }

@@ -20,29 +20,43 @@
  * SOFTWARE.
  ******************************************************************************/
 
-package mapreduce;
+package iterativeaveraging.core;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-import org.junit.BeforeClass;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
-import mapreduce.apps.wordcount.core.WordCountUtils;
-import mapreduce.apps.wordcount.studio.WordCountCollectorStressTest;
-import mapreduce.collector.studio.ClassicReducerAccumulatorTest;
-import mapreduce.collector.studio.ClassicReducerSupplierTest;
-import mapreduce.collector.studio.ClassicReducerTest;
+import slice.core.Slice;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ ClassicReducerSupplierTest.class, ClassicReducerAccumulatorTest.class, ClassicReducerTest.class,
-		WordCountCollectorStressTest.class })
-public class ClassicReducerTestSuite {
-	@BeforeClass
-	public static void setUp() throws IOException {
-		WordCountUtils.downloadWordResources();
+public class IterativeAveragingUtils {
+	public static List<Slice<double[]>> createSlices(double[] data, int numSlices) {
+		List<Slice<double[]>> result = new ArrayList<>(numSlices);
+
+		int min = 1;
+		int max = data.length - 1;
+
+		int range = max - min;
+		int indicesPerSlice = range / numSlices;
+		int remainder = range % numSlices;
+
+		int sliceMin = min;
+
+		for (int sliceId = 0; sliceId < numSlices; sliceId++) {
+
+			int sliceMax = sliceMin + indicesPerSlice;
+
+			if (sliceId < remainder) {
+				sliceMax++;
+			}
+
+			result.add(new Slice<>(data, sliceId, sliceMin, sliceMax));
+
+			sliceMin = sliceMax;
+		}
+
+		return Collections.unmodifiableList(result);
 	}
 }

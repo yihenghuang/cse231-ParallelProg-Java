@@ -45,27 +45,10 @@ import edu.wustl.cse231s.v5.options.AwaitFuturesOption;
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class ExecutorV5Impl extends AbstractV5Impl {
-	private static ExecutorService executorService = ForkJoinPool.commonPool();
-	private static final ThreadLocal<Deque<FinishContext>> contextStack = ThreadLocal.withInitial(() -> {
-		return new LinkedList<>();
-	});
+	private final ExecutorService executorService;
 
-	private static class FinishContext {
-		private final Queue<Future<?>> tasks = new ConcurrentLinkedQueue<>();
-
-		void joinAllTasks() throws InterruptedException, ExecutionException {
-			while (true) {
-				if (tasks.isEmpty()) {
-					break;
-				} else {
-					tasks.poll().get();
-				}
-			}
-		}
-
-		void offerTask(Future<?> task) {
-			tasks.offer(task);
-		}
+	public ExecutorV5Impl(ExecutorService executorService) {
+		this.executorService = executorService;
 	}
 
 	@Override
@@ -281,5 +264,27 @@ public class ExecutorV5Impl extends AbstractV5Impl {
 				throw new UnsupportedOperationException();
 			}
 		};
+	}
+
+	private static final ThreadLocal<Deque<FinishContext>> contextStack = ThreadLocal.withInitial(() -> {
+		return new LinkedList<>();
+	});
+
+	private static class FinishContext {
+		private final Queue<Future<?>> tasks = new ConcurrentLinkedQueue<>();
+
+		void joinAllTasks() throws InterruptedException, ExecutionException {
+			while (true) {
+				if (tasks.isEmpty()) {
+					break;
+				} else {
+					tasks.poll().get();
+				}
+			}
+		}
+
+		void offerTask(Future<?> task) {
+			tasks.offer(task);
+		}
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2017 Dennis Cosgrove
+ * Copyright (C) 2016-2018 Dennis Cosgrove
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,25 +19,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package mapreduce;
 
-import java.io.IOException;
+package iterativeaveraging.demo;
 
-import org.junit.BeforeClass;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-import mapreduce.apps.wordcount.core.WordCountUtils;
-import mapreduce.framework.fun.stream.StreamMapReduceWordCountStressTest;
+import iterativeaveraging.core.IterativeAverager;
+import slice.core.Slice;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ StreamMapReduceWordCountStressTest.class })
-public class StreamFrameworkTestSuite {
-	@BeforeClass
-	public static void setUp() throws IOException {
-		WordCountUtils.downloadWordResources();
+public class SequentialIterativeAverager implements IterativeAverager {
+	@Override
+	public void iterativelyAverage(List<Slice<double[]>> slices, double[] a, double b[], int iterationCount)
+			throws InterruptedException, ExecutionException {
+		for (int iteration = 0; iteration < iterationCount; iteration++) {
+			double[] arrayPrev = ((iteration & 1) == 0) ? a : b;
+			double[] arrayNext = ((iteration & 1) == 0) ? b : a;
+			for (Slice<double[]> slice : slices) {
+				for (int index = slice.getMinInclusive(); index < slice.getMaxExclusive(); index++) {
+					arrayNext[index] = (arrayPrev[index - 1] + arrayPrev[index + 1]) * 0.5;
+				}
+			}
+		}
+	}
+
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName();
 	}
 }

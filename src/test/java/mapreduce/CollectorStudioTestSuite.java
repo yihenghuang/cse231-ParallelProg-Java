@@ -22,8 +22,13 @@
 
 package mapreduce;
 
+import java.io.IOException;
+
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+
+import mapreduce.apps.wordcount.core.WordCountUtils;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
@@ -31,5 +36,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ ClassicReducerTestSuite.class, IntSumCollectorTestSuite.class })
 public class CollectorStudioTestSuite {
-
+	@BeforeClass
+	public static void setUp() throws IOException {
+		WordCountUtils.downloadWordResources();
+	}
 }
