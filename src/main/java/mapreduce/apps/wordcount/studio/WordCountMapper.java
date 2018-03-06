@@ -23,7 +23,6 @@ package mapreduce.apps.wordcount.studio;
 
 import java.util.function.BiConsumer;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import mapreduce.apps.wordcount.core.TextSection;
 import mapreduce.framework.core.Mapper;
 
@@ -59,7 +58,17 @@ public class WordCountMapper implements Mapper<TextSection, String, Integer> {
 	 */
 	@Override
 	public void map(TextSection textSection, BiConsumer<String, Integer> keyValuePairConsumer) {
-		throw new NotYetImplementedException();
+		String[] words = textSection.getWords();
+		for (String word : words) {
+			if (word.length() > 0) {
+				word = word.toLowerCase();
+				keyValuePairConsumer.accept(word, 1);
+			}
+		}
+		/*
+		 * for (String s : textSection.getWords()) { if (s ==
+		 * keyValuePairConsumer.toString()) { keyValuePairConsumer.accept(s, 1); } }
+		 */
 	}
 
 }

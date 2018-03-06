@@ -24,7 +24,6 @@ package mapreduce.apps.kmer.studio;
 import java.nio.charset.StandardCharsets;
 import java.util.function.BiConsumer;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import mapreduce.framework.core.Mapper;
 import net.jcip.annotations.Immutable;
 
@@ -42,7 +41,10 @@ public class KMerMapper implements Mapper<byte[], String, Integer> {
 
 	@Override
 	public void map(byte[] sequence, BiConsumer<String, Integer> keyValuePairConsumer) {
-		throw new NotYetImplementedException();
+		for (int offset = 0; offset < sequence.length - kMerLength + 1; offset++) {
+			String target = toStringKMer(sequence, offset, kMerLength);
+			keyValuePairConsumer.accept(target, 1);
+		}
 	}
 
 	/**

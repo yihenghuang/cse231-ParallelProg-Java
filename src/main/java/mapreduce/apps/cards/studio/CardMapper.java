@@ -23,7 +23,6 @@ package mapreduce.apps.cards.studio;
 
 import java.util.function.BiConsumer;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import mapreduce.apps.cards.core.Card;
 import mapreduce.apps.cards.core.Deck;
 import mapreduce.apps.cards.core.Suit;
@@ -38,6 +37,10 @@ import net.jcip.annotations.Immutable;
 public class CardMapper implements Mapper<Deck, Suit, Integer> {
 	@Override
 	public void map(Deck deck, BiConsumer<Suit, Integer> keyValuePairConsumer) {
-		throw new NotYetImplementedException();
+		for (Card card : deck) {
+			if (card.getRank().isNumeric()) {
+				keyValuePairConsumer.accept(card.getSuit(), card.getRank().getNumericValue());
+			}
+		}
 	}
 }

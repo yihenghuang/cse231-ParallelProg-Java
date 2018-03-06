@@ -24,7 +24,6 @@ package mapreduce.apps.intsum.studio;
 import java.util.List;
 import java.util.function.Function;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import mapreduce.collector.studio.ClassicReducer;
 
 /**
@@ -59,7 +58,11 @@ public class IntegerSumClassicReducer implements ClassicReducer<Integer, Integer
 
 			@Override
 			public Integer apply(List<Integer> list) {
-				throw new NotYetImplementedException();
+				Integer sum = 0;
+				for (Integer i : list) {
+					sum += i;
+				}
+				return sum;
 			}
 
 		};
