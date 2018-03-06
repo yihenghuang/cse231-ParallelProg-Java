@@ -49,7 +49,6 @@ public class ForallForPhasedIterativeAverager implements IterativeAverager {
 					arrayNext[index] = (arrayPrev[index - 1] + arrayPrev[index + 1]) * 0.5;
 				}
 				phaser.arriveAndAwaitAdvance();
-
 			}
 			phaser.arriveAndDeregister();
 		});
