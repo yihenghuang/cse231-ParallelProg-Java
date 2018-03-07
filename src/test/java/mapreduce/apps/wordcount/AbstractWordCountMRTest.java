@@ -46,7 +46,7 @@ public abstract class AbstractWordCountMRTest<A> extends AbstractMRTest<TextSect
 	}
 
 	@Rule
-	public TestRule timeout = JUnitUtils.createTimeoutRule(10);
+	public TestRule timeout = JUnitUtils.createTimeoutRule(16);
 
 	@Test
 	public void testTextSections() {

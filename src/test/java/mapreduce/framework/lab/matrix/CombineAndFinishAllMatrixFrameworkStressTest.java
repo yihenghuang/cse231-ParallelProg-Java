@@ -63,7 +63,7 @@ public class CombineAndFinishAllMatrixFrameworkStressTest<E> {
 	}
 
 	@Rule
-	public TestRule timeout = JUnitUtils.createTimeoutRule();
+	public TestRule timeout = JUnitUtils.createTimeoutRule(16);
 
 	@Test
 	public void testCombineFinishAll() throws InterruptedException, ExecutionException {
