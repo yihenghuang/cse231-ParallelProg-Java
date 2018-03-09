@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import mapreduce.apps.friends.core.AccountId;
 import mapreduce.apps.friends.core.MutualFriendIds;
 import mapreduce.collector.studio.ClassicReducer;
@@ -72,11 +71,12 @@ public class MutualFriendsClassicReducer implements ClassicReducer<Set<AccountId
 			public MutualFriendIds apply(List<Set<AccountId>> t) {
 
 				MutualFriendIds result = MutualFriendIds.createInitializedToUniverse(universe);
-				throw new NotYetImplementedException();
+				for (Set<AccountId> s : t) {
+					result.intersectWith(s);
+				}
+				return result;
 			}
-
 		};
-
 	}
 
 	private final Collection<AccountId> universe;

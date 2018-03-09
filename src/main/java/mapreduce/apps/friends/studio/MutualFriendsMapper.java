@@ -24,7 +24,6 @@ package mapreduce.apps.friends.studio;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import edu.wustl.cse231s.util.OrderedPair;
 import mapreduce.apps.friends.core.Account;
 import mapreduce.apps.friends.core.AccountId;
@@ -61,6 +60,9 @@ public class MutualFriendsMapper implements Mapper<Account, OrderedPair<AccountI
 	 */
 	@Override
 	public void map(Account account, BiConsumer<OrderedPair<AccountId>, Set<AccountId>> keyValuePairConsumer) {
-		throw new NotYetImplementedException();
+		Set<AccountId> friends = account.getFriendIds();
+		for (AccountId id : friends) {
+			keyValuePairConsumer.accept(new OrderedPair<AccountId>(account.getId(), id), friends);
+		}
 	}
 }
