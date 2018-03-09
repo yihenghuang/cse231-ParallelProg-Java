@@ -73,6 +73,7 @@ public class MutualFriendsClassicReducer implements ClassicReducer<Set<AccountId
 				MutualFriendIds result = MutualFriendIds.createInitializedToUniverse(universe);
 				for (Set<AccountId> s : t) {
 					result.intersectWith(s);
+
 				}
 				return result;
 			}
