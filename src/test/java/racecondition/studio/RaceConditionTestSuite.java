@@ -24,12 +24,13 @@ package racecondition.studio;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import racecondition.studio.bettersafethansorry.RepeatRaceConditionTestSuite;
 import racecondition.studio.mergesort.SuspectMergeSortTest;
 import racecondition.studio.wordcount.SuspectWordCountTest;
 import racecondition.studio.wordscore.SuspectWordScoreTest;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ SuspectWordScoreTest.class, SuspectMergeSortTest.class, SuspectWordCountTest.class })
+@Suite.SuiteClasses({ RaceConditionSpring18StudioCreditTestSuite.class, RepeatRaceConditionTestSuite.class })
 
 public class RaceConditionTestSuite {
 }

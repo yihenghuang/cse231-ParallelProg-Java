@@ -19,33 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package mapreduce;
+package racecondition.studio;
 
-import java.io.IOException;
-
-import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import mapreduce.apps.wordcount.core.WordCountUtils;
-import mapreduce.framework.lab.matrix.CombineAndFinishAllMatrixFrameworkPointedTest;
-import mapreduce.framework.lab.matrix.CombineAndFinishAllMatrixFrameworkStressTest;
-import mapreduce.framework.lab.matrix.MapAccumulateAllMatrixFrameworkPointedTest;
-import mapreduce.framework.lab.matrix.MapAccumulateAllMatrixFrameworkStressTest;
-import mapreduce.framework.lab.matrix.MatrixWordCountStressTest;
-import slice.studio.SlicesTestSuite;
-import slice.studio.StrictSlicesComprehensiveTest;
+import racecondition.studio.mergesort.SuspectMergeSortTest;
+import racecondition.studio.wordcount.SuspectWordCountTest;
+import racecondition.studio.wordscore.SuspectWordScoreTest;
 
-/**
- * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
- */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ SlicesTestSuite.class, MapAccumulateAllMatrixFrameworkPointedTest.class,
-		MapAccumulateAllMatrixFrameworkStressTest.class, CombineAndFinishAllMatrixFrameworkPointedTest.class,
-		CombineAndFinishAllMatrixFrameworkStressTest.class, MatrixWordCountStressTest.class, })
-public class MatrixFrameworkTestSuite {
-	@BeforeClass
-	public static void setUp() throws IOException {
-		WordCountUtils.downloadWordResources();
-	}
+@Suite.SuiteClasses({ SuspectWordScoreTest.class, SuspectMergeSortTest.class, SuspectWordCountTest.class })
+
+public class RaceConditionSpring18StudioCreditTestSuite {
 }

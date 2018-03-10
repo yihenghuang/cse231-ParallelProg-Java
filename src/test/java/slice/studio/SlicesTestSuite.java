@@ -25,6 +25,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ SlicesTest.class, StrictSlicesTest.class, NoPrintingTest.class })
+@Suite.SuiteClasses({ SlicesSpring18StudioCreditTestSuite.class, StrictSlicesComprehensiveTest.class })
 public class SlicesTestSuite {
 }

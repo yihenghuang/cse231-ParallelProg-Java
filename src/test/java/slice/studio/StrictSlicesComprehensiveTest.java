@@ -22,10 +22,12 @@
 package slice.studio;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,19 +42,18 @@ import edu.wustl.cse231s.junit.JUnitUtils;
 import slice.core.Slice;
 
 /**
- * @author Finn Voichick
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  * 
  *         {@link Slices}
  */
 @RunWith(Parameterized.class)
-public class SlicesTest {
-	private final Object[] data;
-	private final int numSlices;
+public class StrictSlicesComprehensiveTest {
+	private final byte[] array;
+	private final int sliceCount;
 
-	public SlicesTest(int length, int numSlices) {
-		this.data = new Object[length];
-		this.numSlices = numSlices;
+	public StrictSlicesComprehensiveTest(int arrayLength, int sliceCount) {
+		this.array = new byte[arrayLength];
+		this.sliceCount = sliceCount;
 	}
 
 	@Rule
@@ -60,38 +61,52 @@ public class SlicesTest {
 
 	@Test
 	public void test() {
-		List<Slice<Object[]>> slices = Slices.createNSlices(data, numSlices);
+		List<Slice<byte[]>> slices = Slices.createNSlices(array, sliceCount);
 		assertNotNull(slices);
-		assertEquals(numSlices, slices.size());
-		for (Slice<Object[]> slice : slices) {
+		assertEquals(sliceCount, slices.size());
+
+		Iterator<Slice<byte[]>> iterator = slices.iterator();
+
+		Slice<byte[]> slice0 = iterator.next();
+		assertNotNull(slice0);
+		assertSame(array, slice0.getOriginalUnslicedData());
+		assertEquals(0, slice0.getSliceIndexId());
+		assertEquals(0, slice0.getMinInclusive());
+
+		int prevMax = slice0.getMaxExclusive();
+		int prevSliceLength = prevMax;
+		boolean hasDecreasedByOneAlready = false;
+
+		int indexId = 1;
+		while (iterator.hasNext()) {
+			Slice<byte[]> slice = iterator.next();
 			assertNotNull(slice);
-		}
-		for (Slice<Object[]> slice : slices) {
-			assertSame(data, slice.getOriginalUnslicedData());
-		}
-		int expectedId = 0;
-		for (Slice<Object[]> slice : slices) {
-			assertEquals(expectedId, slice.getSliceIndexId());
-			expectedId++;
-		}
-		if (numSlices > 0) {
-			int expectedMin = 0;
-			for (Slice<Object[]> slice : slices) {
-				assertEquals(expectedMin, slice.getMinInclusive());
-				expectedMin = slice.getMaxExclusive();
+			assertSame(array, slice.getOriginalUnslicedData());
+			assertEquals(indexId, slice.getSliceIndexId());
+			assertEquals(prevMax, slice.getMinInclusive());
+			int sliceLength = slice.getMaxExclusive() - slice.getMinInclusive();
+			if (sliceLength == prevSliceLength - 1) {
+				assertFalse(hasDecreasedByOneAlready);
+				hasDecreasedByOneAlready = true;
+				prevSliceLength = sliceLength;
+			} else {
+				assertEquals(prevSliceLength, sliceLength);
 			}
-			int expectedMax = expectedMin;
-			assertEquals(expectedMax, data.length);
+			prevMax = slice.getMaxExclusive();
+			indexId++;
 		}
+		assertEquals(array.length, prevMax);
 	}
 
-	@Parameters(name = "length={0}; numSlices={1}")
+	@Parameters(name = "length={0}; sliceCount={1}")
 	public static Collection<Object[]> getConstructorArguments() {
 		List<Object[]> result = new LinkedList<>();
-		result.add(new Object[] { 10, 2 });
-		result.add(new Object[] { 11, 2 });
-		result.add(new Object[] { 100, 10 });
-		result.add(new Object[] { 105, 10 });
+		for (int length = 71; length < 231; length += 11) {
+			for (int sliceCount : new int[] { 1, 2, 3, 8, 17, 101 }) {
+				result.add(new Object[] { length, sliceCount });
+			}
+		}
 		return result;
 	}
+
 }
