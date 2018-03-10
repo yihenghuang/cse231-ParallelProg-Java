@@ -21,20 +21,12 @@
  ******************************************************************************/
 package mapreduce.apps.cholera.studio;
 
-import java.util.EnumSet;
-import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collector;
-
-import org.apache.commons.lang3.mutable.MutableDouble;
 
 import edu.wustl.cse231s.NotYetImplementedException;
 import mapreduce.apps.cholera.core.CholeraDeath;
 import mapreduce.apps.cholera.core.WaterPump;
-import mapreduce.collector.intsum.studio.IntSumCollector;
 import mapreduce.framework.core.Mapper;
 
 /**
@@ -42,12 +34,18 @@ import mapreduce.framework.core.Mapper;
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class CholeraApp {
+
 	public static CholeraAppValueRepresentation getValueRepresentation() {
-		throw new NotYetImplementedException();
+		return CholeraAppValueRepresentation.HIGH_NUMBERS_SUSPECT;
 	}
 
 	public static Mapper<CholeraDeath, WaterPump, Number> createMapper() {
-		throw new NotYetImplementedException();
+		return new Mapper<CholeraDeath, WaterPump, Number>() {
+			@Override
+			public void map(CholeraDeath item, BiConsumer<WaterPump, Number> keyValuePairConsumer) {
+				// keyValuePairConsumer.accept(, );
+			}
+		};
 	}
 
 	public static Collector<? extends Number, ?, ? extends Number> createCollector() {
