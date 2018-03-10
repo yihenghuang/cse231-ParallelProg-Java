@@ -21,14 +21,8 @@
  ******************************************************************************/
 package mapreduce.framework.lab.simple;
 
-import static edu.wustl.cse231s.v5.V5.forall;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collector;
@@ -75,8 +69,7 @@ public final class SimpleMapReduceFramework<E, K, V, A, R> implements MapReduceF
 	 * collector.
 	 * 
 	 * @param mapper
-	 *            the mapper used to convert the original data into key-value
-	 *            pairs
+	 *            the mapper used to convert the original data into key-value pairs
 	 * @param collector
 	 *            the collector used to reduce many values into a single reduced
 	 *            value
@@ -98,10 +91,10 @@ public final class SimpleMapReduceFramework<E, K, V, A, R> implements MapReduceF
 
 	/**
 	 * Should call the {@link Mapper#map(Object, java.util.function.BiConsumer)}
-	 * method on everything in the input. The input array contains a items of
-	 * type E. In the end, this method should return an array of lists. Each of
-	 * these lists contains key-value pairs that are the result of the mapper's
-	 * map method. Each item can be mapped in parallel.
+	 * method on everything in the input. The input array contains a items of type
+	 * E. In the end, this method should return an array of lists. Each of these
+	 * lists contains key-value pairs that are the result of the mapper's map
+	 * method. Each item can be mapped in parallel.
 	 * 
 	 * @param input
 	 *            the original input array
@@ -111,24 +104,31 @@ public final class SimpleMapReduceFramework<E, K, V, A, R> implements MapReduceF
 	 *             ExecutionException
 	 */
 	List<KeyValuePair<K, V>>[] mapAll(E[] input) throws InterruptedException, ExecutionException {
+		List<String>[] result = new List[input.length];
+		// @Override
+		// public String map(, BiConsumer<, String> keyValuePairConsumer) {
+		// forall
+		// keyValuePairConsumer.accept(, );
+		// }
+		// }
 		throw new NotYetImplementedException();
+
 	}
 
 	/**
-	 * Should sequentially accumulate the results of the
-	 * {@link #mapAll(Object[])} method. This method should build up a result
-	 * map by sequentially go through the array of lists, looking at each
-	 * key-value pair. For each one, it should accumulate the value with the
-	 * other values currently associated with the key in the map, using the
-	 * {@link Collector#accumulator()}. If there is nothing in the result map
-	 * associated with a key, a mutable result container should be created using
-	 * the {@link Collector#supplier()}.
+	 * Should sequentially accumulate the results of the {@link #mapAll(Object[])}
+	 * method. This method should build up a result map by sequentially go through
+	 * the array of lists, looking at each key-value pair. For each one, it should
+	 * accumulate the value with the other values currently associated with the key
+	 * in the map, using the {@link Collector#accumulator()}. If there is nothing in
+	 * the result map associated with a key, a mutable result container should be
+	 * created using the {@link Collector#supplier()}.
 	 * 
 	 * @param mapAllResults
 	 *            the returns from the mapAll method
-	 * @return a map where each key is a key in one of the key-value pairs, and
-	 *         each value is the accumulation of all of the values associated
-	 *         with that key in the input data
+	 * @return a map where each key is a key in one of the key-value pairs, and each
+	 *         value is the accumulation of all of the values associated with that
+	 *         key in the input data
 	 * 
 	 * @see Map#compute(Object, java.util.function.BiFunction)
 	 * @see Map#computeIfAbsent(Object, java.util.function.Function)
@@ -138,15 +138,14 @@ public final class SimpleMapReduceFramework<E, K, V, A, R> implements MapReduceF
 	}
 
 	/**
-	 * Should finish up the reduction, using the {@link Collector#finisher()}.
-	 * When you parallelize this method, you will want to use a
-	 * {@link ConcurrentHashMap} because it is thread-safe.
+	 * Should finish up the reduction, using the {@link Collector#finisher()}. When
+	 * you parallelize this method, you will want to use a {@link ConcurrentHashMap}
+	 * because it is thread-safe.
 	 * 
 	 * @param accumulateAllResult
 	 *            the results from the accumulateAll method
-	 * @return a map that corresponds to the input one, with identical values
-	 *         except that the {@link Collector#finisher()} has been called on
-	 *         all of them.
+	 * @return a map that corresponds to the input one, with identical values except
+	 *         that the {@link Collector#finisher()} has been called on all of them.
 	 * @throws InterruptedException,
 	 *             ExecutionException
 	 */
