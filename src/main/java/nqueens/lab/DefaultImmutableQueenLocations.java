@@ -26,7 +26,7 @@ import nqueens.core.AbstractQueenLocations;
 import nqueens.core.ImmutableQueenLocations;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public final class DefaultImmutableQueenLocations extends AbstractQueenLocations implements ImmutableQueenLocations {
