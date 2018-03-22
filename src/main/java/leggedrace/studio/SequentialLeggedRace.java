@@ -23,13 +23,11 @@ package leggedrace.studio;
 
 import java.util.concurrent.ExecutionException;
 
-import edu.wustl.cse231s.NotYetImplementedException;
-import edu.wustl.cse231s.util.IntegerRange;
 import leggedrace.core.LeggedRace;
 import leggedrace.core.Participant;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class SequentialLeggedRace implements LeggedRace {
@@ -38,6 +36,10 @@ public class SequentialLeggedRace implements LeggedRace {
 	 */
 	@Override
 	public void takeSteps(Participant[] participants, int stepCount) throws InterruptedException, ExecutionException {
-		throw new NotYetImplementedException();
+		for (int i = 0; i < stepCount; i++) {
+			for (Participant j : participants) {
+				j.takeStep(i);
+			}
+		}
 	}
 }

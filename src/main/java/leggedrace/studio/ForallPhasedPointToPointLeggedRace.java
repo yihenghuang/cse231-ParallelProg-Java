@@ -26,13 +26,11 @@ import static edu.wustl.cse231s.v5.V5.forall;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Phaser;
 
-import edu.wustl.cse231s.NotYetImplementedException;
-import edu.wustl.cse231s.util.IntegerRange;
 import leggedrace.core.LeggedRace;
 import leggedrace.core.Participant;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class ForallPhasedPointToPointLeggedRace implements LeggedRace {
@@ -42,7 +40,20 @@ public class ForallPhasedPointToPointLeggedRace implements LeggedRace {
 	 */
 	@Override
 	public void takeSteps(Participant[] participants, int stepCount) throws InterruptedException, ExecutionException {
-		throw new NotYetImplementedException();
+		Phaser[] p = new Phaser[participants.length];
+		for (int i = 0; i < p.length; i++) {
+			p[i] = new Phaser();
+			p[i].register();
+		}
+		forall(0, participants.length, (j) -> {
+			int temp = j;
+			for (int k = 0; k < stepCount; k++) {
+				participants[temp].takeStep(k);
+				p[temp].arrive();
+
+				p[getPartnerIndex(j)].awaitAdvance(k);
+			}
+		});
 	}
 
 	/**

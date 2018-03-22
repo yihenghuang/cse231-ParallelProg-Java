@@ -26,8 +26,6 @@ import static edu.wustl.cse231s.v5.V5.forall;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Phaser;
 
-import edu.wustl.cse231s.NotYetImplementedException;
-import edu.wustl.cse231s.util.IntegerRange;
 import leggedrace.core.LeggedRace;
 import leggedrace.core.Participant;
 
@@ -42,6 +40,17 @@ public class ForallPhasedLeggedRace implements LeggedRace {
 	 */
 	@Override
 	public void takeSteps(Participant[] participants, int stepCount) throws InterruptedException, ExecutionException {
-		throw new NotYetImplementedException();
+		Phaser ph = new Phaser();
+		ph.bulkRegister(participants.length);
+
+		forall(participants, (pa) -> {
+			for (int i = 0; i < stepCount; i++) {
+				final int steps = i;
+				pa.takeStep(steps);
+				ph.arriveAndAwaitAdvance();
+			}
+			// phaserNext();
+
+		});
 	}
 }
