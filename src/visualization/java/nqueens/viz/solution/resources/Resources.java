@@ -19,15 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package racecondition.studio;
+package nqueens.viz.solution.resources;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import java.net.URL;
 
-import racecondition.studio.bettersafethansorry.RepeatRaceConditionTestSuite;
-
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ RaceConditionSpring18StudioCreditTestSuite.class, RepeatRaceConditionTestSuite.class })
-
-public class RaceConditionTestSuite {
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
+public enum Resources {
+	;
+	public static URL QUEEN_SVG = Resources.class.getResource("Chess_tile_ql.fx");
+	public static URL QUEEN_FXML = Resources.class.getResource("Chess_tile_ql.fxml");
 }

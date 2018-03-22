@@ -19,15 +19,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package racecondition.studio;
+package edu.wustl.cse231s.v5.impl.executor;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import edu.wustl.cse231s.v5.api.AccumulatorReducer;
 
-import racecondition.studio.bettersafethansorry.RepeatRaceConditionTestSuite;
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
+public abstract class ReducerAccumulator<T> extends Accumulator<T> {
+	public ReducerAccumulator(AccumulatorReducer<T> reducer) {
+		this.reducer = reducer;
+		this.resultVal = reducer.identity();
+	}
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ RaceConditionSpring18StudioCreditTestSuite.class, RepeatRaceConditionTestSuite.class })
+	@Override
+	public final T get() {
+		if (this.isAccessible()) {
+			//pass
+		} else {
+			this.checkGet();
+		}
+		return this.resultVal;
+	}
 
-public class RaceConditionTestSuite {
+	protected abstract void putAccessible(T value);
+
+	@Override
+	public final void put(T value) {
+		if (this.isAccessible()) {
+			this.putAccessible(value);
+		} else {
+			this.checkPut();
+			if (this.resultVal != null) {
+				this.resultVal = this.reducer.reduce(this.resultVal, value);
+			} else {
+				this.resultVal = value;
+			}
+		}
+	}
+
+	protected final AccumulatorReducer<T> reducer;
+	protected T resultVal;
 }

@@ -19,15 +19,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package racecondition.studio;
+package edu.wustl.cse231s.v5.impl.executor;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import edu.wustl.cse231s.v5.api.FinishAccumulator;
 
-import racecondition.studio.bettersafethansorry.RepeatRaceConditionTestSuite;
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
+// Based on the implementation by Jun Shirako (shirako@rice.edu) and Vivek
+// Sarkar (vsarkar@rice.edu)
+public abstract class Accumulator<T> implements FinishAccumulator<T> {
+	/* package-private */void open() {
+		this.setAccessible(true);
+	}
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ RaceConditionSpring18StudioCreditTestSuite.class, RepeatRaceConditionTestSuite.class })
+	/* package-private */void close() {
+		this.calculateAccum();
+		this.setAccessible(false);
+	}
 
-public class RaceConditionTestSuite {
+	protected boolean isAccessible() {
+		return this.isAccessible;
+	}
+
+	private void setAccessible(boolean isAccessible) {
+		if (isAccessible) {
+			this.checkRegistration();
+			if (this.isAccessible) {
+				throw new FinishAccumulatorException("Nested (double) registration is not allowed.");
+			}
+		}
+		this.isAccessible = isAccessible;
+	}
+
+	protected abstract void calculateAccum();
+
+	protected void checkGet() {
+		// TODO
+	}
+
+	protected void checkPut() {
+		// TODO
+	}
+
+	protected void checkRegistration() {
+		// TODO
+	}
+
+	private boolean isAccessible;
 }

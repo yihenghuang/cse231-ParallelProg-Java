@@ -19,15 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package racecondition.studio;
+package nqueens.core;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
+public interface QueenLocations {
+	int getColumnOfQueenInRow(int row);
 
-import racecondition.studio.bettersafethansorry.RepeatRaceConditionTestSuite;
+	/**
+	 * Checks to see whether the given square on the board is threat free. Note
+	 * that this method only checks rows prior to the given one, so the queens
+	 * in rows after this one will not interfere (and are not checked).
+	 * 
+	 * @param row
+	 *            The row of the square to check.
+	 * @param candidateColumn
+	 *            The column of the square to check.
+	 * @return false if there are queens on the board preventing placement of a
+	 *         queen on this square, otherwise true.
+	 */
+	boolean isCandidateThreatFree(int row, int candidateColumn);
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ RaceConditionSpring18StudioCreditTestSuite.class, RepeatRaceConditionTestSuite.class })
-
-public class RaceConditionTestSuite {
+	int getBoardSize();
 }

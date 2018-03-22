@@ -21,8 +21,6 @@
  *******************************************************************************/
 package edu.wustl.cse231s.v5.impl;
 
-import static edu.wustl.cse231s.v5.V5.numWorkerThreads;
-
 import java.util.Spliterator;
 import java.util.concurrent.ExecutionException;
 

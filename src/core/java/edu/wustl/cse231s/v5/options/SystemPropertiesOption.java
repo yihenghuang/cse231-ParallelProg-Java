@@ -28,8 +28,8 @@ import java.io.File;
  */
 public class SystemPropertiesOption {
 	public static class Builder {
-		public Builder isSerialized(boolean isSerialized) {
-			this.isSerialized = isSerialized;
+		public Builder isLinearized(boolean isLinearized) {
+			this.isLinearized = isLinearized;
 			return this;
 		}
 
@@ -60,23 +60,29 @@ public class SystemPropertiesOption {
 			return new SystemPropertiesOption(this);
 		}
 
-		private boolean isSerialized;
+		private boolean isLinearized;
 		private boolean isDumpStatisticsDesired;
 		private boolean isAbstractMetricsDesired;
 		private Integer numWorkerThreads;
 		private File eventLogFile;
 	}
 
+	private final boolean isLinearized;
+	private final boolean isDumpStatisticsDesired;
+	private final boolean isAbstractMetricsDesired;
+	private final File eventLogFile;
+	private final Integer numWorkerThreads;
+
 	private SystemPropertiesOption(Builder builder) {
-		this.isSerialized = builder.isSerialized;
+		this.isLinearized = builder.isLinearized;
 		this.isDumpStatisticsDesired = builder.isDumpStatisticsDesired;
 		this.isAbstractMetricsDesired = builder.isAbstractMetricsDesired;
 		this.eventLogFile = builder.eventLogFile;
 		this.numWorkerThreads = builder.numWorkerThreads;
 	}
 
-	public boolean isSerialized() {
-		return this.isSerialized;
+	public boolean isLinearized() {
+		return this.isLinearized;
 	}
 
 	public boolean isDumpStatisticsDesired() {
@@ -94,10 +100,4 @@ public class SystemPropertiesOption {
 	public Integer getNumWorkerThreads() {
 		return this.numWorkerThreads;
 	}
-
-	private final boolean isSerialized;
-	private final boolean isDumpStatisticsDesired;
-	private final boolean isAbstractMetricsDesired;
-	private final File eventLogFile;
-	private final Integer numWorkerThreads;
 }

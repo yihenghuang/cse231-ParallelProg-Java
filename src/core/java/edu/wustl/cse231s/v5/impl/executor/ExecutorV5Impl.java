@@ -33,13 +33,20 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
 
+import edu.wustl.cse231s.v5.api.AccumulatorReducer;
 import edu.wustl.cse231s.v5.api.CheckedCallable;
 import edu.wustl.cse231s.v5.api.CheckedConsumer;
 import edu.wustl.cse231s.v5.api.CheckedRunnable;
+import edu.wustl.cse231s.v5.api.ContentionLevel;
+import edu.wustl.cse231s.v5.api.DoubleAccumulationDeterminismPolicy;
+import edu.wustl.cse231s.v5.api.FinishAccumulator;
 import edu.wustl.cse231s.v5.api.Metrics;
+import edu.wustl.cse231s.v5.api.NumberReductionOperator;
 import edu.wustl.cse231s.v5.impl.AbstractV5Impl;
 import edu.wustl.cse231s.v5.options.AwaitFuturesOption;
+import edu.wustl.cse231s.v5.options.RegisterAccumulatorsOption;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
@@ -53,8 +60,15 @@ public class ExecutorV5Impl extends AbstractV5Impl {
 
 	@Override
 	public void finish(CheckedRunnable body) throws InterruptedException, ExecutionException {
+		finish(null, body);
+	}
+
+	@Override
+	public void finish(RegisterAccumulatorsOption registerAccumulatorsOption, CheckedRunnable body)
+			throws InterruptedException, ExecutionException {
 		Deque<FinishContext> stack = contextStack.get();
-		FinishContext context = new FinishContext();
+		FinishContext context = new FinishContext(
+				registerAccumulatorsOption != null ? registerAccumulatorsOption.getAccumulators() : null);
 		stack.push(context);
 		try {
 			body.run();
@@ -62,6 +76,7 @@ public class ExecutorV5Impl extends AbstractV5Impl {
 		} finally {
 			stack.pop();
 		}
+		context.commitAccumulatorsIfNecessary();
 	}
 
 	private void asyncRunnable(FinishContext context, CheckedRunnable body) {
@@ -248,6 +263,64 @@ public class ExecutorV5Impl extends AbstractV5Impl {
 	}
 
 	@Override
+	public FinishAccumulator<Integer> newIntegerFinishAccumulator(NumberReductionOperator operator,
+			ContentionLevel contentionLevel) {
+		if (contentionLevel == ContentionLevel.HIGH) {
+			return new LazyIntegerAccumulator(operator);
+		} else {
+			return new EagerIntegerAccumulator(operator);
+		}
+	}
+
+	@Override
+	public FinishAccumulator<Double> newDoubleFinishAccumulator(NumberReductionOperator operator,
+			ContentionLevel contentionLevel, DoubleAccumulationDeterminismPolicy determinismPolicy) {
+		if (determinismPolicy == DoubleAccumulationDeterminismPolicy.DETERMINISTIC) {
+			switch (operator) {
+			case SUM:
+			case PRODUCT:
+				if (contentionLevel == ContentionLevel.HIGH) {
+					return new LazyBigDecimalAccumulator(operator);
+				} else {
+					return new EagerBigDecimalAccumulator(operator);
+				}
+			default:
+				// pass
+			}
+		}
+		if (contentionLevel == ContentionLevel.HIGH) {
+			return new LazyDoubleAccumulator(operator);
+		} else {
+			return new EagerDoubleAccumulator(operator);
+		}
+	}
+
+	@Override
+	public <T> FinishAccumulator<T> newReducerFinishAccumulator(AccumulatorReducer<T> reducer,
+			ContentionLevel contentionLevel) {
+		if (contentionLevel == ContentionLevel.HIGH) {
+			return new LazyReducerAccumulator<>(reducer);
+		} else {
+			return new EagerReducerAccumulator<>(reducer);
+		}
+	}
+
+	@Override
+	public int numWorkerThreads() {
+		if (executorService instanceof ForkJoinPool) {
+			ForkJoinPool forkJoinPool = (ForkJoinPool) executorService;
+			return forkJoinPool.getParallelism();
+		} else if (executorService instanceof ThreadPoolExecutor) {
+			ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executorService;
+			return threadPoolExecutor.getMaximumPoolSize();
+		} else {
+			// TODO
+			// return Runtime.getRuntime().availableProcessors();
+			throw new RuntimeException(Objects.toString(executorService));
+		}
+	}
+
+	@Override
 	public void doWork(long n) {
 	}
 
@@ -272,6 +345,17 @@ public class ExecutorV5Impl extends AbstractV5Impl {
 
 	private static class FinishContext {
 		private final Queue<Future<?>> tasks = new ConcurrentLinkedQueue<>();
+		private final FinishAccumulator<?>[] accumulators;
+
+		public FinishContext(FinishAccumulator<?>[] accumulators) {
+			this.accumulators = accumulators;
+			if (this.accumulators != null) {
+				for (FinishAccumulator<?> a : this.accumulators) {
+					Accumulator<?> acc = (Accumulator<?>) a;
+					acc.open();
+				}
+			}
+		}
 
 		void joinAllTasks() throws InterruptedException, ExecutionException {
 			while (true) {
@@ -285,6 +369,15 @@ public class ExecutorV5Impl extends AbstractV5Impl {
 
 		void offerTask(Future<?> task) {
 			tasks.offer(task);
+		}
+
+		public void commitAccumulatorsIfNecessary() {
+			if (this.accumulators != null) {
+				for (FinishAccumulator<?> a : this.accumulators) {
+					Accumulator<?> acc = (Accumulator<?>) a;
+					acc.close();
+				}
+			}
 		}
 	}
 }

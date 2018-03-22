@@ -19,15 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package racecondition.studio;
+package nqueens.lab;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import static edu.wustl.cse231s.v5.V5.launchApp;
 
-import racecondition.studio.bettersafethansorry.RepeatRaceConditionTestSuite;
+import org.junit.Test;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ RaceConditionSpring18StudioCreditTestSuite.class, RepeatRaceConditionTestSuite.class })
+import backtrack.lab.rubric.BacktrackRubric;
+import nqueens.core.ImmutableQueenLocations;
 
-public class RaceConditionTestSuite {
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link ParallelNQueens}
+ */
+@BacktrackRubric(BacktrackRubric.Category.PARALLEL_N_QUEENS_CORRECTNESS)
+public class ParallelNQueensRegisterFinishAccumulatorTest {
+	@Test
+	public void test() {
+		launchApp(() -> {
+			ImmutableQueenLocations queenLocations = new DefaultImmutableQueenLocations(4);
+			throw new RuntimeException("TODO");
+			// try {
+			// ParallelNQueens.countSolutions(queenLocations);
+			// } catch (Throwable t) {
+			// t.printStackTrace();
+			// }
+		});
+	}
 }

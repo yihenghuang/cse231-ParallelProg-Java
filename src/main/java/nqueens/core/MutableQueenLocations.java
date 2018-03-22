@@ -19,15 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package racecondition.studio;
+package nqueens.core;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
-import racecondition.studio.bettersafethansorry.RepeatRaceConditionTestSuite;
-
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ RaceConditionSpring18StudioCreditTestSuite.class, RepeatRaceConditionTestSuite.class })
-
-public class RaceConditionTestSuite {
+/**
+ * A board setup that can be changed. Each row on the board can contain at most
+ * one queen in a single column.
+ * 
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
+public interface MutableQueenLocations extends QueenLocations {
+	public void setColumnOfQueenInRow(int row, int column);
 }

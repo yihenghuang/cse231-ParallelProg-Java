@@ -1,0 +1,68 @@
+/*******************************************************************************
+ * Copyright (C) 2016-2017 Dennis Cosgrove
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ ******************************************************************************/
+package nqueens.core;
+
+/**
+ * A board setup that can be changed. Each row on the board can contain at most
+ * one queen in a single column.
+ * 
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
+public class DefaultMutableQueenLocations extends AbstractQueenLocations implements MutableQueenLocations {
+
+	public DefaultMutableQueenLocations(int boardSize) {
+		this.locations = new int[boardSize];
+	}
+
+	@Override
+	public int getColumnOfQueenInRow(int row) {
+		return this.locations[row];
+	}
+
+	/**
+	 * Sets the queen position in a given row. Each row can contain at most a
+	 * single queen in a single column, so by setting this value, you are
+	 * overwriting any queens already in the given row.
+	 * 
+	 * @param row
+	 *            The row in which to place the queen.
+	 * @param column
+	 *            The column in which to place the queen.
+	 */
+	public void setColumnOfQueenInRow(int row, int column) {
+		if (!this.isCandidateThreatFree(row, column))
+			throw new IllegalArgumentException("Unable to place queen at position (row=" + row + ", column=" + column
+					+ ")\nCurrent board:\n" + toString());
+		this.locations[row] = column;
+	}
+
+	/**
+	 * Gets the size of the board. For a normal chessboard, this will be 8.
+	 * 
+	 * @return The number of rows in the board.
+	 */
+	public int getBoardSize() {
+		return this.locations.length;
+	}	
+	
+	private final int[] locations;
+}

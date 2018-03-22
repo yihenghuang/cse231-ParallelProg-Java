@@ -19,15 +19,59 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package racecondition.studio;
+package edu.wustl.cse231s.v5.impl.executor;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import edu.wustl.cse231s.v5.api.NumberReductionOperator;
 
-import racecondition.studio.bettersafethansorry.RepeatRaceConditionTestSuite;
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
+public abstract class DoubleAccumulator extends Accumulator<Double> {
+	public DoubleAccumulator(NumberReductionOperator operator) {
+		this.operator = operator;
+		this.resultVal = this.operator.getInitialDoubleValue();
+	}
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ RaceConditionSpring18StudioCreditTestSuite.class, RepeatRaceConditionTestSuite.class })
+	@Override
+	public final Double get() {
+		if (this.isAccessible()) {
+			//pass
+		} else {
+			this.checkGet();
+		}
+		return this.resultVal;
+	}
 
-public class RaceConditionTestSuite {
+	protected abstract void putAccessible(double value);
+
+	@Override
+	public final void put(Double v) {
+		double value = v.doubleValue();
+		if (this.isAccessible()) {
+			this.putAccessible(value);
+		} else {
+			this.checkPut();
+			switch (this.operator) {
+			case SUM:
+				this.resultVal += value;
+				break;
+			case PRODUCT:
+				this.resultVal *= value;
+				break;
+			case MIN:
+				if (value < this.resultVal) {
+					this.resultVal = value;
+				}
+				break;
+			case MAX:
+				if (value > this.resultVal) {
+					this.resultVal = value;
+				}
+				break;
+			}
+		}
+	}
+
+	protected final NumberReductionOperator operator;
+	protected double resultVal;
 }

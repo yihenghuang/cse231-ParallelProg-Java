@@ -19,15 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package racecondition.studio;
+package nqueens.core;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
-import racecondition.studio.bettersafethansorry.RepeatRaceConditionTestSuite;
-
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ RaceConditionSpring18StudioCreditTestSuite.class, RepeatRaceConditionTestSuite.class })
-
-public class RaceConditionTestSuite {
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
+public interface ImmutableQueenLocations extends QueenLocations {
+	public ImmutableQueenLocations createNext(int column);
+	public int getRowCount();
+	public boolean isNextRowThreatFree(int column);
 }

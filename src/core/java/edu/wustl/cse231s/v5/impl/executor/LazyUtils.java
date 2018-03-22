@@ -19,15 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package racecondition.studio;
+package edu.wustl.cse231s.v5.impl.executor;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import java.util.concurrent.ForkJoinWorkerThread;
 
-import racecondition.studio.bettersafethansorry.RepeatRaceConditionTestSuite;
+import edu.wustl.cse231s.v5.V5;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ RaceConditionSpring18StudioCreditTestSuite.class, RepeatRaceConditionTestSuite.class })
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
+/* package-private */ class LazyUtils {
+	private LazyUtils() {
+		throw new Error();
+	}
 
-public class RaceConditionTestSuite {
+	/* package-private */ static int getPoolSize() {
+		return V5.numWorkerThreads();
+	}
+
+	/* package-private */ static int getPoolIndex() {
+		Thread thread = Thread.currentThread();
+		if (thread instanceof ForkJoinWorkerThread) {
+			ForkJoinWorkerThread forkJoinWorkerThread = (ForkJoinWorkerThread) thread;
+			return forkJoinWorkerThread.getPoolIndex();
+		} else {
+			throw new RuntimeException(
+					"TODO: getPoolIndex() equivalent for thread " + thread + " " + thread.getClass());
+		}
+	}
+
 }

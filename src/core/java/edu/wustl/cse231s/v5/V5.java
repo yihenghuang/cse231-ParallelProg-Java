@@ -21,12 +21,16 @@
  ******************************************************************************/
 package edu.wustl.cse231s.v5;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.AbstractExecutorService;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import edu.wustl.cse231s.v5.api.AccumulatorReducer;
@@ -86,15 +90,67 @@ public class V5 {
 		launchApp(new ExecutorV5Impl(ForkJoinPool.commonPool()), body);
 	}
 
-	public static void launchApp(SystemPropertiesOption systemPropertiesOption, CheckedRunnable body) {
-		Integer numWorkerThreads = systemPropertiesOption.getNumWorkerThreads();
-		if (numWorkerThreads != null) {
-			ExecutorService executorService = Executors.newFixedThreadPool(numWorkerThreads.intValue());
-			launchApp(new ExecutorV5Impl(executorService), body);
-			executorService.shutdown();
-		} else {
-			launchApp(body);
+	public static <T> T launchAppWithReturn(CheckedCallable<T> body) {
+		class MutuableObject<T> {
+			private T value;
 		}
+		MutuableObject<T> mutuableObject = new MutuableObject<>();
+		launchApp(() -> {
+			mutuableObject.value = body.call();
+		});
+		return mutuableObject.value;
+	}
+
+	public static void launchApp(SystemPropertiesOption systemPropertiesOption, CheckedRunnable body) {
+		ExecutorService executorService;
+		if (systemPropertiesOption.isLinearized()) {
+			class LinearizedExecutorService extends AbstractExecutorService {
+				boolean isShutdown = false;
+				boolean isTerminated = false;
+
+				@Override
+				public void execute(Runnable command) {
+					command.run();
+				}
+
+				@Override
+				public boolean isShutdown() {
+					return isShutdown;
+				}
+
+				@Override
+				public void shutdown() {
+					this.isShutdown = true;
+				}
+
+				@Override
+				public List<Runnable> shutdownNow() {
+					this.shutdown();
+					return Collections.emptyList();
+				}
+
+				@Override
+				public boolean isTerminated() {
+					return this.isTerminated;
+				}
+
+				@Override
+				public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
+					this.isTerminated = true;
+					return this.isTerminated;
+				}
+			}
+			executorService = new LinearizedExecutorService();
+		} else {
+			Integer numWorkerThreads = systemPropertiesOption.getNumWorkerThreads();
+			if (numWorkerThreads != null) {
+				executorService = Executors.newFixedThreadPool(numWorkerThreads.intValue());
+			} else {
+				executorService = ForkJoinPool.commonPool();
+			}
+		}
+		launchApp(new ExecutorV5Impl(executorService), body);
+		executorService.shutdown();
 	}
 
 	public static void launchApp(CheckedRunnable body, Runnable preFinalizeCallback) {
@@ -237,8 +293,13 @@ public class V5 {
 	}
 
 	public static int numWorkerThreads() {
-		// TODO
-		return Runtime.getRuntime().availableProcessors();
+		if (implAtom.get() != null) {
+			return getImpl().numWorkerThreads();
+		} else {
+			// TODO
+			// return Runtime.getRuntime().availableProcessors();
+			throw new RuntimeException();
+		}
 	}
 
 	public static boolean isLaunched() {
@@ -246,7 +307,10 @@ public class V5 {
 	}
 
 	public static void doWork(long n) {
-		getImpl().doWork(n);
+		V5Impl impl = implAtom.get();
+		if (impl != null) {
+			impl.doWork(n);
+		}
 	}
 
 	public static void dumpStatistics() {
@@ -297,27 +361,26 @@ public class V5 {
 
 	public static void finish(RegisterAccumulatorsOption registerAccumulatorsOption, CheckedRunnable body)
 			throws InterruptedException, ExecutionException {
-		throw new RuntimeException();
-		// getImplementation().finish(registerAccumulatorsOption.getAccumulators(),
-		// body);
+		getImpl().finish(registerAccumulatorsOption, body);
+	}
+
+	private static ContentionLevel getDefaultContentionLevel() {
+		// TODO
+		return ContentionLevel.LOW;
 	}
 
 	public static FinishAccumulator<Integer> newIntegerFinishAccumulator(NumberReductionOperator operator,
 			ContentionLevel contentionLevel) {
-		throw new RuntimeException();
-		// return getImplementation().newIntegerFinishAccumulator(operator,
-		// contentionLevel);
+		return getImpl().newIntegerFinishAccumulator(operator, contentionLevel);
 	}
 
 	public static FinishAccumulator<Integer> newIntegerFinishAccumulator(NumberReductionOperator operator) {
-		return newIntegerFinishAccumulator(operator, ContentionLevel.HIGH);
+		return newIntegerFinishAccumulator(operator, getDefaultContentionLevel());
 	}
 
 	public static FinishAccumulator<Double> newDoubleFinishAccumulator(NumberReductionOperator operator,
 			ContentionLevel contentionLevel, DoubleAccumulationDeterminismPolicy determinismPolicy) {
-		throw new RuntimeException();
-		// return getImplementation().newDoubleFinishAccumulator(operator,
-		// contentionLevel, determinismPolicy);
+		return getImpl().newDoubleFinishAccumulator(operator, contentionLevel, determinismPolicy);
 	}
 
 	public static FinishAccumulator<Double> newDoubleFinishAccumulator(NumberReductionOperator operator,
@@ -326,18 +389,16 @@ public class V5 {
 	}
 
 	public static FinishAccumulator<Double> newDoubleFinishAccumulator(NumberReductionOperator operator) {
-		return newDoubleFinishAccumulator(operator, ContentionLevel.HIGH);
+		return newDoubleFinishAccumulator(operator, getDefaultContentionLevel());
 	}
 
 	public static <T> FinishAccumulator<T> newReducerFinishAccumulator(AccumulatorReducer<T> reducer,
 			ContentionLevel contentionLevel) {
-		throw new RuntimeException();
-		// return getImplementation().newReducerFinishAccumulator(reducer,
-		// contentionLevel);
+		return getImpl().newReducerFinishAccumulator(reducer, contentionLevel);
 	}
 
 	public static <T> FinishAccumulator<T> newReducerFinishAccumulator(AccumulatorReducer<T> reducer) {
-		return newReducerFinishAccumulator(reducer, ContentionLevel.HIGH);
+		return newReducerFinishAccumulator(reducer, getDefaultContentionLevel());
 	}
 
 	@Deprecated

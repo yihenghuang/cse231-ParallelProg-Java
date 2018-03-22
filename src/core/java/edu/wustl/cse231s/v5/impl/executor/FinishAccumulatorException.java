@@ -19,15 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package racecondition.studio;
+package edu.wustl.cse231s.v5.impl.executor;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
+public class FinishAccumulatorException extends RuntimeException {
+	private static final long serialVersionUID = 1L;
 
-import racecondition.studio.bettersafethansorry.RepeatRaceConditionTestSuite;
-
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ RaceConditionSpring18StudioCreditTestSuite.class, RepeatRaceConditionTestSuite.class })
-
-public class RaceConditionTestSuite {
+	public FinishAccumulatorException(String detail) {
+		super(detail);
+	}
 }

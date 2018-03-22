@@ -19,15 +19,60 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package racecondition.studio;
+package edu.wustl.cse231s.v5.impl.executor;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import edu.wustl.cse231s.v5.api.NumberReductionOperator;
 
-import racecondition.studio.bettersafethansorry.RepeatRaceConditionTestSuite;
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
+// Based on the implementation by Jun Shirako (shirako@rice.edu) and Vivek Sarkar (vsarkar@rice.edu)
+public abstract class IntegerAccumulator extends Accumulator<Integer> {
+	public IntegerAccumulator(NumberReductionOperator operator) {
+		this.operator = operator;
+		this.resultVal = this.operator.getInitialIntValue();
+	}
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ RaceConditionSpring18StudioCreditTestSuite.class, RepeatRaceConditionTestSuite.class })
+	@Override
+	public final Integer get() {
+		if (this.isAccessible()) {
+			//pass
+		} else {
+			this.checkGet();
+		}
+		return this.resultVal;
+	}
 
-public class RaceConditionTestSuite {
+	protected abstract void putAccessible(int value);
+
+	@Override
+	public final void put(Integer v) {
+		int value = v.intValue();
+		if (this.isAccessible()) {
+			this.putAccessible(value);
+		} else {
+			this.checkPut();
+			switch (this.operator) {
+			case SUM:
+				this.resultVal += value;
+				break;
+			case PRODUCT:
+				this.resultVal *= value;
+				break;
+			case MIN:
+				if (value < this.resultVal) {
+					this.resultVal = value;
+				}
+				break;
+			case MAX:
+				if (value > this.resultVal) {
+					this.resultVal = value;
+				}
+				break;
+			}
+		}
+	}
+
+	protected final NumberReductionOperator operator;
+	protected int resultVal;
 }

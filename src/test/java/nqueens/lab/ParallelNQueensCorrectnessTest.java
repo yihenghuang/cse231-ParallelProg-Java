@@ -19,15 +19,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package racecondition.studio;
+package nqueens.lab;
 
+import java.io.IOException;
+import java.util.Collection;
+
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
-import racecondition.studio.bettersafethansorry.RepeatRaceConditionTestSuite;
+import backtrack.lab.rubric.BacktrackRubric;
+import edu.wustl.cse231s.junit.JUnitUtils;
+import nqueens.core.ImmutableQueenLocations;
+import nqueens.core.NQueensCorrectnessUtils;
+import nqueens.lab.DefaultImmutableQueenLocations;
+import nqueens.lab.ParallelNQueens;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ RaceConditionSpring18StudioCreditTestSuite.class, RepeatRaceConditionTestSuite.class })
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link ParallelNQueens}
+ */
+@RunWith(Parameterized.class)
+@BacktrackRubric(BacktrackRubric.Category.PARALLEL_N_QUEENS_CORRECTNESS)
+public class ParallelNQueensCorrectnessTest extends AbstractNQueensCorrectnessTest {
+	private final int boardSize;
 
-public class RaceConditionTestSuite {
+	public ParallelNQueensCorrectnessTest(int boardSize) throws IOException {
+		this.boardSize = boardSize;
+	}
+
+	@Test
+	public void test() {
+		test(boardSize, () -> {
+			ImmutableQueenLocations queenLocations = new DefaultImmutableQueenLocations(boardSize);
+			return ParallelNQueens.countSolutions(queenLocations);
+		});
+	}
+
+	@Parameters(name = "boardSize={0}")
+	public static Collection<Object[]> getConstructorArguments() {
+		return JUnitUtils.toParameterizedArguments(NQueensCorrectnessUtils.getBoardSizes());
+	}
 }
