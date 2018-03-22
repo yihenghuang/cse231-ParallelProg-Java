@@ -36,7 +36,7 @@ import edu.wustl.cse231s.v5.api.NumberReductionOperator;
 import nqueens.core.ImmutableQueenLocations;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class ParallelNQueens {
