@@ -24,9 +24,9 @@ package mapreduce.apps.cholera.studio;
 import java.util.function.BiConsumer;
 import java.util.stream.Collector;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import mapreduce.apps.cholera.core.CholeraDeath;
 import mapreduce.apps.cholera.core.WaterPump;
+import mapreduce.collector.intsum.studio.IntSumCollector;
 import mapreduce.framework.core.Mapper;
 
 /**
@@ -40,15 +40,31 @@ public class CholeraApp {
 	}
 
 	public static Mapper<CholeraDeath, WaterPump, Number> createMapper() {
-		return new Mapper<CholeraDeath, WaterPump, Number>() {
+		WaterPump[] p = WaterPump.values();
+
+		Mapper<CholeraDeath, WaterPump, Number> m = new Mapper<CholeraDeath, WaterPump, Number>() {
 			@Override
 			public void map(CholeraDeath item, BiConsumer<WaterPump, Number> keyValuePairConsumer) {
-				// keyValuePairConsumer.accept(, );
+
+				double minDist = p[0].getLocation().getDistanceTo(item.getLocation());
+				WaterPump min = p[0];
+
+				for (WaterPump pump : WaterPump.values()) {
+					if (pump.getLocation().getDistanceTo(item.getLocation()) < minDist) {
+						minDist = pump.getLocation().getDistanceTo(item.getLocation());
+						min = pump;
+					}
+				}
+
+				keyValuePairConsumer.accept(min, 1);
 			}
+
 		};
+		return m;
 	}
 
 	public static Collector<? extends Number, ?, ? extends Number> createCollector() {
-		throw new NotYetImplementedException();
+		return new IntSumCollector();
+
 	}
 }
