@@ -44,6 +44,7 @@ public class SimpleThreadFactory implements ThreadFactory {
 	@Override
 	public Thread newThread(Runnable target) {
 		return new Thread(target);
+
 	}
 
 }

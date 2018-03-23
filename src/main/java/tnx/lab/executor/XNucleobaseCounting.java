@@ -21,15 +21,18 @@
  ******************************************************************************/
 package tnx.lab.executor;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 import count.assignment.NucleobaseCounting;
 import edu.wustl.cse231s.IntendedForStaticAccessOnlyError;
-import edu.wustl.cse231s.NotYetImplementedException;
 import edu.wustl.cse231s.bioinformatics.Nucleobase;
+import edu.wustl.cse231s.util.IntegerRange;
 
 /**
  * A parallel nucleobase counter that uses Java's {@link ExecutorService}
@@ -103,7 +106,33 @@ public class XNucleobaseCounting {
 	 */
 	public static int countNWaySplit(ExecutorService executor, byte[] chromosome, Nucleobase nucleobase, int numTasks)
 			throws InterruptedException, ExecutionException {
-		throw new NotYetImplementedException();
+
+		List<Callable<Integer>> tasks = new ArrayList<>(numTasks);
+		int clength = chromosome.length;
+		int slength = clength / numTasks;
+		int mode = Math.floorMod(chromosome.length, numTasks);
+
+		for (int taskIndex : new IntegerRange(0, numTasks)) {
+			tasks.add(() -> {
+				if (taskIndex < mode) {
+					return NucleobaseCounting.countRangeSequential(chromosome, nucleobase, taskIndex * (slength + 1),
+							taskIndex * (slength + 1) + slength + 1);
+				} else {
+					return NucleobaseCounting.countRangeSequential(chromosome, nucleobase,
+							(1 + slength) * mode + (taskIndex - mode) * slength,
+							(1 + slength) * mode + (taskIndex - mode) * slength + slength);
+				}
+			});
+		}
+
+		List<Future<Integer>> futures = executor.invokeAll(tasks);
+
+		int sum = 0;
+		for (Future<Integer> future : futures) {
+			sum += future.get();
+		}
+		return sum;
+
 	}
 
 	/**
@@ -126,7 +155,7 @@ public class XNucleobaseCounting {
 	 */
 	public static int countDivideAndConquer(ExecutorService executor, byte[] chromosome, Nucleobase nucleobase,
 			int threshold) throws InterruptedException, ExecutionException {
-		throw new NotYetImplementedException();
+		return countDivideAndConquerKernel(executor, chromosome, nucleobase, 0, chromosome.length, threshold);
 	}
 
 	/**
@@ -158,6 +187,21 @@ public class XNucleobaseCounting {
 	 */
 	private static int countDivideAndConquerKernel(ExecutorService executor, byte[] chromosome, Nucleobase nucleobase,
 			int min, int maxExclusive, int threshold) throws InterruptedException, ExecutionException {
-		throw new NotYetImplementedException();
+		int sliceLength = maxExclusive - min;
+		if (sliceLength > threshold) {
+			int[] sub = { 0, 0 };
+			int mid = (maxExclusive + min) / 2;
+
+			Future<Integer> first = executor.submit(() -> {
+				return countDivideAndConquerKernel(executor, chromosome, nucleobase, min, mid, threshold);
+			});
+			Future<Integer> second = executor.submit(() -> {
+				return countDivideAndConquerKernel(executor, chromosome, nucleobase, mid, maxExclusive, threshold);
+			});
+			return first.get() + second.get();
+		} else {
+			return NucleobaseCounting.countRangeSequential(chromosome, nucleobase, min, maxExclusive);
+		}
+
 	}
 }

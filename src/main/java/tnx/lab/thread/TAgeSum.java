@@ -55,15 +55,15 @@ public class TAgeSum {
 				total[0] += ages[i];
 			}
 		});
-		Thread b = threadFactory.newThread(() -> {
-			for (int i = ages.length / 2; i < ages.length; i++) {
-				total[1] += ages[i];
-			}
-		});
+
 		a.start();
-		b.start();
+
+		for (int i = ages.length / 2; i < ages.length; i++) {
+			total[1] += ages[i];
+		}
+
 		a.join();
-		b.join();
+
 		return total[0] + total[1];
 
 	}

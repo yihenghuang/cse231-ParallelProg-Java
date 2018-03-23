@@ -22,13 +22,11 @@
 package tnx.lab.executor;
 
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 import edu.wustl.cse231s.IntendedForStaticAccessOnlyError;
-import edu.wustl.cse231s.NotYetImplementedException;
 import sort.core.quick.Partitioner;
 import sort.core.quick.PivotLocation;
 
@@ -57,7 +55,7 @@ public final class XQuicksort {
 	 */
 	public static void sequentialQuicksort(int[] data, Partitioner partitioner)
 			throws InterruptedException, ExecutionException {
-		throw new NotYetImplementedException();
+		sequentialQuicksortKernel(data, 0, data.length, partitioner);
 	}
 
 	/**
@@ -75,7 +73,16 @@ public final class XQuicksort {
 	 */
 	private static void sequentialQuicksortKernel(int[] data, int min, int maxExclusive, Partitioner partitioner)
 			throws InterruptedException, ExecutionException {
-		throw new NotYetImplementedException();
+		if (maxExclusive - min <= 1) {
+			return;
+		}
+
+		PivotLocation p = partitioner.partitionRange(data, min, maxExclusive);
+
+		int left = p.getLeftSidesUpperExclusive();
+		int right = p.getRightSidesLowerInclusive();
+		sequentialQuicksortKernel(data, min, left, partitioner);
+		sequentialQuicksortKernel(data, right, maxExclusive, partitioner);
 	}
 
 	/**
@@ -93,7 +100,7 @@ public final class XQuicksort {
 	 */
 	public static void parallelQuicksort(ExecutorService executor, int[] data, int threshold, Partitioner partitioner)
 			throws InterruptedException, ExecutionException {
-		throw new NotYetImplementedException();
+		parallelQuicksortKernel(executor, data, 0, data.length, futures, threshold, partitioner);
 	}
 
 	/**
@@ -123,7 +130,16 @@ public final class XQuicksort {
 	private static void parallelQuicksortKernel(ExecutorService executor, int[] data, int min, int maxExclusive,
 			Queue<Future<?>> futures, int threshold, Partitioner partitioner)
 			throws InterruptedException, ExecutionException {
-		throw new NotYetImplementedException();
+		if (maxExclusive - min <= 1) {
+			return;
+		}
+
+		PivotLocation p = partitioner.partitionRange(data, min, maxExclusive);
+
+		int left = p.getLeftSidesUpperExclusive();
+		int right = p.getRightSidesLowerInclusive();
+		sequentialQuicksortKernel(data, min, left, partitioner);
+		sequentialQuicksortKernel(data, right, maxExclusive, partitioner);
 	}
 
 }
