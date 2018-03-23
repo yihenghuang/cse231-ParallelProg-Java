@@ -49,6 +49,7 @@ public class TAgeSum {
 	 *             if the current thread was interrupted while waiting
 	 */
 	public static int sumUpperLowerSplit(int[] ages, ThreadFactory threadFactory) throws InterruptedException {
+
 		int[] total = new int[2];
 		Thread a = threadFactory.newThread(() -> {
 			for (int i = 0; i < ages.length / 2; i++) {

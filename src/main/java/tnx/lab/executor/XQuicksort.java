@@ -22,6 +22,7 @@
 package tnx.lab.executor;
 
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -81,6 +82,7 @@ public final class XQuicksort {
 
 		int left = p.getLeftSidesUpperExclusive();
 		int right = p.getRightSidesLowerInclusive();
+
 		sequentialQuicksortKernel(data, min, left, partitioner);
 		sequentialQuicksortKernel(data, right, maxExclusive, partitioner);
 	}
@@ -100,7 +102,14 @@ public final class XQuicksort {
 	 */
 	public static void parallelQuicksort(ExecutorService executor, int[] data, int threshold, Partitioner partitioner)
 			throws InterruptedException, ExecutionException {
+
+		ConcurrentLinkedQueue<Future<?>> futures = new ConcurrentLinkedQueue<>();
+
 		parallelQuicksortKernel(executor, data, 0, data.length, futures, threshold, partitioner);
+
+		while (!futures.isEmpty()) {
+			futures.poll().get();
+		}
 	}
 
 	/**
@@ -130,16 +139,29 @@ public final class XQuicksort {
 	private static void parallelQuicksortKernel(ExecutorService executor, int[] data, int min, int maxExclusive,
 			Queue<Future<?>> futures, int threshold, Partitioner partitioner)
 			throws InterruptedException, ExecutionException {
-		if (maxExclusive - min <= 1) {
-			return;
+
+		if (maxExclusive - min >= threshold) {
+
+			PivotLocation p = partitioner.partitionRange(data, min, maxExclusive);
+
+			Future<?> future1 = executor.submit(() -> {
+				parallelQuicksortKernel(executor, data, min, p.getLeftSidesUpperExclusive(), futures, threshold,
+						partitioner);
+				return null;
+			});
+			Future<?> future2 = executor.submit(() -> {
+				parallelQuicksortKernel(executor, data, p.getRightSidesLowerInclusive(), maxExclusive, futures,
+						threshold, partitioner);
+				return null;
+			});
+
+			futures.add(future1);
+			futures.add(future2);
+
+		} else {
+			sequentialQuicksortKernel(data, min, maxExclusive, partitioner);
 		}
 
-		PivotLocation p = partitioner.partitionRange(data, min, maxExclusive);
-
-		int left = p.getLeftSidesUpperExclusive();
-		int right = p.getRightSidesLowerInclusive();
-		sequentialQuicksortKernel(data, min, left, partitioner);
-		sequentialQuicksortKernel(data, right, maxExclusive, partitioner);
 	}
 
 }

@@ -189,7 +189,7 @@ public class XNucleobaseCounting {
 			int min, int maxExclusive, int threshold) throws InterruptedException, ExecutionException {
 		int sliceLength = maxExclusive - min;
 		if (sliceLength > threshold) {
-			int[] sub = { 0, 0 };
+
 			int mid = (maxExclusive + min) / 2;
 
 			Future<Integer> first = executor.submit(() -> {
@@ -199,6 +199,7 @@ public class XNucleobaseCounting {
 				return countDivideAndConquerKernel(executor, chromosome, nucleobase, mid, maxExclusive, threshold);
 			});
 			return first.get() + second.get();
+
 		} else {
 			return NucleobaseCounting.countRangeSequential(chromosome, nucleobase, min, maxExclusive);
 		}
