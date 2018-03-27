@@ -19,18 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package backtrack.lab;
+package sudoku.core;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
-import nqueens.lab.NQueensTestSuite;
-import sudoku.lab.SudokuTestSuite;
+import java.util.Iterator;
 
 /**
+ * An algorithm for choosing the next square to examine in a
+ * {@link SudokuPuzzle}. This class can be used like an {@link Iterator}, except
+ * that its {@link #selectNextUnfilledSquare(SudokuPuzzle)} method takes a
+ * {@code SudokuPuzzle} as an argument, allowing it to be used with many
+ * {@link ImmutableSudokuPuzzle}s.
+ * 
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ NQueensTestSuite.class, SudokuTestSuite.class, NoPrintingTest.class })
-public class BacktrackTestSuite {
+public interface SquareSearchAlgorithm {
+
+	/**
+	 * Selects the next square to examine in the given puzzle. This square will be
+	 * unfilled. If there are no unfilled squares remaining, this method returns
+	 * null.
+	 * 
+	 * @param puzzle
+	 *            The sudoku puzzle to examine
+	 * @return the next unfilled square to examine in the puzzle
+	 */
+	Square selectNextUnfilledSquare(SudokuPuzzle puzzle);
+
 }

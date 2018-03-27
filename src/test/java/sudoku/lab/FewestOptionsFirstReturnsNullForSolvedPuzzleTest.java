@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2018 Dennis Cosgrove
+ * Copyright (C) 2016-2017 Dennis Cosgrove
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,37 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package count.assignment.rubric;
+package sudoku.lab;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import org.junit.Assert;
+import org.junit.Test;
 
-import edu.wustl.cse231s.rubric.RubricCategory;
+import backtrack.lab.rubric.BacktrackRubric;
+import sudoku.core.ConstraintPropagator;
+import sudoku.core.Square;
+import sudoku.instructor.InstructorSudokuTestUtils;
+import sudoku.lab.DefaultImmutableSudokuPuzzle;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link FewestOptionsFirstSquareSearchAlgorithm#selectNextUnfilledSquare(sudoku.core.SudokuPuzzle)}
  */
-@Retention(RetentionPolicy.RUNTIME)
-public @interface CountRubric {
-	public static enum Category implements RubricCategory {
-		RANGE(0.1),
-		SEQUENTIAL(0.05),
-		MIDPOINT(0.05),
-		LOWER_UPPER(0.2),
-		NWAY(0.25),
-		DIVIDE_AND_CONQUER(0.25),
-		NO_PRINTING(0.0);
-		private final double portion;
-
-		private Category(double portion) {
-			this.portion = portion;
-		}
-
-		@Override
-		public double getPortion() {
-			return this.portion;
-		}
+@BacktrackRubric(BacktrackRubric.Category.FEWEST_OPTIONS_FIRST_SEARCH)
+public class FewestOptionsFirstReturnsNullForSolvedPuzzleTest {
+	@Test
+	public void testSolution() {
+		// source of original givens (now solved): http://norvig.com/hardest.txt
+		String solution = "128547639345869217679213548912486375784352196536791482891624753467935821253178964";
+		ConstraintPropagator constraintPropagator = InstructorSudokuTestUtils.createPeerOnlyConstraintPropagator();
+		DefaultImmutableSudokuPuzzle puzzle = new DefaultImmutableSudokuPuzzle(constraintPropagator, solution);
+		Square square = new FewestOptionsFirstSquareSearchAlgorithm().selectNextUnfilledSquare(puzzle);
+		Assert.assertNull("This is a complete puzzle, no square should have been selected but one was selected",
+				square);
 	}
-
-	Category[] value();
 }

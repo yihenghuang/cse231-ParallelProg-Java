@@ -19,18 +19,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package backtrack.lab;
+package sudoku.lab;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
-import nqueens.lab.NQueensTestSuite;
-import sudoku.lab.SudokuTestSuite;
+import edu.wustl.cse231s.NotYetImplementedException;
+import net.jcip.annotations.Immutable;
+import sudoku.core.Square;
+import sudoku.core.SquareSearchAlgorithm;
+import sudoku.core.SudokuPuzzle;
 
 /**
+ * @author __STUDENT_NAME__
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ NQueensTestSuite.class, SudokuTestSuite.class, NoPrintingTest.class })
-public class BacktrackTestSuite {
+@Immutable
+public class RowMajorSquareSearchAlgorithm implements SquareSearchAlgorithm {
+	/**
+	 * A square search algorithm based on
+	 * <a href="https://en.wikipedia.org/wiki/Row-_and_column-major_order">
+	 * row-major ordering</a>. This implementation should simply traverse the board
+	 * as defined by Square's values method and return the first square that is
+	 * unfilled. This algorithm should return a square with no options if it exists
+	 * (meaning that the puzzle is impossible to solve), or it should return null,
+	 * if the puzzle is already completely solved.
+	 */
+	@Override
+	public Square selectNextUnfilledSquare(SudokuPuzzle puzzle) {
+		throw new NotYetImplementedException();
+	}
 }

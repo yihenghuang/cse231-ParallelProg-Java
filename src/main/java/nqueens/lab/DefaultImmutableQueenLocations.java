@@ -130,7 +130,7 @@ public final class DefaultImmutableQueenLocations extends AbstractQueenLocations
 
 	/**
 	 * This method should check to see if a position on the chess board is being
-	 * attacked by any other queens.
+	 * attacked by any other queens. (Hint: maybe NQueensUtils could be useful?)
 	 * 
 	 * @param column
 	 *            The column where the next queen will be placed.

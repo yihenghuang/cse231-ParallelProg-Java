@@ -25,6 +25,8 @@ package mapreduce.framework.lab.rubric;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import edu.wustl.cse231s.rubric.RubricCategory;
+
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
@@ -35,42 +37,56 @@ public @interface MapReduceRubric {
 		MATRIX_FRAMEWORK("Matrix framework subtotal"),
 		SANITY_CHECK(null),
 		UNCATEGORIZED(null);
-		
+
 		private final String title;
+
 		private SuperCatergory(String title) {
 			this.title = title;
 		}
-		
+
 		public String getTitle() {
 			return title;
 		}
 	}
-	
-	public static enum Category {
-		SANITY_CHECK(SuperCatergory.SANITY_CHECK, null),
-		SIMPLE_MAP_ALL(SuperCatergory.SIMPLE_FRAMEWORK, "Correct mapAll"),
-		SIMPLE_ACCUMULATE_ALL(SuperCatergory.SIMPLE_FRAMEWORK, "Correct accumulateAll"),
-		SIMPLE_FINISH_ALL(SuperCatergory.SIMPLE_FRAMEWORK, "Correct finishAll"),
-		MATRIX_MAP_AND_ACCUMULATE_ALL(SuperCatergory.MATRIX_FRAMEWORK, "Correct mapAndAccumulateAll"),
-		MATRIX_COMBINE_AND_FINISH_ALL(SuperCatergory.MATRIX_FRAMEWORK, "Correct combineAndFinishAll"),
-		COLLECTOR_UNCATEGORIZED(SuperCatergory.UNCATEGORIZED, null),
-		SIMPLE_UNCATEGORIZED(SuperCatergory.UNCATEGORIZED, null),
-		MATRIX_UNCATEGORIZED(SuperCatergory.UNCATEGORIZED, null),
-		UNCATEGORIZED(SuperCatergory.UNCATEGORIZED, null);
-		
+
+	public static enum Category implements RubricCategory {
+		SANITY_CHECK(SuperCatergory.SANITY_CHECK, null, 0.0) {
+			@Override
+			public boolean isVisible() {
+				return false;
+			}
+		},
+		SIMPLE_MAP_ALL(SuperCatergory.SIMPLE_FRAMEWORK, "Correct mapAll", 0.1),
+		SIMPLE_ACCUMULATE_ALL(SuperCatergory.SIMPLE_FRAMEWORK, "Correct accumulateAll", 0.2),
+		SIMPLE_FINISH_ALL(SuperCatergory.SIMPLE_FRAMEWORK, "Correct finishAll", 0.1),
+		SIMPLE_UNCATEGORIZED(SuperCatergory.UNCATEGORIZED, null, 0.0),
+		MATRIX_MAP_AND_ACCUMULATE_ALL(SuperCatergory.MATRIX_FRAMEWORK, "Correct mapAndAccumulateAll", 0.25),
+		MATRIX_COMBINE_AND_FINISH_ALL(SuperCatergory.MATRIX_FRAMEWORK, "Correct combineAndFinishAll", 0.25),
+		MATRIX_UNCATEGORIZED(SuperCatergory.UNCATEGORIZED, null, 0.0),
+		UNCATEGORIZED(SuperCatergory.UNCATEGORIZED, null, 0.0);
+
 		private final SuperCatergory superCatergory;
 		private final String title;
-		private Category(SuperCatergory superCatergory, String title) {
+
+		private final double portion;
+
+		private Category(SuperCatergory superCatergory, String title, double portion) {
 			this.superCatergory = superCatergory;
 			this.title = title;
+			this.portion = portion;
 		}
 
 		public SuperCatergory getSuperCatergory() {
 			return superCatergory;
 		}
-		
+
 		public String getTitle() {
 			return title;
+		}
+
+		@Override
+		public double getPortion() {
+			return this.portion;
 		}
 	}
 

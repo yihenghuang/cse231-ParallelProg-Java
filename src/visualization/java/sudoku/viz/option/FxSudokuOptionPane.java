@@ -19,40 +19,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package tnx.lab.rubric;
+package sudoku.viz.option;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
-import edu.wustl.cse231s.rubric.RubricCategory;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.paint.Color;
+import sudoku.core.ImmutableSudokuPuzzle;
+import sudoku.core.Square;
+import sudoku.viz.common.FxSudokuPane;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@Retention(RetentionPolicy.RUNTIME)
-public @interface TnXRubric {
-	public static enum Category implements RubricCategory {
-		THREAD_NEW(0.05),
-		THREAD_UPPER_LOWER(0.1),
-
-		EXECUTOR_COUNT_2WAY(0.1),
-		EXECUTOR_COUNT_NWAY(0.15),
-		EXECUTOR_COUNT_DIVIDE_AND_CONQUER(0.15),
-
-		SEQUENTIAL_QUICKSORT(0.1),
-		EXECUTOR_QUICKSORT(0.25);
-
-		private final double portion;
-
-		private Category(double portion) {
-			this.portion = portion;
-		}
-
-		@Override
-		public double getPortion() {
-			return this.portion;
-		}
+public class FxSudokuOptionPane extends FxSudokuPane {
+	@Override
+	protected Node createSquareNode(Square square) {
+		Button toggleButton = new Button();
+		this.squareToButtonMap.put(square, toggleButton);
+		return toggleButton;
 	}
 
-	Category[] value();
+	
+	@Override
+	protected void updateSquare(ImmutableSudokuPuzzle puzzle, Square square) {
+		Collection<Integer> options = puzzle.getOptions(square);
+		StringBuilder sb = new StringBuilder();
+		String prefix = "";
+		for (int option : options) {
+			sb.append(prefix);
+			sb.append(option);
+			prefix = ",";
+		}
+		Button button = this.squareToButtonMap.get(square);
+		button.setText(sb.toString());
+
+		
+		double expectedMax = 7.0;
+		Color color = Color.GREEN.darker().darker();
+		color = color.interpolate(Color.WHITE, options.size() / expectedMax);
+		button.setStyle("-fx-base: " + String.format(
+				"#%02X%02X%02X", 
+				(int) (color.getRed() * 255),
+				(int) (color.getGreen() * 255), 
+				(int) (color.getBlue() * 255)
+				) + ";");
+	}
+
+	private final Map<Square, Button> squareToButtonMap = new HashMap<>();
 }

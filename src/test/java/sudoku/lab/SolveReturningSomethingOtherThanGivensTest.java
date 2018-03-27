@@ -19,18 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package backtrack.lab;
+package sudoku.lab;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import static edu.wustl.cse231s.v5.V5.launchAppWithReturn;
+import static org.junit.Assert.assertNotEquals;
 
-import nqueens.lab.NQueensTestSuite;
-import sudoku.lab.SudokuTestSuite;
+import org.junit.Test;
+
+import backtrack.lab.rubric.BacktrackRubric;
+import sudoku.core.ImmutableSudokuPuzzle;
+import sudoku.instructor.InstructorSudokuTestUtils;
+import sudoku.viz.solution.SquareSearchAlgorithmSupplier;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ NQueensTestSuite.class, SudokuTestSuite.class, NoPrintingTest.class })
-public class BacktrackTestSuite {
+@BacktrackRubric(BacktrackRubric.Category.PARALLEL_SUDOKU_CORRECTNESS)
+public class SolveReturningSomethingOtherThanGivensTest {
+	@Test
+	public void test() {
+		// source: http://norvig.com/hardest.txt
+		String givens = "85...24..72......9..4.........1.7..23.5...9...4...........8..7..17..........36.4.";
+		ImmutableSudokuPuzzle original = new DefaultImmutableSudokuPuzzle(
+				InstructorSudokuTestUtils.createPeerAndUnitConstraintPropagator(), givens);
+		ImmutableSudokuPuzzle solution = launchAppWithReturn(() -> {
+			return ParallelSudoku.solve(original, SquareSearchAlgorithmSupplier.INSTRUCTOR_FEWEST_OPTIONS_FIRST.get());
+		});
+
+		assertNotEquals(givens, solution.toString());
+	}
 }

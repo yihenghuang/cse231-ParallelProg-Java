@@ -19,37 +19,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package count.assignment.rubric;
+package backtrack.lab;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import static edu.wustl.cse231s.v5.V5.launchApp;
 
-import edu.wustl.cse231s.rubric.RubricCategory;
+import backtrack.lab.rubric.BacktrackRubric;
+import edu.wustl.cse231s.print.AbstractNoPrintingTest;
+import nqueens.core.DefaultMutableQueenLocations;
+import nqueens.lab.DefaultImmutableQueenLocations;
+import nqueens.lab.ParallelNQueens;
+import nqueens.lab.SequentialNQueens;
+import sudoku.core.ImmutableSudokuPuzzle;
+import sudoku.lab.DefaultConstraintPropagator;
+import sudoku.lab.DefaultImmutableSudokuPuzzle;
+import sudoku.lab.ParallelSudoku;
+import sudoku.lab.RowMajorSquareSearchAlgorithm;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@Retention(RetentionPolicy.RUNTIME)
-public @interface CountRubric {
-	public static enum Category implements RubricCategory {
-		RANGE(0.1),
-		SEQUENTIAL(0.05),
-		MIDPOINT(0.05),
-		LOWER_UPPER(0.2),
-		NWAY(0.25),
-		DIVIDE_AND_CONQUER(0.25),
-		NO_PRINTING(0.0);
-		private final double portion;
-
-		private Category(double portion) {
-			this.portion = portion;
-		}
-
-		@Override
-		public double getPortion() {
-			return this.portion;
-		}
+@BacktrackRubric(BacktrackRubric.Category.NO_PRINTING)
+public class NoPrintingTest extends AbstractNoPrintingTest {
+	@Override
+	protected void testKernel() {
+		SequentialNQueens.countSolutions(new DefaultMutableQueenLocations(8));
+		launchApp(() -> {
+			ParallelNQueens.countSolutions(new DefaultImmutableQueenLocations(8));
+			// source: http://norvig.com/hardest.txt
+			String givens = "85...24..72......9..4.........1.7..23.5...9...4...........8..7..17..........36.4.";
+			ImmutableSudokuPuzzle puzzle = new DefaultImmutableSudokuPuzzle(new DefaultConstraintPropagator(), givens);
+			ParallelSudoku.solve(puzzle, new RowMajorSquareSearchAlgorithm());
+			
+		});
 	}
-
-	Category[] value();
 }

@@ -19,40 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package mapreduce.apps.wordcount.studio;
-
-import java.io.IOException;
-import java.util.Collection;
+package sudoku.lab;
 
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.runners.Suite;
 
-import edu.wustl.cse231s.junit.JUnitUtils;
-import mapreduce.apps.wordcount.AbstractWordCountStressTest;
-import mapreduce.apps.wordcount.core.io.WordsResource;
-import mapreduce.collector.studio.ClassicReducer;
-import mapreduce.core.CollectorSolution;
-import mapreduce.core.FrameworkSolution;
-import mapreduce.core.MapperSolution;
-import mapreduce.framework.lab.rubric.MapReduceRubric;
+@RunWith(Suite.class)
+@Suite.SuiteClasses({ GetValuePointedTest.class, ImmutableSudokuPuzzleTest.class,
+		FewestOptionsFirstIsAlreadySetPointedTest.class, FewestOptionsFirstReturns2OptionSquareTest.class,
+		/* FewestOptionsFirstReturns0OptionSquareTest.class, */ FewestOptionsFirstReturnsNullForSolvedPuzzleTest.class,
+		SolveReturningSomethingOtherThanGivensTest.class, SolveTest.class,
+		PeerEliminationContraintPropagationTest.class, PeerEliminationAndUnitAssignmentContraintPropagationTest.class })
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
- * 
- *         After INSTRUCTOR and STUDENT_FINISHER_ONLY is passing and
- *         STUDENT_COMPLETE is failing, move on to {@link ClassicReducer}
  */
-@RunWith(Parameterized.class)
-@MapReduceRubric(MapReduceRubric.Category.UNCATEGORIZED)
-public class WordCountCollectorStressTest<A> extends AbstractWordCountStressTest<A> {
-	public WordCountCollectorStressTest(CollectorSolution collectorSolution, WordsResource wordsResource)
-			throws IOException {
-		super(FrameworkSolution.INSTRUCTOR, MapperSolution.INSTRUCTOR, collectorSolution, wordsResource);
-	}
-
-	@Parameters(name = "collector={0}; {1}")
-	public static Collection<Object[]> getConstructorArguments() {
-		return JUnitUtils.toParameterizedArguments2(CollectorSolution.getNonWarmUpValues(), WordsResource.values());
-	}
+public class SudokuTestSuite {
 }

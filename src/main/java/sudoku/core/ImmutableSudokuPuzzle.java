@@ -19,18 +19,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package backtrack.lab;
-
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
-import nqueens.lab.NQueensTestSuite;
-import sudoku.lab.SudokuTestSuite;
+package sudoku.core;
 
 /**
+ * An unmodifiable sudoku board. Because the values in the board cannot change,
+ * the only way to modify an <code>ImmutableSudokuPuzzle</code> is to create a
+ * new one using the {@link #createNext(Square, int)} method.
+ * 
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ NQueensTestSuite.class, SudokuTestSuite.class, NoPrintingTest.class })
-public class BacktrackTestSuite {
+public interface ImmutableSudokuPuzzle extends SudokuPuzzle {
+
+	/**
+	 * Creates a new puzzle from the provided other puzzle. The new
+	 * {@code ImmutableSudokuPuzzle} will have values identical to this one, except
+	 * that the given square will be filled in with the given value (and any
+	 * propagated constraints).
+	 * 
+	 * @param square
+	 *            the (currently unfilled) square to fill.
+	 * @param value
+	 *            the value to put in square
+	 * @return a new puzzle with the modified square
+	 */
+	ImmutableSudokuPuzzle createNext(Square square, int value);
 }

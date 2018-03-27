@@ -19,18 +19,61 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package backtrack.lab;
-
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
-import nqueens.lab.NQueensTestSuite;
-import sudoku.lab.SudokuTestSuite;
+package sudoku.core;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ NQueensTestSuite.class, SudokuTestSuite.class, NoPrintingTest.class })
-public class BacktrackTestSuite {
+public class SolutionUtils {
+	private static boolean isCandidateValid(SudokuPuzzle puzzle, Square square, int value) {
+		for (Square peer : square.getPeers()) {
+			if (puzzle.getValue(peer) == value) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static boolean isCompletelyFilledIn(SudokuPuzzle puzzle) {
+		for (Square square : Square.values()) {
+			int value = puzzle.getValue(square);
+			if (value != 0) {
+				// pass
+			} else {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static boolean isCompletelyFilledInAndEachSquareIsValid(SudokuPuzzle puzzle) {
+		for (Square square : Square.values()) {
+			int value = puzzle.getValue(square);
+			if (value != 0) {
+				if (isCandidateValid(puzzle, square, value)) {
+					// pass
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static boolean containsOriginal(SudokuPuzzle original, SudokuPuzzle solution) {
+		for (Square square : Square.values()) {
+			int originalValue = original.getValue(square);
+			if (originalValue != 0) {
+				int value = solution.getValue(square);
+				if (value == originalValue) {
+					// pass
+				} else {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 }

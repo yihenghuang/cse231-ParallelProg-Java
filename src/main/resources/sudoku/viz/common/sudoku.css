@@ -1,0 +1,29 @@
+.sudoku-grid {
+    -fx-background-color: white;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+    -fx-cell-border: solid 10px red;
+}
+
+#celltext {
+    -fx-font: 32px Fixed;
+}
+
+#headingtext {
+    -fx-font: bold 32px Serif;
+    -fx-text-fill: slateblue;
+}
+
+.peerToggleButton {
+    -fx-base: slateblue;
+}
+
+.peerToggleButton:selected {
+    -fx-base: darkblue;
+}
+
+.givenToggleButton {
+    -fx-font: 24px Serif;
+    -fx-font-weight: bold;
+    -fx-underline: true;
+}

@@ -19,40 +19,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package mapreduce.apps.wordcount.studio;
+package sudoku.lab;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import edu.wustl.cse231s.junit.JUnitUtils;
-import mapreduce.apps.wordcount.AbstractWordCountStressTest;
-import mapreduce.apps.wordcount.core.io.WordsResource;
-import mapreduce.collector.studio.ClassicReducer;
-import mapreduce.core.CollectorSolution;
-import mapreduce.core.FrameworkSolution;
-import mapreduce.core.MapperSolution;
-import mapreduce.framework.lab.rubric.MapReduceRubric;
+import backtrack.lab.rubric.BacktrackRubric;
+import sudoku.core.io.PuzzlesResource;
+import sudoku.core.io.PuzzlesResourceUtils;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  * 
- *         After INSTRUCTOR and STUDENT_FINISHER_ONLY is passing and
- *         STUDENT_COMPLETE is failing, move on to {@link ClassicReducer}
+ *         {@link DefaultConstraintPropagator}
  */
+@BacktrackRubric(BacktrackRubric.Category.CONTRAINT_PROPAGATOR)
 @RunWith(Parameterized.class)
-@MapReduceRubric(MapReduceRubric.Category.UNCATEGORIZED)
-public class WordCountCollectorStressTest<A> extends AbstractWordCountStressTest<A> {
-	public WordCountCollectorStressTest(CollectorSolution collectorSolution, WordsResource wordsResource)
-			throws IOException {
-		super(FrameworkSolution.INSTRUCTOR, MapperSolution.INSTRUCTOR, collectorSolution, wordsResource);
+public class PeerEliminationContraintPropagationTest extends AbstractContraintPropagationTest {
+	public PeerEliminationContraintPropagationTest(String givens) {
+		super(givens);
 	}
 
-	@Parameters(name = "collector={0}; {1}")
-	public static Collection<Object[]> getConstructorArguments() {
-		return JUnitUtils.toParameterizedArguments2(CollectorSolution.getNonWarmUpValues(), WordsResource.values());
+	@Parameters(name = "{0}")
+	public static Collection<Object[]> getConstructorArguments() throws IOException {
+		List<String> easyGivensList = PuzzlesResourceUtils.readGivens(PuzzlesResource.EASY50);
+		List<Integer> completelyConstrainableWithPeerEliminationOnlyIndices = Arrays.asList(0, 4, 7, 11, 15, 16, 18, 19,
+				33, 35, 37, 39);
+
+		Collection<Object[]> results = new LinkedList<>();
+		for (int i : completelyConstrainableWithPeerEliminationOnlyIndices) {
+			results.add(new Object[] { easyGivensList.get(i) });
+		}
+		return results;
 	}
 }

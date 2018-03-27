@@ -24,13 +24,17 @@ package util.lab.rubric;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import edu.wustl.cse231s.rubric.RubricCategory;
+
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UtilRubric {
 	public static enum SuperCatergory {
-		ITERATOR("LinkedNodesIterator subtotal"), COLLECTION("LinkedNodesCollection subtotal"), MAP("BucketsHashMap subtotal");
+		ITERATOR("LinkedNodesIterator subtotal"),
+		COLLECTION("LinkedNodesCollection subtotal"),
+		MAP("BucketsHashMap subtotal");
 
 		private final String title;
 
@@ -43,26 +47,30 @@ public @interface UtilRubric {
 		}
 	}
 
-	public static enum Category {
-		ITERATOR_HAS_NEXT(SuperCatergory.ITERATOR, "Correct hasNext"),
-		ITERATOR_NEXT(SuperCatergory.ITERATOR, "Correct next"),
-		ITERATOR_REMOVE(SuperCatergory.ITERATOR, "Correct remove"),
-		COLLECTION_ITERATOR(SuperCatergory.COLLECTION, "Correct iterator"),
-		COLLECTION_SIZE(SuperCatergory.COLLECTION, "Correct size"),
-		COLLECTION_ADD(SuperCatergory.COLLECTION, "Correct add"),
-		COLLECTION_UNCATEGORIZED(SuperCatergory.COLLECTION, null),
-		MAP_SIZE(SuperCatergory.MAP, "Correct size"),
-		MAP_PUT(SuperCatergory.MAP, "Correct put"),
-		MAP_REMOVE(SuperCatergory.MAP, "Correct remove"),
-		MAP_GET(SuperCatergory.MAP, "Correct get"),
-		MAP_UNCATEGORIZED(SuperCatergory.MAP, null);
+	public static enum Category implements RubricCategory {
+		ITERATOR_HAS_NEXT(SuperCatergory.ITERATOR, "Correct hasNext", 0.05),
+		ITERATOR_NEXT(SuperCatergory.ITERATOR, "Correct next", 0.1),
+		ITERATOR_REMOVE(SuperCatergory.ITERATOR, "Correct remove", 0.1),
+		COLLECTION_ITERATOR(SuperCatergory.COLLECTION, "Correct iterator", 0.05),
+		COLLECTION_SIZE(SuperCatergory.COLLECTION, "Correct size", 0.05),
+		COLLECTION_ADD(SuperCatergory.COLLECTION, "Correct add", 0.1),
+		COLLECTION_UNCATEGORIZED(SuperCatergory.COLLECTION, null, 0.0),
+		MAP_HASH(SuperCatergory.MAP, "Correct hash", 0.025),
+		MAP_GET_BUCKET_FOR(SuperCatergory.MAP, "Correct getBucketFor", 0.025),
+		MAP_SIZE(SuperCatergory.MAP, "Correct size", 0.05),
+		MAP_PUT(SuperCatergory.MAP, "Correct put", 0.15),
+		MAP_REMOVE(SuperCatergory.MAP, "Correct remove", 0.1),
+		MAP_GET(SuperCatergory.MAP, "Correct get", 0.1),
+		MAP_UNCATEGORIZED(SuperCatergory.MAP, null, 0.0);
 
 		private final SuperCatergory superCatergory;
 		private final String title;
+		private final double portion;
 
-		private Category(SuperCatergory superCatergory, String title) {
+		private Category(SuperCatergory superCatergory, String title, double portion) {
 			this.superCatergory = superCatergory;
 			this.title = title;
+			this.portion = portion;
 		}
 
 		public SuperCatergory getSuperCatergory() {
@@ -71,6 +79,11 @@ public @interface UtilRubric {
 
 		public String getTitle() {
 			return title;
+		}
+
+		@Override
+		public double getPortion() {
+			return this.portion;
 		}
 	}
 

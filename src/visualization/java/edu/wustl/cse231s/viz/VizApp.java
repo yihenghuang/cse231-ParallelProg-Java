@@ -104,7 +104,7 @@ public abstract class VizApp extends Application {
 		}
 	}
 
-	private void onCancel() {
+	protected void onCancel() {
 		this.isToBeCanceled = true;
 //		if (this.threadToInterruptOnCancel != null) {
 //			this.threadToInterruptOnCancel.interrupt();

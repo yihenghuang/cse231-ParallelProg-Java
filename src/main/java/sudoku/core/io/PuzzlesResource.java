@@ -19,18 +19,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package backtrack.lab;
+package sudoku.core.io;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
-import nqueens.lab.NQueensTestSuite;
-import sudoku.lab.SudokuTestSuite;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ NQueensTestSuite.class, SudokuTestSuite.class, NoPrintingTest.class })
-public class BacktrackTestSuite {
+public enum PuzzlesResource {
+	HARDEST, TOP95, EASY50;
+	public URL getUrl() {
+		try {
+			return new URL("http://norvig.com/" + this.name().toLowerCase() + ".txt");
+		} catch (MalformedURLException murle) {
+			throw new Error(murle);
+		}
+	}
 }

@@ -19,18 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package backtrack.lab;
+package sudoku.viz.peer;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
-import nqueens.lab.NQueensTestSuite;
-import sudoku.lab.SudokuTestSuite;
+import sudoku.viz.common.FxSimpleSudokuApp;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ NQueensTestSuite.class, SudokuTestSuite.class, NoPrintingTest.class })
-public class BacktrackTestSuite {
+public class FxSudokuPeerApp extends FxSimpleSudokuApp {
+	@Override
+	protected FxSudokuPeerPane createMainPane() {
+		return new FxSudokuPeerPane();
+	}
+
+	public static void main(String[] args) {
+		launch(args);
+	}
 }

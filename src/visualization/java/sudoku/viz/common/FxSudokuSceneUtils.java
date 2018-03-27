@@ -19,18 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package backtrack.lab;
+package sudoku.viz.common;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
-import nqueens.lab.NQueensTestSuite;
-import sudoku.lab.SudokuTestSuite;
+import javafx.scene.Scene;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ NQueensTestSuite.class, SudokuTestSuite.class, NoPrintingTest.class })
-public class BacktrackTestSuite {
+public class FxSudokuSceneUtils {
+	public static void addStylesheet(Scene scene) {
+		String packagePath = FxSudokuSceneUtils.class.getPackage().getName().replaceAll("\\.", "/");
+		scene.getStylesheets().add(packagePath + "/sudoku.css");
+	}
 }
