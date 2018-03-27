@@ -30,7 +30,7 @@ import sudoku.core.SquareSearchAlgorithm;
 import sudoku.core.SudokuPuzzle;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 @Immutable
