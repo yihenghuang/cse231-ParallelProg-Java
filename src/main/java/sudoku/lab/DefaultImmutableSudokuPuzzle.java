@@ -37,7 +37,7 @@ import sudoku.core.Square;
  * change after construction, but it can create new immutable boards with an
  * additional value.
  * 
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 @Immutable
