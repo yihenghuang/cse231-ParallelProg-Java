@@ -45,7 +45,7 @@ import sudoku.core.SquareSearchAlgorithm;
  * {@link #solveKernel(MutableObject, ImmutableSudokuPuzzle, SquareSearchAlgorithm)}
  * method, starting off the recursion.
  * 
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class ParallelSudoku {
