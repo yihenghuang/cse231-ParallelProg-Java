@@ -42,7 +42,7 @@ public class AbstractContraintPropagationTest {
 
 	@Test
 	public void test() {
-		ConstraintPropagator constraintPropagator = new DefaultConstraintPropagator();
+		ConstraintPropagator constraintPropagator = new ConstraintPropagatorSupplier().get();
 		DefaultImmutableSudokuPuzzle puzzle = new DefaultImmutableSudokuPuzzle(constraintPropagator, givens);
 		assertTrue(SolutionUtils.isCompletelyFilledInAndEachSquareIsValid(puzzle));
 	}

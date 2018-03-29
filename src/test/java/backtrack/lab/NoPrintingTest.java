@@ -30,7 +30,7 @@ import nqueens.lab.DefaultImmutableQueenLocations;
 import nqueens.lab.ParallelNQueens;
 import nqueens.lab.SequentialNQueens;
 import sudoku.core.ImmutableSudokuPuzzle;
-import sudoku.lab.DefaultConstraintPropagator;
+import sudoku.lab.ConstraintPropagatorSupplier;
 import sudoku.lab.DefaultImmutableSudokuPuzzle;
 import sudoku.lab.ParallelSudoku;
 import sudoku.lab.RowMajorSquareSearchAlgorithm;
@@ -47,9 +47,10 @@ public class NoPrintingTest extends AbstractNoPrintingTest {
 			ParallelNQueens.countSolutions(new DefaultImmutableQueenLocations(8));
 			// source: http://norvig.com/hardest.txt
 			String givens = "85...24..72......9..4.........1.7..23.5...9...4...........8..7..17..........36.4.";
-			ImmutableSudokuPuzzle puzzle = new DefaultImmutableSudokuPuzzle(new DefaultConstraintPropagator(), givens);
+			ImmutableSudokuPuzzle puzzle = new DefaultImmutableSudokuPuzzle(new ConstraintPropagatorSupplier().get(),
+					givens);
 			ParallelSudoku.solve(puzzle, new RowMajorSquareSearchAlgorithm());
-			
+
 		});
 	}
 }
