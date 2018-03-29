@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2017 Dennis Cosgrove
+ * Copyright (C) 2016-2017 Dennis Cosgrove, Ben Choi
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,45 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package edu.wustl.cse231s.util;
+package util.lab;
 
-import java.util.Objects;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+
+import util.lab.collection.IteratorRemoveAllContentsTest;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-public class KeyValuePair<K,V> {
-	private final K key;
-	private final V value;
-
-	public KeyValuePair(K key, V value) {
-		this.key = key;
-		this.value = value;
-	}
-	public K getKey() {
-		return key;
-	}
-	public V getValue() {
-		return value;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		KeyValuePair<?,?> other = (KeyValuePair<?,?>) obj;
-		return Objects.equals(key, other.key) && Objects.equals(value, other.value); 
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(this.getClass().getSimpleName()).append("[key=");
-		sb.append(key).append(";value=").append(value).append("]");
-		return sb.toString();
-	}
+@RunWith(Suite.class)
+@Suite.SuiteClasses({ UtilTestSuite.class, IteratorRemoveAllContentsTest.class })
+public class UtilWithLateAdditionsTestSuite {
 }

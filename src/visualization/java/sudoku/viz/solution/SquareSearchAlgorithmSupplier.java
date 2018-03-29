@@ -34,44 +34,37 @@ import sudoku.lab.RowMajorSquareSearchAlgorithm;
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public enum SquareSearchAlgorithmSupplier implements Supplier<SquareSearchAlgorithm> {
-	STUDENT_ROW_MAJOR("student's ROW_MAJOR Search") {
+	STUDENT_ROW_MAJOR {
 		@Override
 		public SquareSearchAlgorithm get() {
 			return new RowMajorSquareSearchAlgorithm();
 		}
 	},
-	STUDENT_FEWEST_OPTIONS_FIRST("student's FEWEST_OPTIONS_FIRST Search") {
+	STUDENT_FEWEST_OPTIONS_FIRST {
 		@Override
 		public SquareSearchAlgorithm get() {
 			return new FewestOptionsFirstSquareSearchAlgorithm();
 		}
 	},
-	INSTRUCTOR_ROW_MAJOR("instructor's ROW_MAJOR Search") {
+	INSTRUCTOR_ROW_MAJOR {
 		@Override
 		public SquareSearchAlgorithm get() {
 			return InstructorSudokuTestUtils.createRowMajorSearch();
 		}
 	},
-	INSTRUCTOR_FEWEST_OPTIONS_FIRST("instructor's FEWEST_OPTIONS_FIRST Search") {
+	INSTRUCTOR_FEWEST_OPTIONS_FIRST {
 		@Override
 		public SquareSearchAlgorithm get() {
 			return InstructorSudokuTestUtils.createFewestOptionsFirstSearch();
 		}
 	};
 
-	private final String repr;
-
-	private SquareSearchAlgorithmSupplier(String repr) {
-		this.repr = repr;
-	}
-
-	@Override
-	public String toString() {
-		return this.repr;
-	}
-
 	public static Iterable<SquareSearchAlgorithmSupplier> studentValues() {
 		return Arrays.asList(STUDENT_ROW_MAJOR, STUDENT_FEWEST_OPTIONS_FIRST);
+	}
+
+	public static Iterable<SquareSearchAlgorithmSupplier> instructorFewestOptionsFirstPlusStudentValues() {
+		return Arrays.asList(INSTRUCTOR_FEWEST_OPTIONS_FIRST, STUDENT_ROW_MAJOR, STUDENT_FEWEST_OPTIONS_FIRST);
 	}
 
 	public static Iterable<SquareSearchAlgorithmSupplier> instructorValues() {

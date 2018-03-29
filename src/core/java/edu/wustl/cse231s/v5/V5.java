@@ -318,7 +318,7 @@ public class V5 {
 	}
 
 	public static Metrics abstractMetrics() {
-		throw new RuntimeException();
+		return getImpl().getMetrics();
 	}
 
 	public static AwaitFuturesOption await(Future<?> futureA, Future<?>... futuresBtoZ) {

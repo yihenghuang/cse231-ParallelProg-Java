@@ -19,45 +19,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package edu.wustl.cse231s.util;
+package nqueens.lab;
 
-import java.util.Objects;
+import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+
+import java.util.Arrays;
+
+import org.junit.Test;
+
+import backtrack.lab.rubric.BacktrackRubric;
+import edu.wustl.cse231s.v5.bookkeep.BookkeepingUtils;
+import edu.wustl.cse231s.v5.impl.BookkeepingV5Impl;
+import nqueens.core.ImmutableQueenLocations;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link ParallelNQueens#countSolutions(ImmutableQueenLocations)}
  */
-public class KeyValuePair<K,V> {
-	private final K key;
-	private final V value;
+@BacktrackRubric(BacktrackRubric.Category.PARALLEL_N_QUEENS_PARALLELISM)
+public class ParallelNQueensParallelismTest {
+	@Test
+	public void test() {
+		BookkeepingV5Impl bookkeep = BookkeepingUtils.bookkeep(() -> {
+			ImmutableQueenLocations queenLocations = new DefaultImmutableQueenLocations(4);
+			ParallelNQueens.countSolutions(queenLocations);
+		});
 
-	public KeyValuePair(K key, V value) {
-		this.key = key;
-		this.value = value;
-	}
-	public K getKey() {
-		return key;
-	}
-	public V getValue() {
-		return value;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		KeyValuePair<?,?> other = (KeyValuePair<?,?>) obj;
-		return Objects.equals(key, other.key) && Objects.equals(value, other.value); 
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(this.getClass().getSimpleName()).append("[key=");
-		sb.append(key).append(";value=").append(value).append("]");
-		return sb.toString();
+		// expected counts:
+		// tasks created or not for base case & tasks created or not for invalid columns
+		assertThat(bookkeep.getTaskCount(), anyOf(Arrays.asList(is(14), is(16), is(58), is(60))));
+		
+		assertEquals(0, bookkeep.getNonAccumulatorFinishInvocationCount());
+		assertEquals(1, bookkeep.getAccumulatorFinishInvocationCount());
+		assertEquals(1, bookkeep.getAccumulatorRegisterCount());
 	}
 }

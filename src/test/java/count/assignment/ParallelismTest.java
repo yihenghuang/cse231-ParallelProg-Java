@@ -48,7 +48,7 @@ public class ParallelismTest {
 			CheckedRunnable body) {
 		BookkeepingV5Impl bookkeeping = BookkeepingUtils.bookkeep(body);
 
-		int actualFinishCount = bookkeeping.getFinishInvocationCount();
+		int actualFinishCount = bookkeeping.getNonAccumulatorFinishInvocationCount();
 		if (expectedFinishCount != 0) {
 			Assert.assertNotEquals("finish never called; expected: " + expectedFinishCount, 0, actualFinishCount);
 		}

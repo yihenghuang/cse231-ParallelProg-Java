@@ -60,7 +60,7 @@ public class MatrixMultiplyParallelTest {
 
 		int forasyncCount = bookkeep.getForasyncInvocationCount();
 		int forasync2dCount = bookkeep.getForasync2dInvocationCount();
-		int finishCount = bookkeep.getFinishInvocationCount();
+		int finishCount = bookkeep.getNonAccumulatorFinishInvocationCount();
 		Assert.assertNotEquals(0, forasyncCount);
 		Assert.assertNotEquals(1, forasyncCount);
 		Assert.assertEquals(SIZE + 1, forasyncCount);
@@ -80,7 +80,7 @@ public class MatrixMultiplyParallelTest {
 		int forasyncCount = bookkeep.getForasyncInvocationCount();
 		int forasync2dCount = bookkeep.getForasync2dInvocationCount();
 		int forasync2dChunkedCount = bookkeep.getForasync2dChunkedInvocationCount();
-		int finishCount = bookkeep.getFinishInvocationCount();
+		int finishCount = bookkeep.getNonAccumulatorFinishInvocationCount();
 		Assert.assertEquals(0, forasyncCount);
 		Assert.assertEquals(0, forasync2dChunkedCount);
 		Assert.assertEquals(1, forasync2dCount);
@@ -95,7 +95,7 @@ public class MatrixMultiplyParallelTest {
 		int forasyncCount = bookkeep.getForasyncInvocationCount();
 		int forasync2dCount = bookkeep.getForasync2dInvocationCount();
 		int forasync2dChunkedCount = bookkeep.getForasync2dChunkedInvocationCount();
-		int finishCount = bookkeep.getFinishInvocationCount();
+		int finishCount = bookkeep.getNonAccumulatorFinishInvocationCount();
 		Assert.assertEquals(0, forasyncCount);
 		Assert.assertEquals(0, forasync2dCount);
 		Assert.assertEquals(1, forasync2dChunkedCount);

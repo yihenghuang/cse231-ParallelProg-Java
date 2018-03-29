@@ -157,7 +157,7 @@ public abstract class LeggedRaceTest {
 			public void checkParallelism(BookkeepingV5Impl bookkeep, Participant[] participants, int stepCount) {
 				assertEquals(participants.length * stepCount, bookkeep.getTaskCount());
 				assertEquals(stepCount, bookkeep.getForasyncInvocationCount());
-				assertEquals(stepCount, bookkeep.getFinishInvocationCount());
+				assertEquals(stepCount, bookkeep.getNonAccumulatorFinishInvocationCount());
 			}
 		},
 		FORALL_PHASED() {
@@ -175,7 +175,7 @@ public abstract class LeggedRaceTest {
 			public void checkParallelism(BookkeepingV5Impl bookkeep, Participant[] participants, int stepCount) {
 				assertEquals(participants.length, bookkeep.getTaskCount());
 				assertEquals(1, bookkeep.getForasyncInvocationCount());
-				assertEquals(1, bookkeep.getFinishInvocationCount());
+				assertEquals(1, bookkeep.getNonAccumulatorFinishInvocationCount());
 			}
 		},
 		FORALL_POINT_TO_POINT() {
@@ -210,7 +210,7 @@ public abstract class LeggedRaceTest {
 			public void checkParallelism(BookkeepingV5Impl bookkeep, Participant[] participants, int stepCount) {
 				assertEquals(participants.length, bookkeep.getTaskCount());
 				assertEquals(1, bookkeep.getForasyncInvocationCount());
-				assertEquals(1, bookkeep.getFinishInvocationCount());
+				assertEquals(1, bookkeep.getNonAccumulatorFinishInvocationCount());
 			}
 		};
 

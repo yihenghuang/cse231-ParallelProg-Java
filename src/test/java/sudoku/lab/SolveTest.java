@@ -29,13 +29,12 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import com.google.common.base.Supplier;
 
 import backtrack.lab.rubric.BacktrackRubric;
 import sudoku.core.ConstraintPropagator;
@@ -52,19 +51,19 @@ import sudoku.viz.solution.SquareSearchAlgorithmSupplier;
 @RunWith(Parameterized.class)
 public class SolveTest {
 	private final SquareSearchAlgorithmSupplier squareSearchAlgorithmSupplier;
-	private final Supplier<ConstraintPropagator> constraintPropagatorSupplier;
+	private final Propagator propagator;
 	private final String givens;
 
-	public SolveTest(SquareSearchAlgorithmSupplier squareSearchAlgorithmSupplier,
-			Supplier<ConstraintPropagator> constraintPropagatorSupplier, String givens) {
+	public SolveTest(SquareSearchAlgorithmSupplier squareSearchAlgorithmSupplier, Propagator propagator,
+			String givens) {
 		this.squareSearchAlgorithmSupplier = squareSearchAlgorithmSupplier;
-		this.constraintPropagatorSupplier = constraintPropagatorSupplier;
+		this.propagator = propagator;
 		this.givens = givens;
 	}
 
 	@Test
 	public void test() {
-		ImmutableSudokuPuzzle original = new DefaultImmutableSudokuPuzzle(this.constraintPropagatorSupplier.get(), this.givens);
+		ImmutableSudokuPuzzle original = new DefaultImmutableSudokuPuzzle(this.propagator.get(), this.givens);
 		ImmutableSudokuPuzzle result = launchAppWithReturn(() -> {
 			return ParallelSudoku.solve(original, this.squareSearchAlgorithmSupplier.get());
 		});
@@ -76,17 +75,35 @@ public class SolveTest {
 		assertTrue(SolutionUtils.containsOriginal(original, result));
 	}
 
-	@Parameters(name = "{0}, givens: {1}")
+	@Parameters(name = "search: {0}, propagator: {1}, givens: {2}")
 	public static Collection<Object[]> getConstructorArguments() {
 		Collection<Object[]> results = new LinkedList<>();
-		Supplier<ConstraintPropagator> constraintPropagatorSupplier = ()-> InstructorSudokuTestUtils.createPeerAndUnitConstraintPropagator();
-		for (SquareSearchAlgorithmSupplier squareSearchAlgorithmSupplier : SquareSearchAlgorithmSupplier
-				.studentValues()) {
-			List<String> givensList = GivensUtils.getGivensToTest(squareSearchAlgorithmSupplier);
-			for (String givens : givensList) {
-				results.add(new Object[] { squareSearchAlgorithmSupplier, constraintPropagatorSupplier, givens });
+		for (Propagator propagator : Propagator.values()) {
+			for (SquareSearchAlgorithmSupplier squareSearchAlgorithmSupplier : SquareSearchAlgorithmSupplier
+					.instructorFewestOptionsFirstPlusStudentValues()) {
+				if (squareSearchAlgorithmSupplier.name().startsWith("STUDENT") || propagator == Propagator.STUDENT) {
+					List<String> givensList = GivensUtils.getGivensToTest(squareSearchAlgorithmSupplier);
+					for (String givens : givensList) {
+						results.add(new Object[] { squareSearchAlgorithmSupplier, propagator, givens });
+					}
+				}
 			}
 		}
 		return results;
 	}
+
+	private static enum Propagator implements Supplier<ConstraintPropagator> {
+		INSTRUCTOR() {
+			@Override
+			public ConstraintPropagator get() {
+				return InstructorSudokuTestUtils.createPeerAndUnitConstraintPropagator();
+			}
+		},
+		STUDENT() {
+			@Override
+			public ConstraintPropagator get() {
+				return new ConstraintPropagatorSupplier().get();
+			}
+		};
+	};
 }

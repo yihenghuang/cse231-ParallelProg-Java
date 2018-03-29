@@ -92,7 +92,7 @@ public class AsyncTest {
 		BookkeepingV5Impl bookkeeping = BookkeepingUtils.bookkeep(body);
 
 		// Test finish count
-		int actualFinishCount = bookkeeping.getFinishInvocationCount();
+		int actualFinishCount = bookkeeping.getNonAccumulatorFinishInvocationCount();
 
 		if (expectedFinishCount != 0) {
 			assertNotEquals("finish never called; expected: " + expectedFinishCount, 0, actualFinishCount);

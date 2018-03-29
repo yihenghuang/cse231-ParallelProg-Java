@@ -32,8 +32,10 @@ import edu.wustl.cse231s.v5.api.CheckedConsumer;
 import edu.wustl.cse231s.v5.api.CheckedIntConsumer;
 import edu.wustl.cse231s.v5.api.CheckedIntIntConsumer;
 import edu.wustl.cse231s.v5.api.CheckedRunnable;
+import edu.wustl.cse231s.v5.api.FinishAccumulator;
 import edu.wustl.cse231s.v5.impl.BookkeepingV5Impl;
 import edu.wustl.cse231s.v5.options.ChunkedOption;
+import edu.wustl.cse231s.v5.options.RegisterAccumulatorsOption;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
@@ -42,7 +44,9 @@ public class BookkeepingExecutorXV5Impl extends MetricsExecutorV5Impl implements
 	private final AtomicInteger launchInvocationCount = new AtomicInteger(0);
 
 	private final AtomicInteger asyncInvocationCount = new AtomicInteger(0);
-	private final AtomicInteger finishInvocationCount = new AtomicInteger(0);
+	private final AtomicInteger finishNonAccumulatorInvocationCount = new AtomicInteger(0);
+	private final AtomicInteger finishAccumulatorInvocationCount = new AtomicInteger(0);
+	private final AtomicInteger accumulatorRegisterCount = new AtomicInteger(0);
 
 	private final AtomicInteger forasyncInvovationCount = new AtomicInteger(0);
 	private final AtomicInteger forasyncChunkedInvovationCount = new AtomicInteger(0);
@@ -70,9 +74,16 @@ public class BookkeepingExecutorXV5Impl extends MetricsExecutorV5Impl implements
 	}
 
 	@Override
-	public void finish(CheckedRunnable body) throws InterruptedException, ExecutionException {
-		super.finish(body);
-		finishInvocationCount.incrementAndGet();
+	public void finish(RegisterAccumulatorsOption registerAccumulatorsOption, CheckedRunnable body)
+			throws InterruptedException, ExecutionException {
+		super.finish(registerAccumulatorsOption, body);
+		if(registerAccumulatorsOption != null) {
+			finishAccumulatorInvocationCount.incrementAndGet();
+			FinishAccumulator<?>[] accumulators = registerAccumulatorsOption.getAccumulators();
+			accumulatorRegisterCount.addAndGet(accumulators != null ? accumulators.length : 0);
+		} else {
+			finishNonAccumulatorInvocationCount.incrementAndGet();
+		}
 	}
 
 	@Override
@@ -89,14 +100,14 @@ public class BookkeepingExecutorXV5Impl extends MetricsExecutorV5Impl implements
 		forasyncInvovationCount.incrementAndGet();
 		asyncViaForasyncCount.addAndGet(maxExclusive - min);
 	}
-	
+
 	@Override
 	public <T> void forasync(T[] array, CheckedConsumer<T> body) throws InterruptedException, ExecutionException {
 		super.forasync(array, body);
 		forasyncInvovationCount.incrementAndGet();
 		asyncViaForasyncCount.addAndGet(array.length);
 	}
-	
+
 	@Override
 	public <T> void forasync(Iterable<T> iterable, CheckedConsumer<T> body)
 			throws InterruptedException, ExecutionException {
@@ -104,7 +115,7 @@ public class BookkeepingExecutorXV5Impl extends MetricsExecutorV5Impl implements
 		forasyncInvovationCount.incrementAndGet();
 		Iterator<T> iterator = iterable.iterator();
 		int taskCount = 0;
-		while(iterator.hasNext()) {
+		while (iterator.hasNext()) {
 			iterator.next();
 			taskCount++;
 		}
@@ -146,8 +157,18 @@ public class BookkeepingExecutorXV5Impl extends MetricsExecutorV5Impl implements
 	}
 
 	@Override
-	public int getFinishInvocationCount() {
-		return finishInvocationCount.get() - launchInvocationCount.get();
+	public int getNonAccumulatorFinishInvocationCount() {
+		return finishNonAccumulatorInvocationCount.get() - launchInvocationCount.get();
+	}
+
+	@Override
+	public int getAccumulatorFinishInvocationCount() {
+		return finishAccumulatorInvocationCount.get();
+	}
+
+	@Override
+	public int getAccumulatorRegisterCount() {
+		return accumulatorRegisterCount.get();
 	}
 
 	@Override
@@ -189,7 +210,7 @@ public class BookkeepingExecutorXV5Impl extends MetricsExecutorV5Impl implements
 	@Override
 	public void resetAllInvocationCounts() {
 		asyncInvocationCount.set(0);
-		finishInvocationCount.set(0);
+		finishNonAccumulatorInvocationCount.set(0);
 		forasyncInvovationCount.set(0);
 		asyncViaForasyncCount.set(0);
 		futureInvocationCount.set(0);

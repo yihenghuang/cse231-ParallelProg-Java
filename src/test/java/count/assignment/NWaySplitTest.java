@@ -76,8 +76,8 @@ public class NWaySplitTest {
 
 	@Parameters(name = "{0} {1} numTasks={2}")
 	public static Collection<Object[]> getConstructorArguments() {
-		int numWorkerThreads = numWorkerThreads();
-		List<Integer> list = Arrays.asList(numWorkerThreads, numWorkerThreads * 2, numWorkerThreads * 10, 71);
+		int numProcessors = Runtime.getRuntime().availableProcessors();
+		List<Integer> list = Arrays.asList(numProcessors, numProcessors * 2, numProcessors * 10, 71);
 		list.sort((a, b) -> a - b);
 		return JUnitUtils.toParameterizedArguments3(new ChromosomeResource[] { ChromosomeResource.HOMO_SAPIENS_Y },
 				Nucleobase.values(), list.toArray());

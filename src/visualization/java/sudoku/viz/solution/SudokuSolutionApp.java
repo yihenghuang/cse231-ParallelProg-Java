@@ -54,7 +54,7 @@ import sudoku.core.ImmutableSudokuPuzzle;
 import sudoku.core.Square;
 import sudoku.core.SquareSearchAlgorithm;
 import sudoku.instructor.InstructorSudokuTestUtils;
-import sudoku.lab.DefaultConstraintPropagator;
+import sudoku.lab.ConstraintPropagatorSupplier;
 import sudoku.lab.ParallelSudoku;
 import sudoku.viz.common.FxGivensUtils;
 import sudoku.viz.common.FxSudokuPane;
@@ -66,7 +66,6 @@ import sudoku.viz.common.FxSudokuSceneUtils;
 public class SudokuSolutionApp extends VizApp {
 	private String givens;
 	private ImmutableSudokuPuzzle initialPuzzle;
-	private boolean isReset = true;
 
 	private FxSudokuPane mainPane;
 
@@ -148,10 +147,10 @@ public class SudokuSolutionApp extends VizApp {
 	};
 
 	private static enum Propagator {
-		STUDENT("student's Propagator") {
+		STUDENT_LAB("student's Propagator") {
 			@Override
 			public ConstraintPropagator createConstaintPropagator() {
-				return new DefaultConstraintPropagator();
+				return new ConstraintPropagatorSupplier().get();
 			}
 		},
 		INSTRUCTOR_UNPROPAGATED("instructor's UNPROPAGATED") {
@@ -278,9 +277,6 @@ public class SudokuSolutionApp extends VizApp {
 				.addListener((options, oldValue, newValue) -> {
 					if (newValue != null) {
 						boolean isDisabled = newValue == Propagator.INSTRUCTOR_UNPROPAGATED;
-						// solverComboBox.setDisable(isDisabled);
-						// searchComboBox.setDisable(isDisabled);
-
 						if (isDisabled) {
 							solverComboBox.setValue(Solver.INSTRUCTOR);
 							solverComboBox.setItems(FXCollections.observableArrayList(Solver.INSTRUCTOR));
@@ -302,7 +298,7 @@ public class SudokuSolutionApp extends VizApp {
 				});
 
 		this.solverComboBox.setValue(Solver.STUDENT);
-		this.propagatorComboBox.setValue(Propagator.STUDENT);
+		this.propagatorComboBox.setValue(Propagator.STUDENT_LAB);
 		this.searchComboBox.setValue(SquareSearchAlgorithmSupplier.STUDENT_FEWEST_OPTIONS_FIRST);
 
 		GridPane result = new GridPane();

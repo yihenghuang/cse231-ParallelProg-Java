@@ -30,11 +30,11 @@ import org.junit.runners.Suite;
 import mapreduce.apps.wordcount.core.WordCountUtils;
 import mapreduce.framework.lab.matrix.CombineAndFinishAllMatrixFrameworkPointedTest;
 import mapreduce.framework.lab.matrix.CombineAndFinishAllMatrixFrameworkStressTest;
+import mapreduce.framework.lab.matrix.MapAccumulateAllMatrixFrameworkParallelismTest;
 import mapreduce.framework.lab.matrix.MapAccumulateAllMatrixFrameworkPointedTest;
 import mapreduce.framework.lab.matrix.MapAccumulateAllMatrixFrameworkStressTest;
 import mapreduce.framework.lab.matrix.MatrixWordCountStressTest;
 import slice.studio.SlicesTestSuite;
-import slice.studio.StrictSlicesComprehensiveTest;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
@@ -42,7 +42,8 @@ import slice.studio.StrictSlicesComprehensiveTest;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ SlicesTestSuite.class, MapAccumulateAllMatrixFrameworkPointedTest.class,
 		MapAccumulateAllMatrixFrameworkStressTest.class, CombineAndFinishAllMatrixFrameworkPointedTest.class,
-		CombineAndFinishAllMatrixFrameworkStressTest.class, MatrixWordCountStressTest.class, })
+		CombineAndFinishAllMatrixFrameworkStressTest.class, MatrixWordCountStressTest.class,
+		MapAccumulateAllMatrixFrameworkParallelismTest.class })
 public class MatrixFrameworkTestSuite {
 	@BeforeClass
 	public static void setUp() throws IOException {
