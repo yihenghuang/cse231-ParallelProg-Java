@@ -35,7 +35,7 @@ import sudoku.core.Square;
 import sudoku.core.io.PuzzlesResourceUtils;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class PeerRemovingConstraintPropagator implements ConstraintPropagator {
