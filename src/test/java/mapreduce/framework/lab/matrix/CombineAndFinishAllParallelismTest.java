@@ -21,31 +21,24 @@
  ******************************************************************************/
 package mapreduce.framework.lab.matrix;
 
-import static edu.wustl.cse231s.v5.V5.launchApp;
+import static org.hamcrest.CoreMatchers.either;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.stream.Collector;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TestRule;
+import org.junit.Assert;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import edu.wustl.cse231s.junit.JUnitUtils;
 import edu.wustl.cse231s.v5.bookkeep.BookkeepingUtils;
 import edu.wustl.cse231s.v5.impl.BookkeepingV5Impl;
-import mapreduce.core.CollectorSolution;
-import mapreduce.core.MapperSolution;
-import mapreduce.framework.core.FrameworkTestUtils;
 import mapreduce.framework.core.Mapper;
-import mapreduce.framework.core.NoOpCollector;
 import mapreduce.framework.lab.rubric.MapReduceRubric;
 
 /**
@@ -55,41 +48,39 @@ import mapreduce.framework.lab.rubric.MapReduceRubric;
  */
 @MapReduceRubric(MapReduceRubric.Category.MATRIX_MAP_AND_ACCUMULATE_ALL)
 @RunWith(Parameterized.class)
-public class MapAccumulateAllMatrixFrameworkParallelismTest {
-	private final int mapTaskCount;
+public class CombineAndFinishAllParallelismTest extends AbstractNoOpTest {
+	private final int reduceTaskCount;
 
-	public MapAccumulateAllMatrixFrameworkParallelismTest(int mapTaskCount) {
-		this.mapTaskCount = mapTaskCount;
+	public CombineAndFinishAllParallelismTest(int reduceTaskCount) {
+		this.reduceTaskCount = reduceTaskCount;
 	}
 
-	@Rule
-	public TestRule timeout = JUnitUtils.createTimeoutRule();
+	@Override
+	protected <E, K, V, A, R> void execute(Mapper<E, K, V> noOpMapper, Collector<V, A, R> noOpCollector, E[] data) {
+		int mapTaskCount = reduceTaskCount;
 
-	@Test
-	public void test() {
-		class Input {
+		@SuppressWarnings("unchecked")
+		Map<K, A>[][] mapAndAccumulateAllResults = new Map[mapTaskCount][reduceTaskCount];
+		for (int row = 0; row < mapTaskCount; row++) {
+			for (int col = 0; col < reduceTaskCount; col++) {
+				mapAndAccumulateAllResults[row][col] = Collections.emptyMap();
+			}
 		}
-		class MapOutputKey {
-		}
-		class MapOutputValue {
-		}
-
-		int length = 231;
-		Input[] data = new Input[length];
-		Mapper<Input, MapOutputKey, MapOutputValue> doNothingMapper = (Input item,
-				BiConsumer<MapOutputKey, MapOutputValue> keyValuePairConsumer) -> {
-		};
-
-		Collector<MapOutputValue, ?, ?> doNothingCollector = new NoOpCollector<>();
-
-		int reduceTaskCount = mapTaskCount;
 		BookkeepingV5Impl bookkeep = BookkeepingUtils.bookkeep(() -> {
-			AccessMatrixFrameworkUtils.mapAndAccumulateAll(data, doNothingMapper, doNothingCollector, mapTaskCount,
+			AccessMatrixFrameworkUtils.combineAndFinishAll(mapAndAccumulateAllResults, noOpCollector, mapTaskCount,
 					reduceTaskCount);
 		});
 
-		assertEquals(mapTaskCount, bookkeep.getTaskCount());
-		assertEquals(1, bookkeep.getNonAccumulatorFinishInvocationCount());
+		int actualTaskCount = bookkeep.getTaskCount();
+		int actualFinishCount = bookkeep.getNonAccumulatorFinishInvocationCount();
+		final boolean IS_STRICTLY_ENFORCING_SINGLE_FOR_ALL = false;
+		if (IS_STRICTLY_ENFORCING_SINGLE_FOR_ALL) {
+			assertEquals(reduceTaskCount, actualTaskCount);
+			assertEquals(1, actualFinishCount);
+		} else {
+			Assert.assertThat(actualTaskCount, either(is(reduceTaskCount)).or(is(reduceTaskCount * 2)));
+			Assert.assertThat(actualFinishCount, either(is(1)).or(is(2)));
+		}
 	}
 
 	@Parameters(name = "mapTaskCount={0}")

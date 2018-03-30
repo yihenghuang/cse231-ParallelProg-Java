@@ -22,23 +22,24 @@
 package mapreduce.framework.lab.matrix;
 
 import static edu.wustl.cse231s.v5.V5.launchApp;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.concurrent.ExecutionException;
 
-import org.apache.commons.lang3.mutable.MutableObject;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
-import mapreduce.apps.intsum.studio.IntegerSumClassicReducer;
-import mapreduce.framework.lab.matrix.AccessMatrixFrameworkUtils;
+import mapreduce.core.CollectorSolution;
+import mapreduce.core.InstructorMapReduceTestUtils;
+import mapreduce.core.TestApplication;
+import mapreduce.framework.core.FrameworkTestUtils;
+import mapreduce.framework.core.matrix.MatrixCombineFinishAllSolution;
 import mapreduce.framework.lab.matrix.MatrixMapReduceFramework;
 import mapreduce.framework.lab.rubric.MapReduceRubric;
 
@@ -47,61 +48,33 @@ import mapreduce.framework.lab.rubric.MapReduceRubric;
  * 
  *         {@link MatrixMapReduceFramework#combineAndFinishAll(java.util.Map[][])}
  */
+@RunWith(Parameterized.class)
 @MapReduceRubric(MapReduceRubric.Category.MATRIX_COMBINE_AND_FINISH_ALL)
-public class CombineAndFinishAllMatrixFrameworkPointedTest {
-	private void test(int... array) {
-		List<Integer> list = Arrays.stream(array).boxed().collect(Collectors.toList());
-		String key = "testKey";
+public class CombineAndFinishAllStressTest<E> {
+	private final CollectorSolution collectorSolution;
+	private final E[] input;
+	private final TestApplication application;
 
-		@SuppressWarnings("unchecked")
-		Map<String, List<Integer>>[][] mapAndAccumulateAllResults = new Map[][] { { new HashMap<>() } };
-		mapAndAccumulateAllResults[0][0].put(key, list);
-
-		MutableObject<Map<String, Integer>> actualReference = new MutableObject<>();
-		launchApp(() -> {
-			actualReference.setValue(AccessMatrixFrameworkUtils.combineAndFinishAll(mapAndAccumulateAllResults,
-					new IntegerSumClassicReducer(), 1, 1));
-		});
-
-		Map<String, Integer> actual = actualReference.getValue();
-		int expectedValue = list.stream().mapToInt(Integer::intValue).sum();
-		assertEquals(1, actual.size());
-		assertTrue(actual.containsKey(key));
-		assertEquals(expectedValue, actual.get(key).intValue());
+	public CombineAndFinishAllStressTest(CollectorSolution collectorSolution, Object resource)
+			throws IOException {
+		this.collectorSolution = collectorSolution;
+		this.input = FrameworkTestUtils.getInput(resource);
+		this.application = FrameworkTestUtils.getApplication(resource);
 	}
 
 	@Rule
-	public TestRule timeout = JUnitUtils.createTimeoutRule();
+	public TestRule timeout = JUnitUtils.createTimeoutRule(16);
 
 	@Test
-	public void test42() {
-		test(42);
+	public void testCombineFinishAll() throws InterruptedException, ExecutionException {
+		launchApp(() -> {
+			InstructorMapReduceTestUtils.checkMatrixCombineAndFinishAll(input, application, collectorSolution,
+					MatrixCombineFinishAllSolution.STUDENT_ASSIGNMENT);
+		});
 	}
 
-	@Test
-	public void testEmpty() {
-		test();
-	}
-
-	@Test
-	public void testAll1s() {
-		int expected = 71;
-		int[] array = new int[expected];
-		Arrays.fill(array, 1);
-		test(array);
-	}
-
-	@Test
-	public void testFibonaccis() {
-		test(1, 1, 2, 3, 5, 8, 13, 21);
-	}
-
-	@Test
-	public void testGauss() {
-		int[] array = new int[100];
-		for (int i = 0; i < 100; i++) {
-			array[i] = i + 1;
-		}
-		test(array);
+	@Parameters(name = "collector={0}; {1}")
+	public static Collection<Object[]> getConstructorArguments() {
+		return FrameworkTestUtils.getConstructorArguments(CollectorSolution.getNonWarmUpValues());
 	}
 }

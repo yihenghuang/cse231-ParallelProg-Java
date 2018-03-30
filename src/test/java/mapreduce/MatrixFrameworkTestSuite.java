@@ -28,11 +28,12 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 import mapreduce.apps.wordcount.core.WordCountUtils;
-import mapreduce.framework.lab.matrix.CombineAndFinishAllMatrixFrameworkPointedTest;
-import mapreduce.framework.lab.matrix.CombineAndFinishAllMatrixFrameworkStressTest;
-import mapreduce.framework.lab.matrix.MapAccumulateAllMatrixFrameworkParallelismTest;
-import mapreduce.framework.lab.matrix.MapAccumulateAllMatrixFrameworkPointedTest;
-import mapreduce.framework.lab.matrix.MapAccumulateAllMatrixFrameworkStressTest;
+import mapreduce.framework.lab.matrix.CombineAndFinishAllPointedTest;
+import mapreduce.framework.lab.matrix.CombineAndFinishAllStressTest;
+import mapreduce.framework.lab.matrix.CombineAndFinishAllParallelismTest;
+import mapreduce.framework.lab.matrix.MapAccumulateAllParallelismTest;
+import mapreduce.framework.lab.matrix.MapAccumulateAllPointedTest;
+import mapreduce.framework.lab.matrix.MapAccumulateAllStressTest;
 import mapreduce.framework.lab.matrix.MatrixWordCountStressTest;
 import slice.studio.SlicesTestSuite;
 
@@ -40,10 +41,10 @@ import slice.studio.SlicesTestSuite;
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ SlicesTestSuite.class, MapAccumulateAllMatrixFrameworkPointedTest.class,
-		MapAccumulateAllMatrixFrameworkStressTest.class, CombineAndFinishAllMatrixFrameworkPointedTest.class,
-		CombineAndFinishAllMatrixFrameworkStressTest.class, MatrixWordCountStressTest.class,
-		MapAccumulateAllMatrixFrameworkParallelismTest.class })
+@Suite.SuiteClasses({ SlicesTestSuite.class, MapAccumulateAllPointedTest.class,
+		MapAccumulateAllStressTest.class, CombineAndFinishAllPointedTest.class,
+		CombineAndFinishAllStressTest.class, MatrixWordCountStressTest.class,
+		MapAccumulateAllParallelismTest.class, CombineAndFinishAllParallelismTest.class })
 public class MatrixFrameworkTestSuite {
 	@BeforeClass
 	public static void setUp() throws IOException {

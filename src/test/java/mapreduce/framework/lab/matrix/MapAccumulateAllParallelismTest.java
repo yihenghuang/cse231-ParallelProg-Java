@@ -23,22 +23,29 @@ package mapreduce.framework.lab.matrix;
 
 import static edu.wustl.cse231s.v5.V5.launchApp;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.stream.Collector;
 
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
+import edu.wustl.cse231s.v5.bookkeep.BookkeepingUtils;
+import edu.wustl.cse231s.v5.impl.BookkeepingV5Impl;
+import mapreduce.core.CollectorSolution;
+import mapreduce.core.MapperSolution;
+import mapreduce.framework.core.FrameworkTestUtils;
 import mapreduce.framework.core.Mapper;
 import mapreduce.framework.core.NoOpCollector;
-import mapreduce.framework.lab.matrix.AccessMatrixFrameworkUtils;
-import mapreduce.framework.lab.matrix.MatrixMapReduceFramework;
 import mapreduce.framework.lab.rubric.MapReduceRubric;
 
 /**
@@ -47,62 +54,33 @@ import mapreduce.framework.lab.rubric.MapReduceRubric;
  *         {@link MatrixMapReduceFramework#mapAndAccumulateAll(Object[])}
  */
 @MapReduceRubric(MapReduceRubric.Category.MATRIX_MAP_AND_ACCUMULATE_ALL)
-public class MapAccumulateAllMatrixFrameworkPointedTest {
-	private static boolean areDistinctObjects(Object[][] matrix) {
-		int n = 0;
-		int rowLength = 0;
-		for (Object[] row : matrix) {
-			if (n == 0) {
-				rowLength = row.length;
-			} else {
-				assertEquals(rowLength, row.length);
-			}
-			n += row.length;
+@RunWith(Parameterized.class)
+public class MapAccumulateAllParallelismTest extends AbstractNoOpTest {
+	private final int mapTaskCount;
 
-		}
-		for (int i = 0; i < n; i++) {
-			int rowI = i / rowLength;
-			int colI = i % rowLength;
-			for (int j = i + 1; j < n; j++) {
-				int rowJ = j / rowLength;
-				int colJ = j % rowLength;
-				if (matrix[rowI][colI] == matrix[rowJ][colJ]) {
-					return false;
-				}
-			}
-		}
-		return true;
+	public MapAccumulateAllParallelismTest(int mapTaskCount) {
+		this.mapTaskCount = mapTaskCount;
 	}
 
-	@Rule
-	public TestRule timeout = JUnitUtils.createTimeoutRule();
-
-	@Test
-	public void testResultArrayNotNull() {
-		class Input {
-		}
-		class MapOutputKey {
-		}
-		class MapOutputValue {
-		}
-
-		int length = 10;
-		Input[] data = new Input[length];
-		Mapper<Input, MapOutputKey, MapOutputValue> doNothingMapper = (Input item,
-				BiConsumer<MapOutputKey, MapOutputValue> keyValuePairConsumer) -> {
-		};
-
-		Collector<MapOutputValue, ?, ?> doNothingCollector = new NoOpCollector<>();
-
-		launchApp(() -> {
-			Map<MapOutputKey, ?>[][] mapAllResult = AccessMatrixFrameworkUtils.mapAndAccumulateAll(data,
-					doNothingMapper, doNothingCollector);
-			for (Map<MapOutputKey, ?>[] row : mapAllResult) {
-				for (Map<MapOutputKey, ?> map : row) {
-					Assert.assertNotNull(map);
-				}
-			}
-			assertTrue(areDistinctObjects(mapAllResult));
+	@Override
+	protected <E, K, V, A, R> void execute(Mapper<E, K, V> noOpMapper, Collector<V, A, R> noOpCollector, E[] data) {
+		int reduceTaskCount = mapTaskCount;
+		BookkeepingV5Impl bookkeep = BookkeepingUtils.bookkeep(() -> {
+			AccessMatrixFrameworkUtils.mapAndAccumulateAll(data, noOpMapper, noOpCollector, mapTaskCount,
+					reduceTaskCount);
 		});
+
+		assertEquals(mapTaskCount, bookkeep.getTaskCount());
+		assertEquals(1, bookkeep.getNonAccumulatorFinishInvocationCount());
+	}
+
+	@Parameters(name = "mapTaskCount={0}")
+	public static Collection<Object[]> getConstructorArguments() {
+		int numProcecessors = Runtime.getRuntime().availableProcessors();
+		Collection<Object[]> result = new LinkedList<>();
+		result.add(new Object[] { numProcecessors });
+		result.add(new Object[] { numProcecessors * 2 });
+		result.add(new Object[] { 71 });
+		return result;
 	}
 }

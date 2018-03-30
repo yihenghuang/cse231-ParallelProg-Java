@@ -51,13 +51,13 @@ import mapreduce.framework.lab.rubric.MapReduceRubric;
  */
 @RunWith(Parameterized.class)
 @MapReduceRubric(MapReduceRubric.Category.MATRIX_MAP_AND_ACCUMULATE_ALL)
-public class MapAccumulateAllMatrixFrameworkStressTest<E> {
+public class MapAccumulateAllStressTest<E> {
 	private final MapperSolution mapperSolution;
 	private final CollectorSolution collectorSolution;
 	private final E[] input;
 	private final TestApplication application;
 
-	public MapAccumulateAllMatrixFrameworkStressTest(MapperSolution mapperSolution, CollectorSolution collectorSolution,
+	public MapAccumulateAllStressTest(MapperSolution mapperSolution, CollectorSolution collectorSolution,
 			Object resource) throws IOException {
 		this.mapperSolution = mapperSolution;
 		this.collectorSolution = collectorSolution;
