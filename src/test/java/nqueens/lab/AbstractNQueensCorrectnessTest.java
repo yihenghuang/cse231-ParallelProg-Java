@@ -22,26 +22,39 @@
 
 package nqueens.lab;
 
-import static edu.wustl.cse231s.v5.V5.launchApp;
+import static edu.wustl.cse231s.v5.V5.launchAppWithReturn;
 import static org.junit.Assert.assertEquals;
 
 import java.util.concurrent.ExecutionException;
 
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TestRule;
+
+import edu.wustl.cse231s.junit.JUnitUtils;
 import nqueens.core.NQueensCorrectnessUtils;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public abstract class AbstractNQueensCorrectnessTest {
-	protected static interface HjIntSupplier {
-		int getAsInt() throws InterruptedException, ExecutionException;
+	private final int boardSize;
+
+	public AbstractNQueensCorrectnessTest(int boardSize) {
+		this.boardSize = boardSize;
 	}
 
-	protected void test(int boardSize, HjIntSupplier intSupplier) {
-		launchApp(() -> {
-			int expected = NQueensCorrectnessUtils.getSolutionCountForBoardSize(boardSize);
-			int actual = intSupplier.getAsInt();
-			assertEquals("Your solution count did not match the expected count", expected, actual);
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule(4);
+
+	protected abstract int countSolutions(int boardSize) throws InterruptedException, ExecutionException;
+
+	@Test
+	public void test() {
+		int expectedCount = NQueensCorrectnessUtils.getSolutionCountForBoardSize(boardSize);
+		int actualCount = launchAppWithReturn(() -> {
+			return countSolutions(boardSize);
 		});
+		assertEquals("Your solution count did not match the expected count", expectedCount, actualCount);
 	}
 }

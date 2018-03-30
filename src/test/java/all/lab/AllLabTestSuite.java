@@ -29,6 +29,7 @@ import backtrack.lab.BacktrackTestSuite;
 import count.assignment.CountTestSuite;
 import mapreduce.FrameworksLabTestSuite;
 import tnx.lab.ThreadsAndExecutorsTestSuite;
+import util.lab.UtilTestSuite;
 import util.lab.UtilWithLateAdditionsTestSuite;
 
 /**
@@ -38,6 +39,8 @@ import util.lab.UtilWithLateAdditionsTestSuite;
 @Suite.SuiteClasses({ CountTestSuite.class,
 		// UtilTestSuite.class,
 		UtilWithLateAdditionsTestSuite.class, ThreadsAndExecutorsTestSuite.class, FrameworksLabTestSuite.class,
-		BacktrackTestSuite.class, })
+		BacktrackTestSuite.class,
+		// KMerTestSuite.class
+})
 public class AllLabTestSuite {
 }

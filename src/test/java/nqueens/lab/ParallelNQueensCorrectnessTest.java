@@ -23,8 +23,8 @@ package nqueens.lab;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.concurrent.ExecutionException;
 
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -33,8 +33,6 @@ import backtrack.lab.rubric.BacktrackRubric;
 import edu.wustl.cse231s.junit.JUnitUtils;
 import nqueens.core.ImmutableQueenLocations;
 import nqueens.core.NQueensCorrectnessUtils;
-import nqueens.lab.DefaultImmutableQueenLocations;
-import nqueens.lab.ParallelNQueens;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
@@ -44,18 +42,14 @@ import nqueens.lab.ParallelNQueens;
 @RunWith(Parameterized.class)
 @BacktrackRubric(BacktrackRubric.Category.PARALLEL_N_QUEENS_CORRECTNESS)
 public class ParallelNQueensCorrectnessTest extends AbstractNQueensCorrectnessTest {
-	private final int boardSize;
-
 	public ParallelNQueensCorrectnessTest(int boardSize) throws IOException {
-		this.boardSize = boardSize;
+		super(boardSize);
 	}
 
-	@Test
-	public void test() {
-		test(boardSize, () -> {
-			ImmutableQueenLocations queenLocations = new DefaultImmutableQueenLocations(boardSize);
-			return ParallelNQueens.countSolutions(queenLocations);
-		});
+	@Override
+	protected int countSolutions(int boardSize) throws InterruptedException, ExecutionException {
+		ImmutableQueenLocations queenLocations = new DefaultImmutableQueenLocations(boardSize);
+		return ParallelNQueens.countSolutions(queenLocations);
 	}
 
 	@Parameters(name = "boardSize={0}")

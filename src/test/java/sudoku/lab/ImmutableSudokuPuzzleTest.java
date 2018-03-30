@@ -48,19 +48,19 @@ public class ImmutableSudokuPuzzleTest {
 	public void testValue() {
 		ConstraintPropagator constraintPropagator = InstructorSudokuTestUtils.createPeerOnlyConstraintPropagator();
 		DefaultImmutableSudokuPuzzle puzzle = new DefaultImmutableSudokuPuzzle(constraintPropagator, givens);
-		Assert.assertEquals("Your puzzle is not initializing with the correct value", puzzle.getValue(Square.A1), 8);
-		Assert.assertEquals("Your puzzle is not initializing with the correct value", puzzle.getValue(Square.A2), 5);
+		assertEquals("Your puzzle is not initializing with the correct value", puzzle.getValue(Square.A1), 8);
+		assertEquals("Your puzzle is not initializing with the correct value", puzzle.getValue(Square.A2), 5);
 	}
 
 	@Test
 	public void testAlreadySet() {
 		ConstraintPropagator constraintPropagator = InstructorSudokuTestUtils.createPeerOnlyConstraintPropagator();
 		DefaultImmutableSudokuPuzzle puzzle = new DefaultImmutableSudokuPuzzle(constraintPropagator, givens);
-		Assert.assertTrue("A square should be filled, but it is not", puzzle.isSquareValueDetermined(Square.A1));
-		Assert.assertTrue("A square should be filled, but it is not", puzzle.isSquareValueDetermined(Square.A2));
-		Assert.assertFalse("A square should not be filled, but it is", puzzle.isSquareValueDetermined(Square.A3));
-		Assert.assertFalse("A square should not be filled, but it is", puzzle.isSquareValueDetermined(Square.A4));
-		Assert.assertFalse("A square should not be filled, but it is", puzzle.isSquareValueDetermined(Square.A5));
+		assertTrue("A square should be filled, but it is not", puzzle.isSquareValueDetermined(Square.A1));
+		assertTrue("A square should be filled, but it is not", puzzle.isSquareValueDetermined(Square.A2));
+		assertFalse("A square should not be filled, but it is", puzzle.isSquareValueDetermined(Square.A3));
+		assertFalse("A square should not be filled, but it is", puzzle.isSquareValueDetermined(Square.A4));
+		assertFalse("A square should not be filled, but it is", puzzle.isSquareValueDetermined(Square.A5));
 	}
 
 	@Test
@@ -68,7 +68,7 @@ public class ImmutableSudokuPuzzleTest {
 		ConstraintPropagator constraintPropagator = InstructorSudokuTestUtils.createPeerOnlyConstraintPropagator();
 		DefaultImmutableSudokuPuzzle puzzle = new DefaultImmutableSudokuPuzzle(constraintPropagator, givens);
 		Set<Integer> options = puzzle.getOptions(Square.A3);
-		Assert.assertTrue("You are not getting the correct options for a square",
+		assertTrue("You are not getting the correct options for a square",
 				CollectionUtils.isEqualCollection(options, Arrays.asList(1, 3, 6, 9)));
 	}
 

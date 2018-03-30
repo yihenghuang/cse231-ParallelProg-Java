@@ -44,7 +44,12 @@ import sort.studio.merge.MergeSortTestSuite;
 @Suite.SuiteClasses({ SlicesTestSuite.class, MergeSortTestSuite.class, /* floodfill */ FibonacciTestSuite.class,
 		RaceConditionTestSuite.class, MatrixMultiplyTestSuite.class, IntSumStudioTestSuite.class,
 		CollectorStudioTestSuite.class, MutualFriendsStudioTestSuite.class, CholeraStudioTestSuite.class,
-		IterativeAveragingTestSuite.class, LeggedRaceTestSuite.class })
+		IterativeAveragingTestSuite.class, LeggedRaceTestSuite.class,
+		// PipelineFaceDetectionTestSuite.class,
+		// DataFlowFaceDetectionTestSuite.class,
+		// LockOrderingTestSuite.class,
+		// TryLockingTestSuite.class
+})
 public class AllStudioTestSuite {
 
 }

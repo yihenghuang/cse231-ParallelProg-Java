@@ -29,9 +29,9 @@ import sudoku.core.Square;
  * 
  *         {@link FewestOptionsFirstSquareSearchAlgorithm#selectNextUnfilledSquare(sudoku.core.SudokuPuzzle)}
  */
-@BacktrackRubric(BacktrackRubric.Category.FEWEST_OPTIONS_FIRST_SEARCH)
-public class FewestOptionsFirstIsAlreadySetPointedTest extends AbstractIsAlreadySetPointedTest {
-	public FewestOptionsFirstIsAlreadySetPointedTest(String givens, Square expectedSquare) {
-		super(new FewestOptionsFirstSquareSearchAlgorithm(), givens, expectedSquare);
+@BacktrackRubric(BacktrackRubric.Category.ROW_MAJOR_SEARCH)
+public class RowMajorSearchSkipsFilledSquaresTest extends AbstractSearchSkipsFilledSquaresTest {
+	public RowMajorSearchSkipsFilledSquaresTest(String givens, Square expectedSquare) {
+		super(new RowMajorSquareSearchAlgorithm(), givens, expectedSquare);
 	}
 }

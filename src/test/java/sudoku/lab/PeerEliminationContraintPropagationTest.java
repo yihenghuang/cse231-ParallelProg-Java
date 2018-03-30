@@ -32,6 +32,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import backtrack.lab.rubric.BacktrackRubric;
+import sudoku.AbstractContraintPropagationTest;
 import sudoku.core.io.PuzzlesResource;
 import sudoku.core.io.PuzzlesResourceUtils;
 

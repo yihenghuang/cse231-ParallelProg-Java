@@ -19,43 +19,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
+package sudoku;
 
-package nqueens.lab;
+import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.concurrent.ExecutionException;
+import org.junit.Test;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
-
-import backtrack.lab.rubric.BacktrackRubric;
-import edu.wustl.cse231s.junit.JUnitUtils;
-import nqueens.core.DefaultMutableQueenLocations;
-import nqueens.core.MutableQueenLocations;
-import nqueens.core.NQueensCorrectnessUtils;
+import sudoku.core.ConstraintPropagator;
+import sudoku.core.SolutionUtils;
+import sudoku.lab.ConstraintPropagatorSupplier;
+import sudoku.lab.DefaultConstraintPropagator;
+import sudoku.lab.DefaultImmutableSudokuPuzzle;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  * 
- *         {@link SequentialNQueens#countSolutions(MutableQueenLocations)}
+ *         {@link DefaultConstraintPropagator}
  */
-@RunWith(Parameterized.class)
-@BacktrackRubric(BacktrackRubric.Category.SEQUENTIAL_N_QUEENS)
-public class SequentialNQueensCorrectnessTest extends AbstractNQueensCorrectnessTest {
-	public SequentialNQueensCorrectnessTest(int boardSize) throws IOException {
-		super(boardSize);
+public class AbstractContraintPropagationTest {
+	private final String givens;
+
+	public AbstractContraintPropagationTest(String givens) {
+		this.givens = givens;
 	}
 
-	@Override
-	protected int countSolutions(int boardSize) throws InterruptedException, ExecutionException {
-		MutableQueenLocations queenLocations = new DefaultMutableQueenLocations(boardSize);
-		return SequentialNQueens.countSolutions(queenLocations);
-	}
-
-	@Parameters(name = "boardSize={0}")
-	public static Collection<Object[]> getConstructorArguments() {
-		return JUnitUtils.toParameterizedArguments(NQueensCorrectnessUtils.getBoardSizes());
+	@Test
+	public void test() {
+		ConstraintPropagator constraintPropagator = new ConstraintPropagatorSupplier().get();
+		DefaultImmutableSudokuPuzzle puzzle = new DefaultImmutableSudokuPuzzle(constraintPropagator, givens);
+		assertTrue(SolutionUtils.isCompletelyFilledInAndEachSquareIsValid(puzzle));
 	}
 }

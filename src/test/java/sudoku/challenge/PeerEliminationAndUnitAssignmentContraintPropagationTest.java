@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package sudoku.lab;
+package sudoku.challenge;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -32,8 +32,10 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import backtrack.lab.rubric.BacktrackRubric;
+import sudoku.AbstractContraintPropagationTest;
 import sudoku.core.io.PuzzlesResource;
 import sudoku.core.io.PuzzlesResourceUtils;
+import sudoku.lab.DefaultConstraintPropagator;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)

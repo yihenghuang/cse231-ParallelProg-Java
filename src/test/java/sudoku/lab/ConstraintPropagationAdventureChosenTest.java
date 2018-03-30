@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2017 Dennis Cosgrove
+ * Copyright (C) 2016-2018 Dennis Cosgrove
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,31 +19,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
+
 package sudoku.lab;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
+import backtrack.lab.rubric.BacktrackRubric;
 import sudoku.core.ConstraintPropagator;
-import sudoku.core.SolutionUtils;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  * 
- *         {@link DefaultConstraintPropagator}
+ *         {@link ConstraintPropagatorSupplier#get()}
  */
-public class AbstractContraintPropagationTest {
-	private final String givens;
-
-	public AbstractContraintPropagationTest(String givens) {
-		this.givens = givens;
-	}
-
+@BacktrackRubric(BacktrackRubric.Category.CONTRAINT_PROPAGATOR)
+public class ConstraintPropagationAdventureChosenTest {
 	@Test
 	public void test() {
 		ConstraintPropagator constraintPropagator = new ConstraintPropagatorSupplier().get();
-		DefaultImmutableSudokuPuzzle puzzle = new DefaultImmutableSudokuPuzzle(constraintPropagator, givens);
-		assertTrue(SolutionUtils.isCompletelyFilledInAndEachSquareIsValid(puzzle));
+		assertNotNull(constraintPropagator);
 	}
 }

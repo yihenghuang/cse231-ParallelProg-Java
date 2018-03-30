@@ -19,43 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-
-package nqueens.lab;
-
-import java.io.IOException;
-import java.util.Collection;
-import java.util.concurrent.ExecutionException;
+package sudoku.challenge;
 
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.runners.Suite;
 
-import backtrack.lab.rubric.BacktrackRubric;
-import edu.wustl.cse231s.junit.JUnitUtils;
-import nqueens.core.DefaultMutableQueenLocations;
-import nqueens.core.MutableQueenLocations;
-import nqueens.core.NQueensCorrectnessUtils;
+import sudoku.lab.SudokuTestSuite;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
- * 
- *         {@link SequentialNQueens#countSolutions(MutableQueenLocations)}
  */
-@RunWith(Parameterized.class)
-@BacktrackRubric(BacktrackRubric.Category.SEQUENTIAL_N_QUEENS)
-public class SequentialNQueensCorrectnessTest extends AbstractNQueensCorrectnessTest {
-	public SequentialNQueensCorrectnessTest(int boardSize) throws IOException {
-		super(boardSize);
-	}
-
-	@Override
-	protected int countSolutions(int boardSize) throws InterruptedException, ExecutionException {
-		MutableQueenLocations queenLocations = new DefaultMutableQueenLocations(boardSize);
-		return SequentialNQueens.countSolutions(queenLocations);
-	}
-
-	@Parameters(name = "boardSize={0}")
-	public static Collection<Object[]> getConstructorArguments() {
-		return JUnitUtils.toParameterizedArguments(NQueensCorrectnessUtils.getBoardSizes());
-	}
+@RunWith(Suite.class)
+@Suite.SuiteClasses({ SudokuTestSuite.class, PeerEliminationAndUnitAssignmentContraintPropagationTest.class })
+public class ChallengeSudokuTestSuite {
 }

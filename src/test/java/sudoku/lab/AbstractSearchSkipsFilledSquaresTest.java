@@ -40,12 +40,12 @@ import sudoku.instructor.InstructorSudokuTestUtils;
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 @RunWith(Parameterized.class)
-public abstract class AbstractIsAlreadySetPointedTest {
+public abstract class AbstractSearchSkipsFilledSquaresTest {
 	private final SquareSearchAlgorithm squareSearchAlgorithm;
 	private final String givens;
 	private final Square expectedSquare;
 
-	public AbstractIsAlreadySetPointedTest(SquareSearchAlgorithm squareSearchAlgorithm, String givens,
+	public AbstractSearchSkipsFilledSquaresTest(SquareSearchAlgorithm squareSearchAlgorithm, String givens,
 			Square expectedSquare) {
 		this.squareSearchAlgorithm = squareSearchAlgorithm;
 		this.givens = givens;

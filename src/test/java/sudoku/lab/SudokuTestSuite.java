@@ -24,12 +24,14 @@ package sudoku.lab;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import sudoku.challenge.PeerEliminationAndUnitAssignmentContraintPropagationTest;
+
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ GetValuePointedTest.class, ImmutableSudokuPuzzleTest.class,
-		FewestOptionsFirstIsAlreadySetPointedTest.class, FewestOptionsFirstReturns2OptionSquareTest.class,
+@Suite.SuiteClasses({ ConstraintPropagationAdventureChosenTest.class, PeerEliminationContraintPropagationTest.class,
+		GetValuePointedTest.class, ImmutableSudokuPuzzleTest.class, RowMajorSearchSkipsFilledSquaresTest.class,
+		FewestOptionsFirstSkipsFilledSquaresTest.class, FewestOptionsFirstReturns2OptionSquareTest.class,
 		/* FewestOptionsFirstReturns0OptionSquareTest.class, */ FewestOptionsFirstReturnsNullForSolvedPuzzleTest.class,
-		SolveReturningSomethingOtherThanGivensTest.class, SolveTest.class,
-		PeerEliminationContraintPropagationTest.class, PeerEliminationAndUnitAssignmentContraintPropagationTest.class })
+		SolveReturningSomethingOtherThanGivensTest.class, SolveTest.class, })
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)

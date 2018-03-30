@@ -26,8 +26,6 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ SequentialNQueensCorrectnessTest.class, ImmutableQueenLocationsTest.class,
-		/*ParallelNQueensRegisterFinishAccumulatorTest.class, */ParallelNQueensCorrectnessTest.class,
-		/*NQueensCPLTest.class*/ })
-
+		ParallelNQueensCorrectnessTest.class, ParallelNQueensParallelismTest.class })
 public class NQueensTestSuite {
 }

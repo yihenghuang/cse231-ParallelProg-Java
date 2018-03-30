@@ -19,48 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package nqueens.lab;
-
-import static org.hamcrest.CoreMatchers.anyOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-
-import java.util.Arrays;
-
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TestRule;
+package sudoku.lab;
 
 import backtrack.lab.rubric.BacktrackRubric;
-import edu.wustl.cse231s.junit.JUnitUtils;
-import edu.wustl.cse231s.v5.bookkeep.BookkeepingUtils;
-import edu.wustl.cse231s.v5.impl.BookkeepingV5Impl;
-import nqueens.core.ImmutableQueenLocations;
+import sudoku.core.Square;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  * 
- *         {@link ParallelNQueens#countSolutions(ImmutableQueenLocations)}
+ *         {@link FewestOptionsFirstSquareSearchAlgorithm#selectNextUnfilledSquare(sudoku.core.SudokuPuzzle)}
  */
-@BacktrackRubric(BacktrackRubric.Category.PARALLEL_N_QUEENS_PARALLELISM)
-public class ParallelNQueensParallelismTest {
-	@Rule
-	public TestRule timeout = JUnitUtils.createTimeoutRule();
-
-	@Test
-	public void test() {
-		BookkeepingV5Impl bookkeep = BookkeepingUtils.bookkeep(() -> {
-			ImmutableQueenLocations queenLocations = new DefaultImmutableQueenLocations(4);
-			ParallelNQueens.countSolutions(queenLocations);
-		});
-
-		// expected counts:
-		// tasks created or not for base case & tasks created or not for invalid columns
-		assertThat(bookkeep.getTaskCount(), anyOf(Arrays.asList(is(14), is(16), is(58), is(60))));
-
-		assertEquals(0, bookkeep.getNonAccumulatorFinishInvocationCount());
-		assertEquals(1, bookkeep.getAccumulatorFinishInvocationCount());
-		assertEquals(1, bookkeep.getAccumulatorRegisterCount());
+@BacktrackRubric(BacktrackRubric.Category.FEWEST_OPTIONS_FIRST_SEARCH)
+public class FewestOptionsFirstSkipsFilledSquaresTest extends AbstractSearchSkipsFilledSquaresTest {
+	public FewestOptionsFirstSkipsFilledSquaresTest(String givens, Square expectedSquare) {
+		super(new FewestOptionsFirstSquareSearchAlgorithm(), givens, expectedSquare);
 	}
 }

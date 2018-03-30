@@ -22,9 +22,12 @@
 package nqueens.lab;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
 import backtrack.lab.rubric.BacktrackRubric;
+import edu.wustl.cse231s.junit.JUnitUtils;
 import nqueens.lab.DefaultImmutableQueenLocations;
 
 /**
@@ -34,6 +37,9 @@ import nqueens.lab.DefaultImmutableQueenLocations;
  */
 @BacktrackRubric(BacktrackRubric.Category.IMMUTABLE_QUEEN_LOCATIONS)
 public class ImmutableQueenLocationsTest {
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
 	@Test
 	public void test0Rows() {
 		int truthAndBeautyBoardSize = 7;
