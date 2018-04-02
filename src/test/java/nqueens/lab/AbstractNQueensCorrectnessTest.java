@@ -45,7 +45,7 @@ public abstract class AbstractNQueensCorrectnessTest {
 	}
 
 	@Rule
-	public TestRule timeout = JUnitUtils.createTimeoutRule(4);
+	public TestRule timeout = JUnitUtils.createTimeoutRule(16);
 
 	protected abstract int countSolutions(int boardSize) throws InterruptedException, ExecutionException;
 
