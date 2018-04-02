@@ -19,49 +19,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package mapreduce.framework.lab.matrix;
+package sudoku.util;
 
-import static org.junit.Assert.assertEquals;
+import java.util.function.Supplier;
 
-import java.util.function.BiConsumer;
-import java.util.stream.Collector;
-
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TestRule;
-
-import edu.wustl.cse231s.junit.JUnitUtils;
-import edu.wustl.cse231s.v5.bookkeep.BookkeepingUtils;
-import edu.wustl.cse231s.v5.impl.BookkeepingV5Impl;
-import mapreduce.framework.core.Mapper;
-import mapreduce.framework.core.NoOpCollector;
-import mapreduce.framework.core.NoOpMapper;
+import sudoku.core.ConstraintPropagator;
+import sudoku.instructor.InstructorSudokuTestUtils;
+import sudoku.lab.ConstraintPropagatorSupplier;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-public abstract class AbstractNoOpTest {
-	@Rule
-	public TestRule timeout = JUnitUtils.createTimeoutRule();
-
-	protected abstract <E, K, V, A, R> void execute(Mapper<E, K, V> noOpMapper, Collector<V, A, R> noOpCollector,
-			E[] data);
-
-	@Test
-	public void test() {
-		class Input {
+public enum PropagatorSupplier implements Supplier<ConstraintPropagator> {
+	STUDENT_LAB("student's Propagator") {
+		@Override
+		public ConstraintPropagator get() {
+			return new ConstraintPropagatorSupplier().get();
 		}
-		class MapOutputKey {
+	},
+	INSTRUCTOR_UNPROPAGATED("instructor's UNPROPAGATED") {
+		@Override
+		public ConstraintPropagator get() {
+			return null;
 		}
-		class MapOutputValue {
+	},
+	INSTRUCTOR_PEER_ONLY("instructor's PEER_ONLY Propagator") {
+		@Override
+		public ConstraintPropagator get() {
+			return InstructorSudokuTestUtils.createPeerOnlyConstraintPropagator();
 		}
+	},
+	INSTRUCTOR_PEER_AND_UNIT("instructor's PEER_AND_UNIT Propagator") {
+		@Override
+		public ConstraintPropagator get() {
+			return InstructorSudokuTestUtils.createPeerAndUnitConstraintPropagator();
+		}
+	};
+	private final String repr;
 
-		int length = 231;
-		Input[] data = new Input[length];
-		Mapper<Input, MapOutputKey, MapOutputValue> noOpMapper = new NoOpMapper<>();
-		Collector<MapOutputValue, ?, ?> noOpCollector = new NoOpCollector<>();
-
-		execute(noOpMapper, noOpCollector, data);
+	private PropagatorSupplier(String repr) {
+		this.repr = repr;
 	}
 
+	@Override
+	public String toString() {
+		return this.repr;
+	}
 }

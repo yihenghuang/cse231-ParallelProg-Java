@@ -19,18 +19,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
+package sudoku.util;
 
-package mapreduce;
+import java.util.function.BiFunction;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
-import mapreduce.framework.lab.NoPrintingTest;
+import sudoku.core.ConstraintPropagator;
+import sudoku.core.ImmutableSudokuPuzzle;
+import sudoku.instructor.InstructorSudokuTestUtils;
+import sudoku.lab.DefaultImmutableSudokuPuzzle;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ SimpleFrameworkTestSuite.class, MatrixFrameworkTestSuite.class, NoPrintingTest.class })
-public class FrameworksLabTestSuite {
+public enum PuzzleSupplier implements BiFunction<ConstraintPropagator, String, ImmutableSudokuPuzzle> {
+	STUDENT("student's Puzzle") {
+		@Override
+		public ImmutableSudokuPuzzle apply(ConstraintPropagator constraintPropagator, String givens) {
+			return new DefaultImmutableSudokuPuzzle(constraintPropagator, givens);
+		}
+	},
+	INSTRUCTOR("instructor's Puzzle") {
+		@Override
+		public ImmutableSudokuPuzzle apply(ConstraintPropagator constraintPropagator, String givens) {
+			return InstructorSudokuTestUtils.createPuzzle(constraintPropagator, givens, null);
+		}
+	};
+
+	private final String repr;
+
+	private PuzzleSupplier(String repr) {
+		this.repr = repr;
+	}
+
+	@Override
+	public String toString() {
+		return this.repr;
+	}
 }

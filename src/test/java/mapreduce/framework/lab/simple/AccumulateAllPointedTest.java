@@ -19,37 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package mapreduce;
+package mapreduce.framework.lab.simple;
 
-import java.io.IOException;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.BeforeClass;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collector;
 
-import mapreduce.apps.wordcount.core.WordCountUtils;
-import mapreduce.framework.lab.simple.AccumulateAllParallelismTest;
-import mapreduce.framework.lab.simple.AccumulateAllPointedTest;
-import mapreduce.framework.lab.simple.AccumulateAllStressTest;
-import mapreduce.framework.lab.simple.FinishAllParallelismTest;
-import mapreduce.framework.lab.simple.FinishAllPointedTest;
-import mapreduce.framework.lab.simple.FinishAllStressTest;
-import mapreduce.framework.lab.simple.MapAllParallelismTest;
-import mapreduce.framework.lab.simple.MapAllPointedTest;
-import mapreduce.framework.lab.simple.MapAllStressTest;
-import mapreduce.framework.lab.simple.SimpleFrameworkStressTest;
+import edu.wustl.cse231s.util.KeyValuePair;
+import mapreduce.framework.lab.rubric.MapReduceRubric;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link SimpleMapReduceFramework#accumulateAll(List[])}
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ MapAllPointedTest.class, MapAllStressTest.class, AccumulateAllPointedTest.class,
-		AccumulateAllStressTest.class, FinishAllPointedTest.class, FinishAllStressTest.class,
-		SimpleFrameworkStressTest.class, MapAllParallelismTest.class, AccumulateAllParallelismTest.class,
-		FinishAllParallelismTest.class })
-public class SimpleFrameworkTestSuite {
-	@BeforeClass
-	public static void setUp() throws IOException {
-		WordCountUtils.downloadWordResources();
+@MapReduceRubric(MapReduceRubric.Category.SIMPLE_ACCUMULATE_ALL)
+public class AccumulateAllPointedTest extends AbstractAccumulateAllTest {
+	@Override
+	protected void execute(Collector<Boolean, List<Boolean>, Void> collector,
+			List<KeyValuePair<String, Boolean>>[] mapAllResult) {
+		Map<String, List<Boolean>> accumulateAllResult = AccessSimpleFrameworkUtils.accumulateAllOnly(mapAllResult,
+				collector);
+		assertEquals(2, accumulateAllResult.size());
+		assertEquals(Arrays.asList(true, false), accumulateAllResult.get("a"));
+		assertEquals(Arrays.asList(true), accumulateAllResult.get("b"));
 	}
 }

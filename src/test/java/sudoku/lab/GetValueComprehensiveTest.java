@@ -38,7 +38,7 @@ import sudoku.core.GivensUtils;
 import sudoku.core.Square;
 import sudoku.instructor.InstructorSudokuTestUtils;
 import sudoku.lab.DefaultImmutableSudokuPuzzle;
-import sudoku.viz.solution.SquareSearchAlgorithmSupplier;
+import sudoku.util.SearchSupplier;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
@@ -85,7 +85,7 @@ public class GetValueComprehensiveTest {
 	public static Collection<Object[]> getConstructorArguments() {
 		Collection<Object[]> results = new LinkedList<>();
 		List<String> givensList = GivensUtils
-				.getGivensToTest(SquareSearchAlgorithmSupplier.STUDENT_FEWEST_OPTIONS_FIRST);
+				.getGivensToTest(SearchSupplier.STUDENT_FEWEST_OPTIONS_FIRST);
 		for (String givens : givensList) {
 			results.add(new Object[] { givens });
 		}

@@ -39,6 +39,7 @@ import org.junit.runners.Parameterized.Parameters;
 import edu.wustl.cse231s.v5.bookkeep.BookkeepingUtils;
 import edu.wustl.cse231s.v5.impl.BookkeepingV5Impl;
 import mapreduce.framework.core.Mapper;
+import mapreduce.framework.lab.AbstractNoOpTest;
 import mapreduce.framework.lab.rubric.MapReduceRubric;
 
 /**

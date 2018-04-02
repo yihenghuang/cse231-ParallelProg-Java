@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 
 import edu.wustl.cse231s.fx.FxUtils;
 import edu.wustl.cse231s.v5.options.SystemPropertiesOption;
@@ -46,16 +45,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import sudoku.core.ConstraintPropagator;
 import sudoku.core.ImmutableSudokuPuzzle;
 import sudoku.core.Square;
-import sudoku.core.SquareSearchAlgorithm;
 import sudoku.instructor.InstructorSudokuTestUtils;
-import sudoku.lab.ConstraintPropagatorSupplier;
-import sudoku.lab.ParallelSudoku;
+import sudoku.util.PropagatorSupplier;
+import sudoku.util.PuzzleSupplier;
+import sudoku.util.SearchSupplier;
+import sudoku.util.SolverSupplier;
 import sudoku.viz.common.FxGivensUtils;
 import sudoku.viz.common.FxSudokuPane;
 import sudoku.viz.common.FxSudokuSceneUtils;
@@ -70,9 +71,10 @@ public class SudokuSolutionApp extends VizApp {
 	private FxSudokuPane mainPane;
 
 	private final StringProperty[][] propertyMatrix = new StringProperty[9][9];
-	private ComboBox<Solver> solverComboBox;
-	private ComboBox<Propagator> propagatorComboBox;
-	private ComboBox<SquareSearchAlgorithmSupplier> searchComboBox;
+	private ComboBox<SolverSupplier> solverComboBox;
+	private ComboBox<PropagatorSupplier> propagatorComboBox;
+//	private ComboBox<PuzzleSupplier> puzzleComboBox;
+	private ComboBox<SearchSupplier> searchComboBox;
 
 	public SudokuSolutionApp() {
 		for (int row = 0; row < this.propertyMatrix.length; row++) {
@@ -114,78 +116,6 @@ public class SudokuSolutionApp extends VizApp {
 		};
 	}
 
-	private static enum Solver {
-		STUDENT("student's Solver") {
-			@Override
-			public ImmutableSudokuPuzzle solve(ImmutableSudokuPuzzle puzzle,
-					SquareSearchAlgorithm squareSearchAlgorithm) throws InterruptedException, ExecutionException {
-				return ParallelSudoku.solve(puzzle, squareSearchAlgorithm);
-			}
-		},
-		INSTRUCTOR("instructor's Solver") {
-			@Override
-			public ImmutableSudokuPuzzle solve(ImmutableSudokuPuzzle puzzle,
-					SquareSearchAlgorithm squareSearchAlgorithm) throws InterruptedException, ExecutionException {
-				return InstructorSudokuTestUtils.solve(puzzle, squareSearchAlgorithm);
-			}
-		};
-
-		private final String repr;
-
-		private Solver(String repr) {
-			this.repr = repr;
-		}
-
-		public abstract ImmutableSudokuPuzzle solve(ImmutableSudokuPuzzle puzzle,
-				SquareSearchAlgorithm squareSearchAlgorithm) throws InterruptedException, ExecutionException;
-
-		@Override
-		public String toString() {
-			return this.repr;
-		}
-
-	};
-
-	private static enum Propagator {
-		STUDENT_LAB("student's Propagator") {
-			@Override
-			public ConstraintPropagator createConstaintPropagator() {
-				return new ConstraintPropagatorSupplier().get();
-			}
-		},
-		INSTRUCTOR_UNPROPAGATED("instructor's UNPROPAGATED") {
-			@Override
-			public ConstraintPropagator createConstaintPropagator() {
-				return null;
-			}
-		},
-		INSTRUCTOR_PEER_ONLY("instructor's PEER_ONLY Propagator") {
-			@Override
-			public ConstraintPropagator createConstaintPropagator() {
-				return InstructorSudokuTestUtils.createPeerOnlyConstraintPropagator();
-			}
-		},
-		INSTRUCTOR_PEER_AND_UNIT("instructor's PEER_AND_UNIT Propagator") {
-			@Override
-			public ConstraintPropagator createConstaintPropagator() {
-				return InstructorSudokuTestUtils.createPeerAndUnitConstraintPropagator();
-			}
-		};
-		private final String repr;
-
-		private Propagator(String repr) {
-			this.repr = repr;
-		}
-
-		public abstract ConstraintPropagator createConstaintPropagator();
-
-		@Override
-		public String toString() {
-			return this.repr;
-		}
-
-	}
-
 	public void handleCreateNextPuzzle(ImmutableSudokuPuzzle puzzle) throws RuntimeInterruptedException {
 		Objects.requireNonNull(puzzle);
 		if (Thread.currentThread().isInterrupted()) {
@@ -223,9 +153,8 @@ public class SudokuSolutionApp extends VizApp {
 
 	private void updateToInitial() {
 		if (givens != null) {
-			Propagator propagator = propagatorComboBox.getValue();
-			ConstraintPropagator constraintPropagator = propagator.createConstaintPropagator();
-			initialPuzzle = InstructorSudokuTestUtils.createPuzzle(givens, constraintPropagator, this);
+			ConstraintPropagator constraintPropagator = propagatorComboBox.getValue().get();
+			initialPuzzle = InstructorSudokuTestUtils.createPuzzle(constraintPropagator, givens, this);
 			Platform.runLater(() -> {
 				this.mainPane.setInitialPuzzle(initialPuzzle);
 			});
@@ -244,11 +173,11 @@ public class SudokuSolutionApp extends VizApp {
 	@Override
 	protected void solve() {
 		launchApp(new SystemPropertiesOption.Builder().isLinearized(true).build(), () -> {
-			Solver sudokuSolver = this.solverComboBox.getValue();
-			SquareSearchAlgorithmSupplier squareSearchAlgorithmSupplier = this.searchComboBox.getValue();
+			SolverSupplier solverSupplier = this.solverComboBox.getValue();
+			SearchSupplier squareSearchAlgorithmSupplier = this.searchComboBox.getValue();
 
 			this.updateToInitial();
-			ImmutableSudokuPuzzle solution = sudokuSolver.solve(initialPuzzle, squareSearchAlgorithmSupplier.get());
+			ImmutableSudokuPuzzle solution = solverSupplier.solve(initialPuzzle, squareSearchAlgorithmSupplier.get());
 			if (solution != null) {
 				try {
 					this.handleCreateNextPuzzle(solution);
@@ -260,27 +189,31 @@ public class SudokuSolutionApp extends VizApp {
 	}
 
 	private Node createControls(ComboBox<String> givensComboBox) {
-		ObservableList<Solver> solverOptions = FXCollections.observableArrayList(Solver.values());
+		ObservableList<SolverSupplier> solverOptions = FXCollections.observableArrayList(SolverSupplier.values());
 		this.solverComboBox = new ComboBox<>(solverOptions);
 
-		ObservableList<SquareSearchAlgorithmSupplier> searchOptions = FXCollections
-				.observableArrayList(SquareSearchAlgorithmSupplier.values());
+		ObservableList<SearchSupplier> searchOptions = FXCollections.observableArrayList(SearchSupplier.values());
 		this.searchComboBox = new ComboBox<>(searchOptions);
 
-		List<SquareSearchAlgorithmSupplier> unpropagatedSupportingSearches = Arrays.asList(
-				SquareSearchAlgorithmSupplier.INSTRUCTOR_ROW_MAJOR,
-				SquareSearchAlgorithmSupplier.INSTRUCTOR_FEWEST_OPTIONS_FIRST);
+		//ObservableList<PuzzleSupplier> puzzleOptions = FXCollections.observableArrayList(PuzzleSupplier.values());
+		//this.puzzleComboBox = new ComboBox<>(puzzleOptions);
 
-		ObservableList<Propagator> propagatorOptions = FXCollections.observableArrayList(Propagator.values());
+		List<SearchSupplier> unpropagatedSupportingSearches = Arrays.asList(SearchSupplier.INSTRUCTOR_ROW_MAJOR,
+				SearchSupplier.INSTRUCTOR_FEWEST_OPTIONS_FIRST);
+
+		ObservableList<PropagatorSupplier> propagatorOptions = FXCollections
+				.observableArrayList(PropagatorSupplier.values());
 		this.propagatorComboBox = new ComboBox<>(propagatorOptions);
 		this.propagatorComboBox.getSelectionModel().selectedItemProperty()
 				.addListener((options, oldValue, newValue) -> {
 					if (newValue != null) {
-						boolean isDisabled = newValue == Propagator.INSTRUCTOR_UNPROPAGATED;
+						boolean isDisabled = newValue == PropagatorSupplier.INSTRUCTOR_UNPROPAGATED;
 						if (isDisabled) {
-							solverComboBox.setValue(Solver.INSTRUCTOR);
-							solverComboBox.setItems(FXCollections.observableArrayList(Solver.INSTRUCTOR));
-							SquareSearchAlgorithmSupplier search = searchComboBox.getValue();
+							solverComboBox.setValue(SolverSupplier.INSTRUCTOR);
+							solverComboBox.setItems(FXCollections.observableArrayList(SolverSupplier.INSTRUCTOR));
+							//puzzleComboBox.setValue(PuzzleSupplier.INSTRUCTOR);
+							//puzzleComboBox.setItems(FXCollections.observableArrayList(PuzzleSupplier.INSTRUCTOR));
+							SearchSupplier search = searchComboBox.getValue();
 							if (unpropagatedSupportingSearches.contains(search)) {
 								// pass
 							} else {
@@ -288,29 +221,33 @@ public class SudokuSolutionApp extends VizApp {
 							}
 							searchComboBox.setItems(FXCollections.observableArrayList(unpropagatedSupportingSearches));
 						} else {
-							solverComboBox.setItems(FXCollections.observableArrayList(Solver.values()));
-							searchComboBox.setItems(
-									FXCollections.observableArrayList(SquareSearchAlgorithmSupplier.values()));
+							solverComboBox.setItems(FXCollections.observableArrayList(SolverSupplier.values()));
+							searchComboBox.setItems(FXCollections.observableArrayList(SearchSupplier.values()));
+							//puzzleComboBox.setItems(FXCollections.observableArrayList(PuzzleSupplier.values()));
 						}
 						this.onCancel();
 						this.updateToInitial();
 					}
 				});
 
-		this.solverComboBox.setValue(Solver.STUDENT);
-		this.propagatorComboBox.setValue(Propagator.STUDENT_LAB);
-		this.searchComboBox.setValue(SquareSearchAlgorithmSupplier.STUDENT_FEWEST_OPTIONS_FIRST);
+		//this.puzzleComboBox.setValue(PuzzleSupplier.STUDENT);
+		this.solverComboBox.setValue(SolverSupplier.STUDENT);
+		this.propagatorComboBox.setValue(PropagatorSupplier.STUDENT_LAB);
+		this.searchComboBox.setValue(SearchSupplier.STUDENT_FEWEST_OPTIONS_FIRST);
 
 		GridPane result = new GridPane();
-		result.add(givensComboBox, 0, 0, 8, 1);
+		result.add(givensComboBox, 0, 0, 3, 1);
 		result.add(solverComboBox, 0, 1);
-		result.add(propagatorComboBox, 1, 1);
-		result.add(searchComboBox, 2, 1);
-		result.add(this.getSolveButton(), 3, 1);
-		result.add(this.getStepButton(), 4, 1);
-		result.add(this.getPauseButton(), 5, 1);
-		result.add(this.getResumeButton(), 6, 1);
-		result.add(this.getCancelButton(), 7, 1);
+		result.add(searchComboBox, 1, 1);
+		//result.add(puzzleComboBox, 2, 1);
+		result.add(propagatorComboBox, 2, 1);
+		FlowPane pane = new FlowPane();
+		pane.getChildren().add(this.getSolveButton());
+		pane.getChildren().add(this.getStepButton());
+		pane.getChildren().add(this.getPauseButton());
+		pane.getChildren().add(this.getResumeButton());
+		pane.getChildren().add(this.getCancelButton());
+		result.add(pane, 0, 2, 3, 1);
 		return result;
 	}
 

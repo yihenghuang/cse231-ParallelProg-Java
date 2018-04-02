@@ -21,15 +21,20 @@
  ******************************************************************************/
 package mapreduce.framework.lab.simple;
 
-import static edu.wustl.cse231s.v5.V5.launchApp;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.junit.Rule;
@@ -37,73 +42,65 @@ import org.junit.Test;
 import org.junit.rules.TestRule;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
-import mapreduce.apps.intsum.studio.IntegerSumClassicReducer;
-import mapreduce.collector.studio.ClassicReducer;
+import edu.wustl.cse231s.util.KeyValuePair;
+import edu.wustl.cse231s.v5.bookkeep.BookkeepingUtils;
+import edu.wustl.cse231s.v5.impl.BookkeepingV5Impl;
 import mapreduce.framework.lab.rubric.MapReduceRubric;
-import mapreduce.framework.lab.simple.AccessSimpleFrameworkUtils;
-import mapreduce.framework.lab.simple.SimpleMapReduceFramework;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  * 
  *         {@link SimpleMapReduceFramework#finishAll(Map)}
- *         {@link IntegerSumClassicReducer} 
- *         {@link ClassicReducer}
  */
 @MapReduceRubric(MapReduceRubric.Category.SIMPLE_FINISH_ALL)
-public class FinishAllSimpleFrameworkPointedTest {
-	private void test(int... array) {
-		List<Integer> list = Arrays.stream(array).boxed().collect(Collectors.toList());
-		String key = "testKey";
-
-		Map<String, List<Integer>> accumulateAllResult = new HashMap<>();
-		accumulateAllResult.put(key, list);
-
-		MutableObject<Map<String, Integer>> actualReference = new MutableObject<>();
-		launchApp(() -> {
-			actualReference.setValue(
-					AccessSimpleFrameworkUtils.finishAllOnly(accumulateAllResult, new IntegerSumClassicReducer()));
-		});
-
-		Map<String, Integer> actual = actualReference.getValue();
-		int expectedValue = list.stream().mapToInt(Integer::intValue).sum();
-		assertEquals(1, actual.size());
-		assertTrue(actual.containsKey(key));
-		assertEquals(expectedValue, actual.get(key).intValue());
-	}
-
+public class FinishAllParallelismTest {
 	@Rule
 	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
-	@Test
-	public void test42() {
-		test(42);
-	}
-
-	@Test
-	public void testEmpty() {
-		test();
-	}
-
-	@Test
-	public void testAll1s() {
-		int expected = 71;
-		int[] array = new int[expected];
-		Arrays.fill(array, 1);
-		test(array);
-	}
-
-	@Test
-	public void testFibonaccis() {
-		test(1, 1, 2, 3, 5, 8, 13, 21);
-	}
-
-	@Test
-	public void testGauss() {
-		int[] array = new int[100];
-		for (int i = 0; i < 100; i++) {
-			array[i] = i + 1;
+	private <K, V, A, R> void execute(Collector<V, A, R> collector, List<KeyValuePair<K, A>> keyValuePairs) {
+		Map<K, A> accumulateAllResult = new HashMap<>();
+		for (KeyValuePair<K, A> kv : keyValuePairs) {
+			accumulateAllResult.put(kv.getKey(), kv.getValue());
 		}
-		test(array);
+
+		MutableObject<Map<K, R>> actual = new MutableObject<>();
+		BookkeepingV5Impl bookkeep = BookkeepingUtils.bookkeep(() -> {
+			actual.setValue(AccessSimpleFrameworkUtils.finishAllOnly(accumulateAllResult, collector));
+		});
+
+		assertEquals(1, bookkeep.getNonAccumulatorFinishInvocationCount());
+		assertEquals(accumulateAllResult.size(), bookkeep.getTaskCount());
+	}
+
+	@Test
+	public void test() {
+		Collector<Integer, List<Integer>, Integer> collector = new Collector<Integer, List<Integer>, Integer>() {
+			@Override
+			public Supplier<List<Integer>> supplier() {
+				throw new RuntimeException();
+			}
+
+			@Override
+			public BiConsumer<List<Integer>, Integer> accumulator() {
+				throw new RuntimeException();
+			}
+
+			@Override
+			public BinaryOperator<List<Integer>> combiner() {
+				throw new RuntimeException();
+			}
+
+			@Override
+			public Function<List<Integer>, Integer> finisher() {
+				return (container) -> 0;
+			}
+
+			@Override
+			public Set<Characteristics> characteristics() {
+				return EnumSet.of(Characteristics.UNORDERED);
+			}
+		};
+		execute(collector, Arrays.asList(new KeyValuePair<>("a", Collections.emptyList()),
+				new KeyValuePair<>("b", Collections.emptyList()), new KeyValuePair<>("c", Collections.emptyList())));
 	}
 }

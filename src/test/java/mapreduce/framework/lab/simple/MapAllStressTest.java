@@ -35,28 +35,28 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
-import mapreduce.core.CollectorSolution;
 import mapreduce.core.InstructorMapReduceTestUtils;
+import mapreduce.core.MapperSolution;
 import mapreduce.core.TestApplication;
 import mapreduce.framework.core.FrameworkTestUtils;
 import mapreduce.framework.lab.rubric.MapReduceRubric;
 import mapreduce.framework.lab.simple.SimpleMapReduceFramework;
-import mapreduce.framework.simple.core.SimpleFinishAllSolution;
+import mapreduce.framework.simple.core.SimpleMapAllSolution;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  * 
- *         {@link SimpleMapReduceFramework#finishAll(java.util.Map)}
+ *         {@link SimpleMapReduceFramework#mapAll(Object[])}
  */
 @RunWith(Parameterized.class)
-@MapReduceRubric(MapReduceRubric.Category.SIMPLE_FINISH_ALL)
-public class FinishAllSimpleFrameworkStressTest<E> {
-	private final CollectorSolution collectorSolution;
+@MapReduceRubric(MapReduceRubric.Category.SIMPLE_MAP_ALL)
+public class MapAllStressTest<E> {
+	private final MapperSolution mapperSolution;
 	private final E[] input;
 	private final TestApplication application;
 
-	public FinishAllSimpleFrameworkStressTest(CollectorSolution collectorSolution, Object resource) throws IOException {
-		this.collectorSolution = collectorSolution;
+	public MapAllStressTest(MapperSolution mapperSolution, Object resource) throws IOException {
+		this.mapperSolution = mapperSolution;
 		this.input = FrameworkTestUtils.getInput(resource);
 		this.application = FrameworkTestUtils.getApplication(resource);
 	}
@@ -67,13 +67,13 @@ public class FinishAllSimpleFrameworkStressTest<E> {
 	@Test
 	public void testMapAll() throws InterruptedException, ExecutionException {
 		launchApp(() -> {
-			InstructorMapReduceTestUtils.checkSimpleFinishAll(input, application, collectorSolution,
-					SimpleFinishAllSolution.STUDENT_ASSIGNMENT);
+			InstructorMapReduceTestUtils.checkSimpleMapAll(input, application, this.mapperSolution,
+					SimpleMapAllSolution.STUDENT_ASSIGNMENT);
 		});
 	}
 
-	@Parameters(name = "collector={0}; {1}")
+	@Parameters(name = "mapper={0}; {1}")
 	public static Collection<Object[]> getConstructorArguments() {
-		return FrameworkTestUtils.getConstructorArguments(CollectorSolution.getNonWarmUpValues());
+		return FrameworkTestUtils.getConstructorArguments(MapperSolution.getNonWarmUpValues());
 	}
 }

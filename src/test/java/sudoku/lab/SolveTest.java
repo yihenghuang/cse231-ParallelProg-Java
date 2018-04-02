@@ -42,7 +42,7 @@ import sudoku.core.GivensUtils;
 import sudoku.core.ImmutableSudokuPuzzle;
 import sudoku.core.SolutionUtils;
 import sudoku.instructor.InstructorSudokuTestUtils;
-import sudoku.viz.solution.SquareSearchAlgorithmSupplier;
+import sudoku.util.SearchSupplier;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
@@ -50,11 +50,11 @@ import sudoku.viz.solution.SquareSearchAlgorithmSupplier;
 @BacktrackRubric(BacktrackRubric.Category.PARALLEL_SUDOKU_CORRECTNESS)
 @RunWith(Parameterized.class)
 public class SolveTest {
-	private final SquareSearchAlgorithmSupplier squareSearchAlgorithmSupplier;
+	private final SearchSupplier squareSearchAlgorithmSupplier;
 	private final Propagator propagator;
 	private final String givens;
 
-	public SolveTest(SquareSearchAlgorithmSupplier squareSearchAlgorithmSupplier, Propagator propagator,
+	public SolveTest(SearchSupplier squareSearchAlgorithmSupplier, Propagator propagator,
 			String givens) {
 		this.squareSearchAlgorithmSupplier = squareSearchAlgorithmSupplier;
 		this.propagator = propagator;
@@ -79,7 +79,7 @@ public class SolveTest {
 	public static Collection<Object[]> getConstructorArguments() {
 		Collection<Object[]> results = new LinkedList<>();
 		for (Propagator propagator : Propagator.values()) {
-			for (SquareSearchAlgorithmSupplier squareSearchAlgorithmSupplier : SquareSearchAlgorithmSupplier
+			for (SearchSupplier squareSearchAlgorithmSupplier : SearchSupplier
 					.instructorFewestOptionsFirstPlusStudentValues()) {
 				if (squareSearchAlgorithmSupplier.name().startsWith("STUDENT") || propagator == Propagator.STUDENT) {
 					List<String> givensList = GivensUtils.getGivensToTest(squareSearchAlgorithmSupplier);

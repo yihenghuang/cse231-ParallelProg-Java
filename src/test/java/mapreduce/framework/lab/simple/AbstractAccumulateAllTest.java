@@ -19,37 +19,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package mapreduce;
+package mapreduce.framework.lab.simple;
 
-import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collector;
 
-import org.junit.BeforeClass;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TestRule;
 
-import mapreduce.apps.wordcount.core.WordCountUtils;
-import mapreduce.framework.lab.simple.AccumulateAllParallelismTest;
-import mapreduce.framework.lab.simple.AccumulateAllPointedTest;
-import mapreduce.framework.lab.simple.AccumulateAllStressTest;
-import mapreduce.framework.lab.simple.FinishAllParallelismTest;
-import mapreduce.framework.lab.simple.FinishAllPointedTest;
-import mapreduce.framework.lab.simple.FinishAllStressTest;
-import mapreduce.framework.lab.simple.MapAllParallelismTest;
-import mapreduce.framework.lab.simple.MapAllPointedTest;
-import mapreduce.framework.lab.simple.MapAllStressTest;
-import mapreduce.framework.lab.simple.SimpleFrameworkStressTest;
+import edu.wustl.cse231s.junit.JUnitUtils;
+import edu.wustl.cse231s.util.KeyValuePair;
+import mapreduce.collector.studio.ClassicReducer;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ * 
+ *         {@link SimpleMapReduceFramework#accumulateAll(List[])}
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ MapAllPointedTest.class, MapAllStressTest.class, AccumulateAllPointedTest.class,
-		AccumulateAllStressTest.class, FinishAllPointedTest.class, FinishAllStressTest.class,
-		SimpleFrameworkStressTest.class, MapAllParallelismTest.class, AccumulateAllParallelismTest.class,
-		FinishAllParallelismTest.class })
-public class SimpleFrameworkTestSuite {
-	@BeforeClass
-	public static void setUp() throws IOException {
-		WordCountUtils.downloadWordResources();
+public abstract class AbstractAccumulateAllTest {
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	protected abstract void execute(Collector<Boolean, List<Boolean>, Void> collector,
+			List<KeyValuePair<String, Boolean>>[] mapAllResult);
+
+	@Test
+	public void test() {
+		@SuppressWarnings("unchecked")
+		List<KeyValuePair<String, Boolean>>[] mapAllResult = new List[] { Arrays.asList(new KeyValuePair<>("a", true),
+				new KeyValuePair<>("b", true), new KeyValuePair<>("a", false)) };
+
+		class NonsenseBooleanReducer implements ClassicReducer<Boolean, Void> {
+			@Override
+			public Function<List<Boolean>, Void> finisher() {
+				return null;
+			}
+		}
+
+		execute(new NonsenseBooleanReducer(), mapAllResult);
 	}
+
 }

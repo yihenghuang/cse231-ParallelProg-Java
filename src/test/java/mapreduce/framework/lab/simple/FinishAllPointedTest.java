@@ -21,52 +21,84 @@
  ******************************************************************************/
 package mapreduce.framework.lab.simple;
 
+import static edu.wustl.cse231s.v5.V5.launchApp;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import org.junit.Assert;
+import org.apache.commons.lang3.mutable.MutableObject;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
-import edu.wustl.cse231s.util.KeyValuePair;
-import mapreduce.collector.studio.ClassicReducer;
+import mapreduce.apps.intsum.studio.IntegerSumClassicReducer;
 import mapreduce.framework.lab.rubric.MapReduceRubric;
-import mapreduce.framework.lab.simple.AccessSimpleFrameworkUtils;
-import mapreduce.framework.lab.simple.SimpleMapReduceFramework;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  * 
- *         {@link SimpleMapReduceFramework#accumulateAll(List[])}
+ *         {@link SimpleMapReduceFramework#finishAll(Map)}
  */
-@MapReduceRubric(MapReduceRubric.Category.SIMPLE_ACCUMULATE_ALL)
-public class AccumulateAllSimpleFrameworkPointedTest {
+@MapReduceRubric(MapReduceRubric.Category.SIMPLE_FINISH_ALL)
+public class FinishAllPointedTest {
+	private void test(int... array) {
+		List<Integer> list = Arrays.stream(array).boxed().collect(Collectors.toList());
+		String key = "testKey";
+
+		Map<String, List<Integer>> accumulateAllResult = new HashMap<>();
+		accumulateAllResult.put(key, list);
+
+		MutableObject<Map<String, Integer>> actualReference = new MutableObject<>();
+		launchApp(() -> {
+			actualReference.setValue(
+					AccessSimpleFrameworkUtils.finishAllOnly(accumulateAllResult, new IntegerSumClassicReducer()));
+		});
+
+		Map<String, Integer> actual = actualReference.getValue();
+		int expectedValue = list.stream().mapToInt(Integer::intValue).sum();
+		assertEquals(1, actual.size());
+		assertTrue(actual.containsKey(key));
+		assertEquals(expectedValue, actual.get(key).intValue());
+	}
+
 	@Rule
 	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
 	@Test
-	public void test() {
-		@SuppressWarnings("unchecked")
-		List<KeyValuePair<String, Boolean>>[] mapResult = new List[] { Arrays.asList(new KeyValuePair<>("a", true),
-				new KeyValuePair<>("b", true), new KeyValuePair<>("a", false)) };
-
-		class NonsenseBooleanReducer implements ClassicReducer<Boolean, Void> {
-			@Override
-			public Function<List<Boolean>, Void> finisher() {
-				return null;
-			}
-		}
-
-		Map<String, List<Boolean>> studentGroupAllResult = AccessSimpleFrameworkUtils.accumulateAllOnly(mapResult,
-				new NonsenseBooleanReducer());
-
-		Assert.assertEquals(2, studentGroupAllResult.size());
-		Assert.assertEquals(Arrays.asList(true, false), studentGroupAllResult.get("a"));
-		Assert.assertEquals(Arrays.asList(true), studentGroupAllResult.get("b"));
+	public void test42() {
+		test(42);
 	}
 
+	@Test
+	public void testEmpty() {
+		test();
+	}
+
+	@Test
+	public void testAll1s() {
+		int expected = 71;
+		int[] array = new int[expected];
+		Arrays.fill(array, 1);
+		test(array);
+	}
+
+	@Test
+	public void testFibonaccis() {
+		test(1, 1, 2, 3, 5, 8, 13, 21);
+	}
+
+	@Test
+	public void testGauss() {
+		int[] array = new int[100];
+		for (int i = 0; i < 100; i++) {
+			array[i] = i + 1;
+		}
+		test(array);
+	}
 }

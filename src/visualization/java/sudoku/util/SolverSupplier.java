@@ -19,18 +19,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
+package sudoku.util;
 
-package mapreduce;
+import java.util.concurrent.ExecutionException;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
-import mapreduce.framework.lab.NoPrintingTest;
+import sudoku.core.ImmutableSudokuPuzzle;
+import sudoku.core.SquareSearchAlgorithm;
+import sudoku.instructor.InstructorSudokuTestUtils;
+import sudoku.lab.ParallelSudoku;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ SimpleFrameworkTestSuite.class, MatrixFrameworkTestSuite.class, NoPrintingTest.class })
-public class FrameworksLabTestSuite {
+// NOTE: not a supplier at the moment
+public enum SolverSupplier {
+	STUDENT("student's Solver") {
+		@Override
+		public ImmutableSudokuPuzzle solve(ImmutableSudokuPuzzle puzzle, SquareSearchAlgorithm squareSearchAlgorithm)
+				throws InterruptedException, ExecutionException {
+			return ParallelSudoku.solve(puzzle, squareSearchAlgorithm);
+		}
+	},
+	INSTRUCTOR("instructor's Solver") {
+		@Override
+		public ImmutableSudokuPuzzle solve(ImmutableSudokuPuzzle puzzle, SquareSearchAlgorithm squareSearchAlgorithm)
+				throws InterruptedException, ExecutionException {
+			return InstructorSudokuTestUtils.solve(puzzle, squareSearchAlgorithm);
+		}
+	};
+
+	private final String repr;
+
+	private SolverSupplier(String repr) {
+		this.repr = repr;
+	}
+
+	public abstract ImmutableSudokuPuzzle solve(ImmutableSudokuPuzzle puzzle,
+			SquareSearchAlgorithm squareSearchAlgorithm) throws InterruptedException, ExecutionException;
+
+	@Override
+	public String toString() {
+		return this.repr;
+	}
 }

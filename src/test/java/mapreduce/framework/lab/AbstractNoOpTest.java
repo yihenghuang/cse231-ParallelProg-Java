@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2018 Dennis Cosgrove
+ * Copyright (C) 2016-2017 Dennis Cosgrove
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,18 +19,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
+package mapreduce.framework.lab;
 
-package mapreduce;
+import java.util.stream.Collector;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TestRule;
 
-import mapreduce.framework.lab.NoPrintingTest;
+import edu.wustl.cse231s.junit.JUnitUtils;
+import mapreduce.framework.core.Mapper;
+import mapreduce.framework.core.NoOpCollector;
+import mapreduce.framework.core.NoOpMapper;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ SimpleFrameworkTestSuite.class, MatrixFrameworkTestSuite.class, NoPrintingTest.class })
-public class FrameworksLabTestSuite {
+public abstract class AbstractNoOpTest {
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
+	protected abstract <E, K, V, A, R> void execute(Mapper<E, K, V> noOpMapper, Collector<V, A, R> noOpCollector,
+			E[] data);
+
+	@Test
+	public void test() {
+		class Input {
+		}
+		class MapOutputKey {
+		}
+		class MapOutputValue {
+		}
+
+		int length = 231;
+		Input[] data = new Input[length];
+		Mapper<Input, MapOutputKey, MapOutputValue> noOpMapper = new NoOpMapper<>();
+		Collector<MapOutputValue, ?, ?> noOpCollector = new NoOpCollector<>();
+
+		execute(noOpMapper, noOpCollector, data);
+	}
+
 }

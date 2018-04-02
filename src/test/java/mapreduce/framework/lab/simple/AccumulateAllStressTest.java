@@ -51,12 +51,12 @@ import mapreduce.framework.simple.core.SimpleAccumulateAllSolution;
  */
 @RunWith(Parameterized.class)
 @MapReduceRubric(MapReduceRubric.Category.SIMPLE_ACCUMULATE_ALL)
-public class AccumulateAllSimpleFrameworkStressTest<E> {
+public class AccumulateAllStressTest<E> {
 	private final CollectorSolution collectorSolution;
 	private final E[] input;
 	private final TestApplication application;
 
-	public AccumulateAllSimpleFrameworkStressTest(CollectorSolution collectorSolution, Object resource)
+	public AccumulateAllStressTest(CollectorSolution collectorSolution, Object resource)
 			throws IOException {
 		this.collectorSolution = collectorSolution;
 		this.input = FrameworkTestUtils.getInput(resource);

@@ -31,14 +31,14 @@ import java.util.Map;
 
 import sudoku.core.io.PuzzlesResource;
 import sudoku.core.io.PuzzlesResourceUtils;
-import sudoku.viz.solution.SquareSearchAlgorithmSupplier;
+import sudoku.util.SearchSupplier;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class GivensUtils {
-	private static Map<SquareSearchAlgorithmSupplier, List<String>> givensToTest = new EnumMap<>(
-			SquareSearchAlgorithmSupplier.class);
+	private static Map<SearchSupplier, List<String>> givensToTest = new EnumMap<>(
+			SearchSupplier.class);
 
 	private static Collection<Integer> createIndicesToSkipFromTop95ForRowOrder() {
 		List<Integer> indicesThatTookTooLongOrCrashedOnProfsMachine = Arrays.asList(0, 4, 7, 22, 35, 40, 70, 94);
@@ -54,7 +54,7 @@ public class GivensUtils {
 		return indicesToSkipFromTop95ForRowOrder;
 	}
 
-	public static List<String> getGivensToTest(SquareSearchAlgorithmSupplier squareSearchAlgorithmSupplier) {
+	public static List<String> getGivensToTest(SearchSupplier squareSearchAlgorithmSupplier) {
 		return givensToTest.get(squareSearchAlgorithmSupplier);
 	}
 
@@ -97,8 +97,8 @@ public class GivensUtils {
 				}
 			}
 
-			givensToTest.put(SquareSearchAlgorithmSupplier.STUDENT_FEWEST_OPTIONS_FIRST, fewestOptionsGivens);
-			givensToTest.put(SquareSearchAlgorithmSupplier.INSTRUCTOR_FEWEST_OPTIONS_FIRST, fewestOptionsGivens);
+			givensToTest.put(SearchSupplier.STUDENT_FEWEST_OPTIONS_FIRST, fewestOptionsGivens);
+			givensToTest.put(SearchSupplier.INSTRUCTOR_FEWEST_OPTIONS_FIRST, fewestOptionsGivens);
 			final boolean IS_MORE_THAN_TWO_ROW_MAJOR_DESIRED = false;
 
 			if (IS_MORE_THAN_TWO_ROW_MAJOR_DESIRED) {
@@ -106,8 +106,8 @@ public class GivensUtils {
 			} else {
 				some = some.subList(0, 2);
 			}
-			givensToTest.put(SquareSearchAlgorithmSupplier.STUDENT_ROW_MAJOR, some);
-			givensToTest.put(SquareSearchAlgorithmSupplier.INSTRUCTOR_ROW_MAJOR, some);
+			givensToTest.put(SearchSupplier.STUDENT_ROW_MAJOR, some);
+			givensToTest.put(SearchSupplier.INSTRUCTOR_ROW_MAJOR, some);
 
 		} catch (IOException ioe) {
 			throw new RuntimeException(ioe);

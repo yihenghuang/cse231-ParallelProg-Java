@@ -19,18 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package mapreduce.framework.lab.matrix;
+package mapreduce.framework.lab.simple;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collector;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
-
+import edu.wustl.cse231s.util.KeyValuePair;
 import edu.wustl.cse231s.v5.bookkeep.BookkeepingUtils;
 import edu.wustl.cse231s.v5.impl.BookkeepingV5Impl;
 import mapreduce.framework.core.Mapper;
@@ -40,35 +37,18 @@ import mapreduce.framework.lab.rubric.MapReduceRubric;
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  * 
- *         {@link MatrixMapReduceFramework#mapAndAccumulateAll(Object[])}
+ *         {@link SimpleMapReduceFramework#mapAll(Object[])}
  */
-@MapReduceRubric(MapReduceRubric.Category.MATRIX_MAP_AND_ACCUMULATE_ALL)
-@RunWith(Parameterized.class)
-public class MapAccumulateAllParallelismTest extends AbstractNoOpTest {
-	private final int mapTaskCount;
-
-	public MapAccumulateAllParallelismTest(int mapTaskCount) {
-		this.mapTaskCount = mapTaskCount;
-	}
-
+@MapReduceRubric(MapReduceRubric.Category.SIMPLE_MAP_ALL)
+public class MapAllParallelismTest extends AbstractNoOpTest {
 	@Override
 	protected <E, K, V, A, R> void execute(Mapper<E, K, V> noOpMapper, Collector<V, A, R> noOpCollector, E[] data) {
-		int reduceTaskCount = mapTaskCount;
 		BookkeepingV5Impl bookkeep = BookkeepingUtils.bookkeep(() -> {
-			AccessMatrixFrameworkUtils.mapAndAccumulateAll(data, noOpMapper, noOpCollector, mapTaskCount,
-					reduceTaskCount);
+			List<KeyValuePair<K, V>>[] mapAllResult = AccessSimpleFrameworkUtils.mapAllOnly(data, noOpMapper);
+			assertNotNull(mapAllResult);
+			assertEquals(mapAllResult.length, data.length);
 		});
-		assertEquals(mapTaskCount, bookkeep.getTaskCount());
+		assertEquals(data.length, bookkeep.getTaskCount());
 		assertEquals(1, bookkeep.getNonAccumulatorFinishInvocationCount());
-	}
-
-	@Parameters(name = "mapTaskCount={0}")
-	public static Collection<Object[]> getConstructorArguments() {
-		int numProcecessors = Runtime.getRuntime().availableProcessors();
-		Collection<Object[]> result = new LinkedList<>();
-		result.add(new Object[] { numProcecessors });
-		result.add(new Object[] { numProcecessors * 2 });
-		result.add(new Object[] { 71 });
-		return result;
 	}
 }

@@ -29,7 +29,7 @@ import org.junit.Test;
 import backtrack.lab.rubric.BacktrackRubric;
 import sudoku.core.ImmutableSudokuPuzzle;
 import sudoku.instructor.InstructorSudokuTestUtils;
-import sudoku.viz.solution.SquareSearchAlgorithmSupplier;
+import sudoku.util.SearchSupplier;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
@@ -43,7 +43,7 @@ public class SolveReturningSomethingOtherThanGivensTest {
 		ImmutableSudokuPuzzle original = new DefaultImmutableSudokuPuzzle(
 				InstructorSudokuTestUtils.createPeerAndUnitConstraintPropagator(), givens);
 		ImmutableSudokuPuzzle solution = launchAppWithReturn(() -> {
-			return ParallelSudoku.solve(original, SquareSearchAlgorithmSupplier.INSTRUCTOR_FEWEST_OPTIONS_FIRST.get());
+			return ParallelSudoku.solve(original, SearchSupplier.INSTRUCTOR_FEWEST_OPTIONS_FIRST.get());
 		});
 
 		assertNotEquals(givens, solution.toString());

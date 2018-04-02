@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2017 Dennis Cosgrove
+ * Copyright (C) 2016-2018 Dennis Cosgrove
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package sudoku.viz.solution;
+package sudoku.util;
 
 import java.util.Arrays;
 
@@ -33,7 +33,7 @@ import sudoku.lab.RowMajorSquareSearchAlgorithm;
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-public enum SquareSearchAlgorithmSupplier implements Supplier<SquareSearchAlgorithm> {
+public enum SearchSupplier implements Supplier<SquareSearchAlgorithm> {
 	STUDENT_ROW_MAJOR {
 		@Override
 		public SquareSearchAlgorithm get() {
@@ -59,15 +59,15 @@ public enum SquareSearchAlgorithmSupplier implements Supplier<SquareSearchAlgori
 		}
 	};
 
-	public static Iterable<SquareSearchAlgorithmSupplier> studentValues() {
+	public static Iterable<SearchSupplier> studentValues() {
 		return Arrays.asList(STUDENT_ROW_MAJOR, STUDENT_FEWEST_OPTIONS_FIRST);
 	}
 
-	public static Iterable<SquareSearchAlgorithmSupplier> instructorFewestOptionsFirstPlusStudentValues() {
+	public static Iterable<SearchSupplier> instructorFewestOptionsFirstPlusStudentValues() {
 		return Arrays.asList(INSTRUCTOR_FEWEST_OPTIONS_FIRST, STUDENT_ROW_MAJOR, STUDENT_FEWEST_OPTIONS_FIRST);
 	}
 
-	public static Iterable<SquareSearchAlgorithmSupplier> instructorValues() {
+	public static Iterable<SearchSupplier> instructorValues() {
 		return Arrays.asList(INSTRUCTOR_ROW_MAJOR, INSTRUCTOR_FEWEST_OPTIONS_FIRST);
 	}
 }

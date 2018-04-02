@@ -45,7 +45,7 @@ import mapreduce.framework.lab.simple.SimpleMapReduceFramework;
  *         {@link SimpleMapReduceFramework#mapAll(Object[])}
  */
 @MapReduceRubric(MapReduceRubric.Category.SIMPLE_MAP_ALL)
-public class MapAllSimpleFrameworkPointedTest {
+public class MapAllPointedTest {
 	private static boolean areDistinctObjects(Object[] array) {
 		for (int i = 0; i < array.length; i++) {
 			for (int j = i + 1; j < array.length; j++) {

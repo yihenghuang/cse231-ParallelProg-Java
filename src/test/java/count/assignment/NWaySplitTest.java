@@ -22,7 +22,6 @@
 package count.assignment;
 
 import static edu.wustl.cse231s.v5.V5.launchApp;
-import static edu.wustl.cse231s.v5.V5.numWorkerThreads;
 
 import java.io.IOException;
 import java.util.Arrays;
