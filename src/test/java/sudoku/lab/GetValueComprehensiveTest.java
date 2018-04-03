@@ -34,10 +34,10 @@ import org.junit.runners.Parameterized.Parameters;
 
 import backtrack.lab.rubric.BacktrackRubric;
 import sudoku.core.ConstraintPropagator;
-import sudoku.core.GivensUtils;
 import sudoku.core.Square;
 import sudoku.instructor.InstructorSudokuTestUtils;
 import sudoku.lab.DefaultImmutableSudokuPuzzle;
+import sudoku.util.GivensUtils;
 import sudoku.util.SearchSupplier;
 
 /**

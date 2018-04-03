@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package sudoku.core;
+package sudoku.util;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -112,5 +112,13 @@ public class GivensUtils {
 		} catch (IOException ioe) {
 			throw new RuntimeException(ioe);
 		}
+	}
+	
+	public static String createEmptyGivens() {
+		StringBuilder sb = new StringBuilder();
+		for(int i=0; i<81; i++) {
+			sb.append(".");
+		}
+		return sb.toString();
 	}
 }

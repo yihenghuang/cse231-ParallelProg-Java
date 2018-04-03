@@ -38,11 +38,11 @@ import org.junit.runners.Parameterized.Parameters;
 
 import backtrack.lab.rubric.BacktrackRubric;
 import sudoku.core.ConstraintPropagator;
-import sudoku.core.GivensUtils;
 import sudoku.core.ImmutableSudokuPuzzle;
-import sudoku.core.SolutionUtils;
 import sudoku.instructor.InstructorSudokuTestUtils;
+import sudoku.util.GivensUtils;
 import sudoku.util.SearchSupplier;
+import sudoku.util.SolutionUtils;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)

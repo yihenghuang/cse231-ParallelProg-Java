@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2017 Dennis Cosgrove
+ * Copyright (C) 2016-2018 Dennis Cosgrove
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,31 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package sudoku;
+package pipeline.cake.studio;
 
-import static org.junit.Assert.assertTrue;
+import static edu.wustl.cse231s.v5.V5.async;
+import static edu.wustl.cse231s.v5.V5.finish;
 
-import org.junit.Test;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Phaser;
 
-import sudoku.core.ConstraintPropagator;
-import sudoku.lab.ConstraintPropagatorSupplier;
-import sudoku.lab.DefaultImmutableSudokuPuzzle;
-import sudoku.util.SolutionUtils;
+import edu.wustl.cse231s.NotYetImplementedException;
+import pipeline.cake.core.BakedCake;
+import pipeline.cake.core.Baker;
+import pipeline.cake.core.IcedCake;
+import pipeline.cake.core.Icer;
+import pipeline.cake.core.MixedIngredients;
+import pipeline.cake.core.Mixer;
 
 /**
+ * @author __STUDENT_NAME__
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-public class AbstractContraintPropagationTest {
-	private final String givens;
-
-	public AbstractContraintPropagationTest(String givens) {
-		this.givens = givens;
-	}
-
-	@Test
-	public void test() {
-		ConstraintPropagator constraintPropagator = new ConstraintPropagatorSupplier().get();
-		DefaultImmutableSudokuPuzzle puzzle = new DefaultImmutableSudokuPuzzle(constraintPropagator, givens);
-		assertTrue(SolutionUtils.isCompletelyFilledInAndEachSquareIsValid(puzzle));
+public class CakePipeline {
+	public static IcedCake[] mixBakeAndIceCakes(Mixer mixer, Baker baker, Icer icer, int cakeCount)
+			throws InterruptedException, ExecutionException {
+		MixedIngredients[] mixedIngredients = new MixedIngredients[cakeCount];
+		BakedCake[] bakedCakes = new BakedCake[cakeCount];
+		IcedCake[] icedCakes = new IcedCake[cakeCount];
+		throw new NotYetImplementedException();
 	}
 }

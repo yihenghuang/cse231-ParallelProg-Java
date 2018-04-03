@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2017 Dennis Cosgrove
+ * Copyright (C) 2016-2018 Dennis Cosgrove
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,31 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package sudoku;
-
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
-import sudoku.core.ConstraintPropagator;
-import sudoku.lab.ConstraintPropagatorSupplier;
-import sudoku.lab.DefaultImmutableSudokuPuzzle;
-import sudoku.util.SolutionUtils;
+package pipeline.cake.core;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-public class AbstractContraintPropagationTest {
-	private final String givens;
-
-	public AbstractContraintPropagationTest(String givens) {
-		this.givens = givens;
-	}
-
-	@Test
-	public void test() {
-		ConstraintPropagator constraintPropagator = new ConstraintPropagatorSupplier().get();
-		DefaultImmutableSudokuPuzzle puzzle = new DefaultImmutableSudokuPuzzle(constraintPropagator, givens);
-		assertTrue(SolutionUtils.isCompletelyFilledInAndEachSquareIsValid(puzzle));
-	}
+public interface Baker {
+	BakedCake bake(int cakeIndex, MixedIngredients mixedIngredients);
 }
