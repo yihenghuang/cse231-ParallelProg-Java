@@ -21,9 +21,13 @@
  ******************************************************************************/
 package pipeline.cake.studio;
 
+import static org.hamcrest.CoreMatchers.either;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -127,7 +131,15 @@ public class CakePipelineCorrectnessTest {
 		for (int i = 0; i < resultIcedCakes.length; i++) {
 			assertNotNull(resultIcedCakes[i]);
 		}
-		assertEquals(1, bookkeep.getNonAccumulatorFinishInvocationCount());
-		assertEquals(3, bookkeep.getTaskCount());
+		int finishCount = bookkeep.getNonAccumulatorFinishInvocationCount();
+		int taskCount = bookkeep.getTaskCount();
+
+		assertThat(taskCount, either(is(3)).or(is(2)));
+		assertThat(finishCount, either(is(1)).or(is(0)));
+
+		if(finishCount==0) {
+			assertTrue(taskCount == 2);
+			assertSame(threads[2], Thread.currentThread());
+		}
 	}
 }
