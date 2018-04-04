@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2017 Dennis Cosgrove
+ * Copyright (C) 2016-2018 Dennis Cosgrove
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,14 +19,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
+
 package nqueens.lab;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ SequentialNQueensCorrectnessTest.class, ImmutableQueenLocationsTest.class,
-		ParallelNQueensTaskAndFinishTest.class, ParallelNQueensCorrectnessTest.class,
-		ParallelNQueensParallelismTest.class })
-public class NQueensTestSuite {
+import org.junit.Test;
+
+import edu.wustl.cse231s.v5.bookkeep.BookkeepingUtils;
+import edu.wustl.cse231s.v5.impl.BookkeepingV5Impl;
+import nqueens.core.ImmutableQueenLocations;
+
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
+public class ParallelNQueensTaskAndFinishTest {
+	@Test
+	public void test() {
+		BookkeepingV5Impl bookkeep = BookkeepingUtils.bookkeep(() -> {
+			ImmutableQueenLocations queenLocations = new DefaultImmutableQueenLocations(4);
+			ParallelNQueens.countSolutions(queenLocations);
+		});
+
+		if (bookkeep.getTaskCount() > 0) {
+			assertTrue("spawning tasks without ever invoking finish", (bookkeep.getNonAccumulatorFinishInvocationCount()
+					+ bookkeep.getAccumulatorFinishInvocationCount()) > 0);
+			assertEquals(0, bookkeep.getNonAccumulatorFinishInvocationCount());
+			assertEquals(1, bookkeep.getAccumulatorFinishInvocationCount());
+			assertEquals(1, bookkeep.getAccumulatorRegisterCount());
+		}
+	}
 }

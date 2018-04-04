@@ -19,14 +19,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package nqueens.lab;
+package sudoku.lab;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import static org.junit.Assert.assertTrue;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ SequentialNQueensCorrectnessTest.class, ImmutableQueenLocationsTest.class,
-		ParallelNQueensTaskAndFinishTest.class, ParallelNQueensCorrectnessTest.class,
-		ParallelNQueensParallelismTest.class })
-public class NQueensTestSuite {
+import org.junit.Test;
+
+import backtrack.lab.rubric.BacktrackRubric;
+import edu.wustl.cse231s.v5.bookkeep.BookkeepingUtils;
+import edu.wustl.cse231s.v5.impl.BookkeepingV5Impl;
+import sudoku.core.ImmutableSudokuPuzzle;
+import sudoku.instructor.InstructorSudokuTestUtils;
+import sudoku.util.SearchSupplier;
+
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
+@BacktrackRubric(BacktrackRubric.Category.PARALLEL_SUDOKU_PARALLELISM)
+public class TaskAndFinishTest {
+	@Test
+	public void test() {
+		// source: http://norvig.com/hardest.txt
+		String givens = "85...24..72......9..4.........1.7..23.5...9...4...........8..7..17..........36.4.";
+		ImmutableSudokuPuzzle original = new DefaultImmutableSudokuPuzzle(
+				InstructorSudokuTestUtils.createPeerAndUnitConstraintPropagator(), givens);
+
+		BookkeepingV5Impl bookkeep = BookkeepingUtils.bookkeep(() -> {
+			ParallelSudoku.solve(original, SearchSupplier.INSTRUCTOR_FEWEST_OPTIONS_FIRST.get());
+		});
+
+		if (bookkeep.getTaskCount() > 0) {
+			assertTrue("spawning tasks without ever invoking finish",
+					bookkeep.getNonAccumulatorFinishInvocationCount() > 0);
+		}
+	}
 }

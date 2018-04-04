@@ -30,7 +30,7 @@ import org.junit.runners.Suite;
 		GetValuePointedTest.class, ImmutableSudokuPuzzleTest.class, RowMajorSearchSkipsFilledSquaresTest.class,
 		FewestOptionsFirstSkipsFilledSquaresTest.class, FewestOptionsFirstReturns2OptionSquareTest.class,
 		/* FewestOptionsFirstReturns0OptionSquareTest.class, */ FewestOptionsFirstReturnsNullForSolvedPuzzleTest.class,
-		SolveReturningSomethingOtherThanGivensTest.class, SolveTest.class, })
+		TaskAndFinishTest.class, SolveReturningSomethingOtherThanGivensTest.class, SolveTest.class, })
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
