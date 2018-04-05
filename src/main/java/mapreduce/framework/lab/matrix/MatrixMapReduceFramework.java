@@ -26,10 +26,8 @@ import static edu.wustl.cse231s.v5.V5.forall;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collector;
-import java.util.stream.Collector.Characteristics;
 
 import edu.wustl.cse231s.NotYetImplementedException;
 import edu.wustl.cse231s.util.MultiWrapMap;
@@ -115,7 +113,41 @@ public class MatrixMapReduceFramework<E, K, V, A, R> implements MapReduceFramewo
 	 *             ExecutionException
 	 */
 	Map<K, A>[][] mapAndAccumulateAll(E[] input) throws InterruptedException, ExecutionException {
-		throw new NotYetImplementedException();
+
+		@SuppressWarnings("unchecked")
+		Map<K, A>[][] arr = new Map[mapTaskCount][reduceTaskCount];
+
+		for (int i = 0; i < mapTaskCount; i++) {
+			for (int j = 0; j < reduceTaskCount; j++) {
+				arr[i][j] = new HashMap<K, A>();
+			}
+		}
+
+		List<Slice<E[]>> slices = Slices.createNSlices(input, mapTaskCount);
+
+		forall(0, mapTaskCount, (i) -> {
+
+			Slice<E[]> eachSlice = slices.get(i);
+
+			for (int j = eachSlice.getMinInclusive(); j < eachSlice.getMaxExclusive(); j++) {
+
+				this.getMapper().map(input[j], (K k, V v) -> {
+
+					if (arr[eachSlice.getSliceIndexId()][getReduceIndex(k)].containsKey(k)) {
+						arr[eachSlice.getSliceIndexId()][getReduceIndex(k)].compute(k, (K _k, A a) -> {
+							collector.accumulator().accept(a, v);
+							return a;
+						});
+					} else {
+						A _a = this.getCollector().supplier().get();
+						this.getCollector().accumulator().accept(_a, v);
+						arr[eachSlice.getSliceIndexId()][getReduceIndex(k)].put(k, _a);
+					}
+
+				});
+			}
+		});
+		return arr;
 	}
 
 	/**

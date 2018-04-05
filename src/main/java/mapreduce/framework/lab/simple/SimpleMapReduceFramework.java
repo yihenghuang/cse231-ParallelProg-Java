@@ -21,13 +21,18 @@
  ******************************************************************************/
 package mapreduce.framework.lab.simple;
 
+import static edu.wustl.cse231s.v5.V5.forall;
+
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collector;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import edu.wustl.cse231s.util.KeyValuePair;
 import mapreduce.framework.core.MapReduceFramework;
 import mapreduce.framework.core.Mapper;
@@ -104,15 +109,19 @@ public final class SimpleMapReduceFramework<E, K, V, A, R> implements MapReduceF
 	 *             ExecutionException
 	 */
 	List<KeyValuePair<K, V>>[] mapAll(E[] input) throws InterruptedException, ExecutionException {
-		List<String>[] result = new List[input.length];
-		// @Override
-		// public String map(, BiConsumer<, String> keyValuePairConsumer) {
-		// forall
-		// keyValuePairConsumer.accept(, );
-		// }
-		// }
-		throw new NotYetImplementedException();
 
+		@SuppressWarnings("unchecked")
+		List<KeyValuePair<K, V>>[] result = new List[input.length];
+
+		forall(0, input.length, (i) -> {
+			List<KeyValuePair<K, V>> newList = new LinkedList<KeyValuePair<K, V>>();
+			this.getMapper().map(input[i], (K k, V v) -> {
+				KeyValuePair<K, V> newPair = new KeyValuePair<K, V>(k, v);
+				newList.add(newPair);
+			});
+			result[i] = newList;
+		});
+		return result;
 	}
 
 	/**
@@ -134,7 +143,22 @@ public final class SimpleMapReduceFramework<E, K, V, A, R> implements MapReduceF
 	 * @see Map#computeIfAbsent(Object, java.util.function.Function)
 	 */
 	Map<K, A> accumulateAll(List<KeyValuePair<K, V>>[] mapAllResults) {
-		throw new NotYetImplementedException();
+
+		Map<K, A> newMap = new HashMap<K, A>();
+
+		for (List<KeyValuePair<K, V>> aList : mapAllResults) {
+			for (KeyValuePair<K, V> aPair : aList) {
+				newMap.compute(aPair.getKey(), (K k, A a) -> {
+					if (a == null) {
+						a = this.getCollector().supplier().get();
+					}
+					this.getCollector().accumulator().accept(a, aPair.getValue());
+					return a;
+				});
+			}
+		}
+		return newMap;
+
 	}
 
 	/**
@@ -150,7 +174,15 @@ public final class SimpleMapReduceFramework<E, K, V, A, R> implements MapReduceF
 	 *             ExecutionException
 	 */
 	Map<K, R> finishAll(Map<K, A> accumulateAllResult) throws InterruptedException, ExecutionException {
-		throw new NotYetImplementedException();
+
+		Map<K, R> newMap = new ConcurrentHashMap<K, R>();
+
+		Set<Entry<K, A>> set = accumulateAllResult.entrySet();
+
+		forall(set, (Entry<K, A> entry) -> {
+			newMap.put(entry.getKey(), this.getCollector().finisher().apply(entry.getValue()));
+		});
+		return newMap;
 	}
 
 	@Override
