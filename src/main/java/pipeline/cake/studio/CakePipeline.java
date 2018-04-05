@@ -27,7 +27,6 @@ import static edu.wustl.cse231s.v5.V5.finish;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Phaser;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import pipeline.cake.core.BakedCake;
 import pipeline.cake.core.Baker;
 import pipeline.cake.core.IcedCake;
@@ -36,15 +35,48 @@ import pipeline.cake.core.MixedIngredients;
 import pipeline.cake.core.Mixer;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class CakePipeline {
 	public static IcedCake[] mixBakeAndIceCakes(Mixer mixer, Baker baker, Icer icer, int cakeCount)
 			throws InterruptedException, ExecutionException {
+
 		MixedIngredients[] mixedIngredients = new MixedIngredients[cakeCount];
 		BakedCake[] bakedCakes = new BakedCake[cakeCount];
 		IcedCake[] icedCakes = new IcedCake[cakeCount];
-		throw new NotYetImplementedException();
+
+		Phaser[] p = new Phaser[2 * cakeCount];
+
+		for (int i = 0; i < p.length; i++) {
+			p[i] = new Phaser();
+			p[i].register();
+		}
+
+		finish(() -> {
+			async(() -> {
+				for (int i = 0; i < cakeCount; i++) {
+					mixedIngredients[i] = mixer.mix(i);
+					p[i].arrive();
+				}
+			});
+
+			async(() -> {
+				for (int i = 0; i < cakeCount; i++) {
+					p[i].awaitAdvance(0);
+					bakedCakes[i] = baker.bake(i, mixedIngredients[i]);
+					p[cakeCount + i].arrive();
+				}
+			});
+
+			async(() -> {
+				for (int i = 0; i < cakeCount; i++) {
+					p[cakeCount + i].awaitAdvance(0);
+					icedCakes[i] = icer.ice(i, bakedCakes[i]);
+				}
+			});
+		});
+
+		return icedCakes;
 	}
 }
