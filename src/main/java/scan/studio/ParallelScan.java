@@ -32,7 +32,7 @@ import scan.core.PowersOfTwoLessThan;
 import scan.core.Scan;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class ParallelScan implements Scan {
