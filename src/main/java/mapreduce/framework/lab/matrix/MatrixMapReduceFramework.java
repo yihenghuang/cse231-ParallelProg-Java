@@ -26,10 +26,11 @@ import static edu.wustl.cse231s.v5.V5.forall;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collector;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import edu.wustl.cse231s.util.MultiWrapMap;
 import mapreduce.framework.core.MapReduceFramework;
 import mapreduce.framework.core.Mapper;
@@ -132,18 +133,16 @@ public class MatrixMapReduceFramework<E, K, V, A, R> implements MapReduceFramewo
 			for (int j = eachSlice.getMinInclusive(); j < eachSlice.getMaxExclusive(); j++) {
 
 				this.getMapper().map(input[j], (K k, V v) -> {
-
-					if (arr[eachSlice.getSliceIndexId()][getReduceIndex(k)].containsKey(k)) {
-						arr[eachSlice.getSliceIndexId()][getReduceIndex(k)].compute(k, (K _k, A a) -> {
+					if (arr[i][getReduceIndex(k)].containsKey(k)) {
+						arr[i][getReduceIndex(k)].compute(k, (K _k, A a) -> {
 							collector.accumulator().accept(a, v);
 							return a;
 						});
 					} else {
 						A _a = this.getCollector().supplier().get();
 						this.getCollector().accumulator().accept(_a, v);
-						arr[eachSlice.getSliceIndexId()][getReduceIndex(k)].put(k, _a);
+						arr[i][getReduceIndex(k)].put(k, _a);
 					}
-
 				});
 			}
 		});
@@ -168,7 +167,39 @@ public class MatrixMapReduceFramework<E, K, V, A, R> implements MapReduceFramewo
 	 *             ExecutionException
 	 */
 	Map<K, R> combineAndFinishAll(Map<K, A>[][] input) throws InterruptedException, ExecutionException {
-		throw new NotYetImplementedException();
+
+		@SuppressWarnings("unchecked")
+		Map<K, R>[] endMap = new HashMap[reduceTaskCount];
+		@SuppressWarnings("unchecked")
+		Map<K, A>[] aMap = new HashMap[reduceTaskCount];
+
+		for (int i = 0; i < reduceTaskCount; i++) {
+			aMap[i] = new HashMap<K, A>();
+			endMap[i] = new HashMap<K, R>();
+		}
+		forall(0, reduceTaskCount, (colm) -> {
+			for (int i = 0; i < mapTaskCount; i++) {
+				Set<Entry<K, A>> set = input[i][colm].entrySet();
+				for (Entry<K, A> entry : set) {
+					K k = entry.getKey();
+					if (aMap[colm].containsKey(k)) {
+						A newA = collector.combiner().apply(aMap[colm].get(k), entry.getValue());
+						aMap[colm].put(k, newA);
+					} else {
+						aMap[colm].put(k, input[i][colm].get(k));
+					}
+				}
+			}
+		});
+
+		for (int i = 0; i < aMap.length; i++) {
+			for (Entry<K, A> a : aMap[i].entrySet()) {
+				R value = collector.finisher().apply(a.getValue());
+				endMap[i].put(a.getKey(), value);
+			}
+		}
+		Map<K, R> map = new MultiWrapMap<K, R>(endMap);
+		return map;
 	}
 
 	@Override

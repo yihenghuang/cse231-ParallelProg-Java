@@ -145,7 +145,6 @@ public final class SimpleMapReduceFramework<E, K, V, A, R> implements MapReduceF
 	Map<K, A> accumulateAll(List<KeyValuePair<K, V>>[] mapAllResults) {
 
 		Map<K, A> newMap = new HashMap<K, A>();
-
 		for (List<KeyValuePair<K, V>> aList : mapAllResults) {
 			for (KeyValuePair<K, V> aPair : aList) {
 				newMap.compute(aPair.getKey(), (K k, A a) -> {
