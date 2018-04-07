@@ -73,7 +73,6 @@ public class SequentialNQueens {
 				}
 			}
 		}
-
 	}
 
 	public static int countSolutions(MutableQueenLocations queenLocations) {

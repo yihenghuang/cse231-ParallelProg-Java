@@ -110,6 +110,7 @@ public final class DefaultImmutableQueenLocations extends AbstractQueenLocations
 	@Override
 	public int getRowCount() {
 		return locations.length;
+
 	}
 
 	/**

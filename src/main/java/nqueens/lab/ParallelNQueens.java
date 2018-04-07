@@ -30,7 +30,6 @@ import static edu.wustl.cse231s.v5.V5.register;
 import java.util.concurrent.ExecutionException;
 
 import edu.wustl.cse231s.IntendedForStaticAccessOnlyError;
-import edu.wustl.cse231s.NotYetImplementedException;
 import edu.wustl.cse231s.v5.api.FinishAccumulator;
 import edu.wustl.cse231s.v5.api.NumberReductionOperator;
 import nqueens.core.ImmutableQueenLocations;
@@ -66,19 +65,20 @@ public class ParallelNQueens {
 			throws InterruptedException, ExecutionException {
 		doWork(1);
 
-		forasync(, body);
-		for (int col = 0; col < queenLocations.getBoardSize(); col++) {
-
+		int row = queenLocations.getRowCount();
+		forasync(0, queenLocations.getBoardSize(), (int col) -> {
 			if (queenLocations.isCandidateThreatFree(row, col)) {
 
 				if (row == queenLocations.getBoardSize() - 1) {
-					count.increment();
+					acc.put(1);
 				} else {
-					queenLocations.setColumnOfQueenInRow(row, col);
-					placeQueenInRow(count, queenLocations, row + 1);
+					ImmutableQueenLocations newBoard = queenLocations.createNext(col);
+
+					placeQueenInRow(acc, newBoard);
 				}
 			}
-		}
+		});
+
 	}
 
 	/**
@@ -92,7 +92,10 @@ public class ParallelNQueens {
 	 */
 	public static int countSolutions(ImmutableQueenLocations queenLocations)
 			throws InterruptedException, ExecutionException {
-		// TODO implement countSolutions
-		throw new NotYetImplementedException();
+		FinishAccumulator<Integer> acc = newIntegerFinishAccumulator(NumberReductionOperator.SUM);
+		finish(register(acc), () -> {
+			placeQueenInRow(acc, queenLocations);
+		});
+		return acc.get();
 	}
 }
