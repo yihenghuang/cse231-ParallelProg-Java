@@ -41,8 +41,8 @@ public final class DefaultImmutableQueenLocations extends AbstractQueenLocations
 	private final int[] locations;
 
 	/**
-	 * Creates an ImmutableQueenLocations board with no queens on it. You will
-	 * never need to call this method.
+	 * Creates an ImmutableQueenLocations board with no queens on it. You will never
+	 * need to call this method.
 	 * 
 	 * @param boardSize
 	 *            The size of the new board. This will be the number of columns.
@@ -53,9 +53,9 @@ public final class DefaultImmutableQueenLocations extends AbstractQueenLocations
 	}
 
 	/**
-	 * Creates a new ImmutableQueenLocations instance from an already existing
-	 * one. The new instance will have an additional queen. This queen will be
-	 * placed in the next row down, in the given column.
+	 * Creates a new ImmutableQueenLocations instance from an already existing one.
+	 * The new instance will have an additional queen. This queen will be placed in
+	 * the next row down, in the given column.
 	 * 
 	 * @param other
 	 *            The original ImmutableQueenLocations object to add onto.
@@ -78,19 +78,19 @@ public final class DefaultImmutableQueenLocations extends AbstractQueenLocations
 	 * 
 	 * @param column
 	 *            The column where the queen will be placed.
-	 * @return A new ImmutableQueenLocations object built off of this one. It
-	 *         should have a new queen in the next row down in the given column.
+	 * @return A new ImmutableQueenLocations object built off of this one. It should
+	 *         have a new queen in the next row down in the given column.
 	 */
 	@Override
 	public DefaultImmutableQueenLocations createNext(int column) {
-		// TODO implement createNext
-			throw new NotYetImplementedException();
+
+		return 
 	}
 
 	/**
-	 * This method should tell you which column a queen is in for a given row.
-	 * Note that each row can only have a single queen, so this method will
-	 * return the column of that queen.
+	 * This method should tell you which column a queen is in for a given row. Note
+	 * that each row can only have a single queen, so this method will return the
+	 * column of that queen.
 	 * 
 	 * @param row
 	 *            The row where you will determine what column the queen is in.
@@ -98,34 +98,31 @@ public final class DefaultImmutableQueenLocations extends AbstractQueenLocations
 	 */
 	@Override
 	public int getColumnOfQueenInRow(int row) {
-		// TODO implement getColumnOfQueenInRow
-			throw new NotYetImplementedException();
+		return this.locations[row];
 	}
 
 	/**
-	 * This method should return how many rows there currently are in the
-	 * object. (Hint: look at your instance variables.)
+	 * This method should return how many rows there currently are in the object.
+	 * (Hint: look at your instance variables.)
 	 * 
 	 * @return The number of rows on the board that are currently occupied by a
 	 *         queen.
 	 */
 	@Override
 	public int getRowCount() {
-		// TODO implement getRowCount
-			throw new NotYetImplementedException();
+		return locations.length;
 	}
 
 	/**
-	 * This method should return the size of the board. (Hint: again, look at
-	 * your instance variables.)
+	 * This method should return the size of the board. (Hint: again, look at your
+	 * instance variables.)
 	 * 
-	 * @return The size of the board. This is equivalent to the number of
-	 *         columns on the board.
+	 * @return The size of the board. This is equivalent to the number of columns on
+	 *         the board.
 	 */
 	@Override
 	public int getBoardSize() {
-		// TODO implement getBoardSize
-			throw new NotYetImplementedException();
+		return this.boardSize;
 	}
 
 	/**
@@ -138,6 +135,6 @@ public final class DefaultImmutableQueenLocations extends AbstractQueenLocations
 	@Override
 	public boolean isNextRowThreatFree(int column) {
 		// TODO implement isNextRowThreatFree
-			throw new NotYetImplementedException();
+		throw new NotYetImplementedException();
 	}
 }

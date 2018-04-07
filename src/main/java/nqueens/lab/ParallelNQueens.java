@@ -65,10 +65,20 @@ public class ParallelNQueens {
 	private static void placeQueenInRow(FinishAccumulator<Integer> acc, ImmutableQueenLocations queenLocations)
 			throws InterruptedException, ExecutionException {
 		doWork(1);
-		// TODO implement parallel placeQueenInRow
-			// Note: implement the unfinished methods in ImmutableQueenLocations
-			// first
-			throw new NotYetImplementedException();
+
+		forasync(, body);
+		for (int col = 0; col < queenLocations.getBoardSize(); col++) {
+
+			if (queenLocations.isCandidateThreatFree(row, col)) {
+
+				if (row == queenLocations.getBoardSize() - 1) {
+					count.increment();
+				} else {
+					queenLocations.setColumnOfQueenInRow(row, col);
+					placeQueenInRow(count, queenLocations, row + 1);
+				}
+			}
+		}
 	}
 
 	/**
@@ -83,6 +93,6 @@ public class ParallelNQueens {
 	public static int countSolutions(ImmutableQueenLocations queenLocations)
 			throws InterruptedException, ExecutionException {
 		// TODO implement countSolutions
-			throw new NotYetImplementedException();
+		throw new NotYetImplementedException();
 	}
 }
