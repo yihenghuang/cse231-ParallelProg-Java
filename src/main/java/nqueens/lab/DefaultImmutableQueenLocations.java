@@ -21,7 +21,6 @@
  ******************************************************************************/
 package nqueens.lab;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import nqueens.core.AbstractQueenLocations;
 import nqueens.core.ImmutableQueenLocations;
 
@@ -84,7 +83,7 @@ public final class DefaultImmutableQueenLocations extends AbstractQueenLocations
 	@Override
 	public DefaultImmutableQueenLocations createNext(int column) {
 
-		return 
+		return new DefaultImmutableQueenLocations(this, column);
 	}
 
 	/**
@@ -134,7 +133,7 @@ public final class DefaultImmutableQueenLocations extends AbstractQueenLocations
 	 */
 	@Override
 	public boolean isNextRowThreatFree(int column) {
-		// TODO implement isNextRowThreatFree
-		throw new NotYetImplementedException();
+
+		return isCandidateThreatFree(getRowCount(), column);
 	}
 }
