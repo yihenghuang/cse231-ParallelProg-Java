@@ -43,7 +43,7 @@ import slice.core.Slice;
  * A parallel implementation of {@link KMerCounter} that uses a
  * {@link ConcurrentHashMap}, where each k-mer is represented as a Long.
  * 
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class LongConcurrentHashMapKMerCounter implements KMerCounter {
