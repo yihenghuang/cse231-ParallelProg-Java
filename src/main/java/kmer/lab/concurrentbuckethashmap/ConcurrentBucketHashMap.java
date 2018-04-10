@@ -37,7 +37,7 @@ import edu.wustl.cse231s.util.KeyMutableValuePair;
 import net.jcip.annotations.ThreadSafe;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 @ThreadSafe
