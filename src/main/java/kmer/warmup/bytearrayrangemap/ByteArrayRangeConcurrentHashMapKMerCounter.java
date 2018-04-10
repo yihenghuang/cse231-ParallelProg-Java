@@ -44,7 +44,7 @@ import slice.core.Slice;
  * ConcurrentHashMap, where each k-mer is represented as a
  * {@link ByteArrayRange}.
  * 
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class ByteArrayRangeConcurrentHashMapKMerCounter implements KMerCounter {
