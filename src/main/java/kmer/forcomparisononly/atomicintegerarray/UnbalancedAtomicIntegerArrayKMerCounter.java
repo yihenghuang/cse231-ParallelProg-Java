@@ -34,7 +34,7 @@ import kmer.core.KMerUtils;
 import kmer.core.array.AtomicIntegerArrayKMerCount;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class UnbalancedAtomicIntegerArrayKMerCounter implements KMerCounter {
