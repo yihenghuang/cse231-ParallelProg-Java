@@ -33,7 +33,7 @@ import kmer.core.KMerCounter;
  * should be on-par with MAO. MapReduce-like implementations are explicitly
  * eliminated since we have already done MapReduce to death.
  * 
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class OptimisticConcurrencyKMerCounter implements KMerCounter {
