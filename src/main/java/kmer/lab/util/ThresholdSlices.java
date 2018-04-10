@@ -31,7 +31,7 @@ import kmer.core.KMerUtils;
 import slice.core.Slice;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class ThresholdSlices {
