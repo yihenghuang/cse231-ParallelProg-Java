@@ -34,7 +34,7 @@ import kmer.core.array.IntArrayKMerCount;
  * where each index represents a k-mer and the value at that index represents
  * the count.
  * 
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class IntArrayKMerCounter implements KMerCounter {
