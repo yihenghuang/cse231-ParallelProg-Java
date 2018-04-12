@@ -378,7 +378,7 @@ public class KMerUtils {
 		// limit as just below 2^31.
 		// we will choose 2^30 (inclusive) as the maximum since it is the largest
 		// potential k-mer (4^15)
-		final long MAX_K_MER_ARRAY_LENGTH_INCLUSIVE = 2 ^ 30;
+		final long MAX_K_MER_ARRAY_LENGTH_INCLUSIVE = 1 << 30;
 		if (possibleKMers <= MAX_K_MER_ARRAY_LENGTH_INCLUSIVE) {
 			return (int) possibleKMers;
 		} else {
