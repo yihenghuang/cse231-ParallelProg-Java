@@ -29,7 +29,7 @@ import locking.core.banking.TransferResult;
 import locking.core.banking.TransferUtils;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Ben Choi (benjaminchoi@wustl.edu)
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
