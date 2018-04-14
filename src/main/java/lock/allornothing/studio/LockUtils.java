@@ -31,7 +31,7 @@ import edu.wustl.cse231s.NotYetImplementedException;
 import edu.wustl.cse231s.concurrent.Interruptible;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class LockUtils {
