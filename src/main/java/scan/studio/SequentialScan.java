@@ -37,7 +37,6 @@ public class SequentialScan implements Scan {
 				total[i] += data[j];
 			}
 		}
-
 		return total;
 	}
 

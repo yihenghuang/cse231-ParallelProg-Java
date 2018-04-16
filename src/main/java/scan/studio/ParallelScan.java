@@ -57,7 +57,6 @@ public class ParallelScan implements Scan {
 					dst[i] = src[i];
 				}
 			});
-
 			arr.nextSrcAndDst();
 			numCopiedDown = 2 * numCopiedDown;
 		}
