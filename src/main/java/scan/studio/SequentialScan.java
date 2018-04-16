@@ -22,7 +22,6 @@
 
 package scan.studio;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import scan.core.Scan;
 
 /**
@@ -32,9 +31,16 @@ import scan.core.Scan;
 public class SequentialScan implements Scan {
 	@Override
 	public int[] sumScan(int[] data) {
-		throw new NotYetImplementedException();
+		int[] total = new int[data.length];
+		for (int i = 0; i < data.length; i++) {
+			for (int j = i; j >= 0; j--) {
+				total[i] += data[j];
+			}
+		}
+
+		return total;
 	}
-	
+
 	@Override
 	public boolean isInclusive() {
 		return true;

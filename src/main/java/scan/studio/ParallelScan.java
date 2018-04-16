@@ -26,9 +26,7 @@ import static edu.wustl.cse231s.v5.V5.forall;
 
 import java.util.concurrent.ExecutionException;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import scan.core.ArraysHolder;
-import scan.core.PowersOfTwoLessThan;
 import scan.core.Scan;
 
 /**
@@ -38,7 +36,34 @@ import scan.core.Scan;
 public class ParallelScan implements Scan {
 	@Override
 	public int[] sumScan(int[] data) throws InterruptedException, ExecutionException {
-		throw new NotYetImplementedException();
+
+		int numCopiedDown = 1;
+		int len = data.length;
+
+		ArraysHolder arr = new ArraysHolder(data);
+
+		while (numCopiedDown < len) {
+
+			final int numAway = numCopiedDown;
+
+			forall(0, len, (int i) -> {
+
+				int[] dst = arr.getDst();
+				int[] src = arr.getSrc();
+
+				if (i >= numAway) {
+					dst[i] = src[i] + src[i - numAway];
+				} else {
+					dst[i] = src[i];
+				}
+			});
+
+			arr.nextSrcAndDst();
+			numCopiedDown = 2 * numCopiedDown;
+		}
+
+		int[] result = arr.getSrc();
+		return result;
 	}
 
 	@Override
