@@ -50,11 +50,11 @@ public class StockPortfolio {
 		Integer oldValue = this.map.get(listingSymbol);
 		Integer newValue;
 		if (oldValue != null) {
-			newValue = oldValue + deltaShareCount; 
+			newValue = oldValue + deltaShareCount;
 		} else {
 			newValue = deltaShareCount;
 		}
-		this.map.put(listingSymbol, newValue);
+		this.map.compute(listingSymbol, (k, v) -> (v == null) ? deltaShareCount : v + deltaShareCount);
 		return newValue;
 	}
 
