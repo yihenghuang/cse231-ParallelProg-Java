@@ -25,20 +25,25 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.lang3.mutable.Mutable;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.junit.FixMethodOrder;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 import org.junit.runners.MethodSorters;
 
-import lock.allornothing.studio.LockUtils;
+import edu.wustl.cse231s.junit.JUnitUtils;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
@@ -47,8 +52,11 @@ import lock.allornothing.studio.LockUtils;
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RunWithAllLocksOrDontRunAtAllTest {
-	@Test(timeout = 5000)
-	public void testA_SingleUncontendedLock() throws InterruptedException {
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule(4);
+
+	@Test
+	public void testA_SingleUncontendedLock() throws InterruptedException, ExecutionException {
 		ReentrantLock uncontendedLock = new ReentrantLock();
 		List<ReentrantLock> locks = Arrays.asList(uncontendedLock);
 		for (ReentrantLock lock : locks) {
@@ -76,8 +84,8 @@ public class RunWithAllLocksOrDontRunAtAllTest {
 		}
 	}
 
-	@Test(timeout = 5000)
-	public void testB_MultipleUncontendedLocks() throws InterruptedException {
+	@Test
+	public void testB_MultipleUncontendedLocks() throws InterruptedException, ExecutionException {
 		List<ReentrantLock> locks = new LinkedList<>();
 		for (int i = 0; i < 3; i++) {
 			locks.add(new ReentrantLock());
@@ -108,22 +116,18 @@ public class RunWithAllLocksOrDontRunAtAllTest {
 		}
 	}
 
-	@Test(timeout = 5000)
-	public void testC_SingleHeldLock() throws InterruptedException {
+	@Test
+	public void testC_SingleHeldLock() throws InterruptedException, ExecutionException {
 		ReentrantLock heldLock = new ReentrantLock();
 		heldLock.lock();
 		assertTrue(heldLock.isHeldByCurrentThread());
 		List<ReentrantLock> locks = Arrays.asList(heldLock);
 
-		Mutable<Boolean> isSuccessful = new MutableObject<>(null);
 		MutableBoolean isBodyInvoked = new MutableBoolean(false);
-		startAndJoinThread(() -> {
-			isSuccessful.setValue(LockUtils.runWithAllLocksOrDontRunAtAll(locks, () -> {
-				isBodyInvoked.setTrue();
-			}));
+		boolean isSuccessful = startAndJoinThreadRunWithAllLocksOrDontRunAtAll(locks, () -> {
+			isBodyInvoked.setTrue();
 		});
-		assertNotNull(isSuccessful.getValue());
-		assertFalse(isSuccessful.getValue().booleanValue());
+		assertFalse(isSuccessful);
 		assertFalse(isBodyInvoked.booleanValue());
 
 		assertTrue(heldLock.isHeldByCurrentThread());
@@ -133,8 +137,8 @@ public class RunWithAllLocksOrDontRunAtAllTest {
 		}
 	}
 
-	@Test(timeout = 5000)
-	public void testD_SingleHeldOfMultipleLock() throws InterruptedException {
+	@Test
+	public void testD_SingleHeldOfMultipleLock() throws InterruptedException, ExecutionException {
 		List<ReentrantLock> locks = new LinkedList<>();
 		for (int i = 0; i < 3; i++) {
 			locks.add(new ReentrantLock());
@@ -150,15 +154,11 @@ public class RunWithAllLocksOrDontRunAtAllTest {
 
 			assertTrue(heldLock.isHeldByCurrentThread());
 
-			Mutable<Boolean> isSuccessful = new MutableObject<>(null);
 			MutableBoolean isBodyInvoked = new MutableBoolean(false);
-			startAndJoinThread(() -> {
-				isSuccessful.setValue(LockUtils.runWithAllLocksOrDontRunAtAll(locks, () -> {
-					isBodyInvoked.setTrue();
-				}));
+			boolean isSuccessful = startAndJoinThreadRunWithAllLocksOrDontRunAtAll(locks, () -> {
+				isBodyInvoked.setTrue();
 			});
-			assertNotNull(isSuccessful.getValue());
-			assertFalse(isSuccessful.getValue().booleanValue());
+			assertFalse(isSuccessful);
 			assertFalse(isBodyInvoked.booleanValue());
 
 			assertTrue(heldLock.isHeldByCurrentThread());
@@ -170,8 +170,8 @@ public class RunWithAllLocksOrDontRunAtAllTest {
 		}
 	}
 
-	@Test(timeout = 5000)
-	public void testE_AllHeldMultipleLocks() throws InterruptedException {
+	@Test
+	public void testE_AllHeldMultipleLocks() throws InterruptedException, ExecutionException {
 		List<ReentrantLock> locks = new LinkedList<>();
 		for (int i = 0; i < 3; i++) {
 			locks.add(new ReentrantLock());
@@ -183,16 +183,12 @@ public class RunWithAllLocksOrDontRunAtAllTest {
 			assertTrue(lock.isHeldByCurrentThread());
 		}
 
-		Mutable<Boolean> isSuccessful = new MutableObject<>(null);
 		MutableBoolean isBodyInvoked = new MutableBoolean(false);
-		startAndJoinThread(() -> {
-			isSuccessful.setValue(LockUtils.runWithAllLocksOrDontRunAtAll(locks, () -> {
-				isBodyInvoked.setTrue();
-			}));
+		boolean isSuccessful = startAndJoinThreadRunWithAllLocksOrDontRunAtAll(locks, () -> {
+			isBodyInvoked.setTrue();
 		});
 
-		assertNotNull(isSuccessful.getValue());
-		assertFalse(isSuccessful.getValue().booleanValue());
+		assertFalse(isSuccessful);
 		assertFalse(isBodyInvoked.booleanValue());
 
 		for (ReentrantLock lock : locks) {
@@ -202,10 +198,84 @@ public class RunWithAllLocksOrDontRunAtAllTest {
 		}
 	}
 
-	private static Thread startAndJoinThread(Runnable body) throws InterruptedException {
+	@Test
+	public void testF_OnlyUnlockingImmediatelyPreviouslyAcquiredLocks()
+			throws InterruptedException, ExecutionException {
+		List<ReentrantLock> locks = new ArrayList<>();
+		for (int i = 0; i < 7; i++) {
+			locks.add(new ReentrantLock());
+		}
+
+		// acquiring this lock will prevent the runWithAllLocksOrDontRunAtAll thread
+		// from succeeding
+		Lock lock = locks.get(3);
+		lock.lock();
+
+		MutableObject<Boolean> isSuccessful = new MutableObject<>();
+		MutableBoolean isBodyInvoked = new MutableBoolean(false);
+		Thread thread = new Thread(() -> {
+			// since lock 5 will come after 3, it should not be locked by
+			// runWithAllLocksOrDontRunAtAll so it should not be unlocked.
+			int indexOfLock = 5;
+			locks.get(indexOfLock).lock();
+			isSuccessful.setValue(LockUtils.runWithAllLocksOrDontRunAtAll(locks, () -> {
+				isBodyInvoked.setTrue();
+			}));
+			assertTrue("Only unlock the locks you successfully acquired.  Do NOT invoke unlockAll.",
+					locks.get(indexOfLock).isHeldByCurrentThread());
+		});
+		startAndJoinThread(thread);
+		assertNotNull(isSuccessful.getValue());
+		assertFalse(isSuccessful.getValue());
+		assertFalse(isBodyInvoked.booleanValue());
+	}
+
+	@Test
+	public void testG_TryFinally() throws InterruptedException, ExecutionException {
+		class CustomException extends RuntimeException {
+			private static final long serialVersionUID = 1L;
+		}
+
+		List<ReentrantLock> locks = Arrays.asList(new ReentrantLock(), new ReentrantLock(), new ReentrantLock());
+		Throwable cause = null;
+		try {
+			startAndJoinThreadRunWithAllLocksOrDontRunAtAll(locks, () -> {
+				throw new CustomException();
+			});
+		} catch (ExecutionException ee) {
+			cause = ee.getCause();
+		}
+		assertNotNull(cause);
+		assertTrue(cause instanceof CustomException);
+		for (ReentrantLock lock : locks) {
+			assertFalse("Use the try/finally to unlock all acquired locks in the finally block.", lock.isLocked());
+		}
+	}
+
+	private static Thread startAndJoinThread(Runnable body) throws InterruptedException, ExecutionException {
 		Thread thread = new Thread(body);
+		MutableObject<Throwable> throwableReference = new MutableObject<>();
+		thread.setUncaughtExceptionHandler((_thread, _throwable) -> {
+			throwableReference.setValue(_throwable);
+		});
 		thread.start();
 		thread.join();
-		return thread;
+		Throwable throwableValue = throwableReference.getValue();
+		if (throwableValue != null) {
+			throw new ExecutionException(throwableValue);
+		} else {
+			return thread;
+		}
+	}
+
+	private static boolean startAndJoinThreadRunWithAllLocksOrDontRunAtAll(List<ReentrantLock> locks, Runnable body)
+			throws InterruptedException, ExecutionException {
+		MutableObject<Boolean> isSuccessful = new MutableObject<>();
+		Thread thread = new Thread(() -> {
+			isSuccessful.setValue(LockUtils.runWithAllLocksOrDontRunAtAll(locks, body));
+		});
+		startAndJoinThread(thread);
+		assertNotNull(isSuccessful.getValue());
+		return isSuccessful.getValue().booleanValue();
 	}
 }
