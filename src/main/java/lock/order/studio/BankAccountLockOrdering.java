@@ -21,8 +21,10 @@
  ******************************************************************************/
 package lock.order.studio;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import edu.wustl.cse231s.IntendedForStaticAccessOnlyError;
-import edu.wustl.cse231s.NotYetImplementedException;
 import locking.core.banking.Account;
 import locking.core.banking.TransferResult;
 import locking.core.banking.TransferUtils;
@@ -59,7 +61,28 @@ public class BankAccountLockOrdering {
 	 * @return result of the transfer
 	 */
 	public static TransferResult transferMoney(Account sender, Account recipient, int amount) {
-		throw new NotYetImplementedException();
-	}
 
+		TransferResult result;
+		Account first;
+		Account second;
+		int sid = sender.getUniqueIdNumber();
+		int rid = recipient.getUniqueIdNumber();
+
+		if (sid < rid) {
+			second = sender;
+			first = recipient;
+		} else {
+			first = sender;
+			second = recipient;
+		}
+		Lock lock = new ReentrantLock();
+		synchronized (first) {
+			synchronized (second) {
+				lock.lock();
+				result = TransferUtils.checkBalanceAndTransfer(sender, recipient, amount);
+			}
+		}
+		return result;
+
+	}
 }
