@@ -49,6 +49,7 @@ public final class DefaultImmutableQueenLocations extends AbstractQueenLocations
 	public DefaultImmutableQueenLocations(int boardSize) {
 		this.boardSize = boardSize;
 		this.locations = new int[0];
+
 	}
 
 	/**

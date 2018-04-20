@@ -21,7 +21,6 @@
  ******************************************************************************/
 package sudoku.lab;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import net.jcip.annotations.Immutable;
 import sudoku.core.Square;
 import sudoku.core.SquareSearchAlgorithm;
@@ -44,6 +43,13 @@ public class RowMajorSquareSearchAlgorithm implements SquareSearchAlgorithm {
 	 */
 	@Override
 	public Square selectNextUnfilledSquare(SudokuPuzzle puzzle) {
-		throw new NotYetImplementedException();
+
+		Square[] set = Square.values();
+		for (Square each : set) {
+			if (puzzle.getValue(each) == 0) {
+				return each;
+			}
+		}
+		return null;
 	}
 }

@@ -24,7 +24,6 @@ package sudoku.lab;
 
 import java.util.function.Supplier;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import sudoku.core.ConstraintPropagator;
 
 /**
@@ -34,9 +33,7 @@ import sudoku.core.ConstraintPropagator;
 public class ConstraintPropagatorSupplier implements Supplier<ConstraintPropagator> {
 	@Override
 	public ConstraintPropagator get() {
-		throw new NotYetImplementedException();
-		// return new PeerRemovingConstraintPropagator();
-		// or
+		return new PeerRemovingConstraintPropagator();
 		// return new DefaultConstraintPropagator();
 	}
 }

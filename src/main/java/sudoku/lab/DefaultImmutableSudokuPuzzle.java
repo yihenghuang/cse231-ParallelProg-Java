@@ -21,11 +21,9 @@
  ******************************************************************************/
 package sudoku.lab;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.SortedSet;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import net.jcip.annotations.Immutable;
 import sudoku.core.ConstraintPropagator;
 import sudoku.core.ImmutableSudokuPuzzle;
@@ -53,7 +51,8 @@ public final class DefaultImmutableSudokuPuzzle implements ImmutableSudokuPuzzle
 	 * @param givens
 	 */
 	public DefaultImmutableSudokuPuzzle(ConstraintPropagator constraintPropagator, String givens) {
-		throw new NotYetImplementedException();
+		this.constraintPropagator = constraintPropagator;
+		this.optionSets = constraintPropagator.createOptionSetsFromGivens(givens);
 	}
 
 	/**
@@ -70,7 +69,8 @@ public final class DefaultImmutableSudokuPuzzle implements ImmutableSudokuPuzzle
 	 *            the value to put in square
 	 */
 	private DefaultImmutableSudokuPuzzle(DefaultImmutableSudokuPuzzle other, Square square, int value) {
-		throw new NotYetImplementedException();
+		this.constraintPropagator = other.constraintPropagator;
+		this.optionSets = other.constraintPropagator.createNextOptionSets(other.optionSets, square, value);
 	}
 
 	public ConstraintPropagator getConstraintPropagator() {
@@ -79,7 +79,8 @@ public final class DefaultImmutableSudokuPuzzle implements ImmutableSudokuPuzzle
 
 	@Override
 	public ImmutableSudokuPuzzle createNext(Square square, int value) {
-		throw new NotYetImplementedException();
+		ImmutableSudokuPuzzle p = new DefaultImmutableSudokuPuzzle(this, square, value);
+		return p;
 	}
 
 	/**
@@ -90,7 +91,11 @@ public final class DefaultImmutableSudokuPuzzle implements ImmutableSudokuPuzzle
 	 */
 	@Override
 	public int getValue(Square square) {
-		throw new NotYetImplementedException();
+		int size = optionSets.get(square).size();
+		if (size != 1) {
+			return 0;
+		}
+		return optionSets.get(square).first();
 	}
 
 	/**
@@ -100,7 +105,7 @@ public final class DefaultImmutableSudokuPuzzle implements ImmutableSudokuPuzzle
 	 */
 	@Override
 	public SortedSet<Integer> getOptions(Square square) {
-		throw new NotYetImplementedException();
+		return optionSets.get(square);
 	}
 
 	@Override

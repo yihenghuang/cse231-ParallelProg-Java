@@ -23,13 +23,13 @@
 package sudoku.lab;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import sudoku.core.ConstraintPropagator;
 import sudoku.core.Square;
 import sudoku.core.io.PuzzlesResourceUtils;
@@ -42,18 +42,54 @@ public class PeerRemovingConstraintPropagator implements ConstraintPropagator {
 	@Override
 	public Map<Square, SortedSet<Integer>> createOptionSetsFromGivens(String givens) {
 		int[][] values = PuzzlesResourceUtils.parseGivens(givens);
-		throw new NotYetImplementedException();
+
+		Map<Square, SortedSet<Integer>> map = new EnumMap<>(Square.class);
+
+		int len = values.length;
+		for (int i = 0; i < len; i++) {
+			for (int j = 0; j < len; j++) {
+				Square each = Square.valueOf(i, j);
+				map.put(each, allOptions());
+			}
+		}
+
+		for (int i = 0; i < len; i++) {
+			for (int j = 0; j < len; j++) {
+				Square each = Square.valueOf(i, j);
+				if (values[i][j] != 0) {
+					associateValueWithSquareAndRemoveFromPeers(map, each, values[i][j]);
+				}
+			}
+		}
+
+		return map;
 	}
 
 	@Override
 	public Map<Square, SortedSet<Integer>> createNextOptionSets(Map<Square, SortedSet<Integer>> otherOptionSets,
 			Square square, int value) {
-		throw new NotYetImplementedException();
+		Map<Square, SortedSet<Integer>> map = deepCopyOf(otherOptionSets);
+		associateValueWithSquareAndRemoveFromPeers(map, square, value);
+		return map;
 	}
 
 	private static void associateValueWithSquareAndRemoveFromPeers(Map<Square, SortedSet<Integer>> resultOptionSets,
 			Square square, int value) {
-		throw new NotYetImplementedException();
+
+		Collection<Square> peers = square.getPeers();
+		resultOptionSets.put(square, singleOption(value));
+
+		for (Square each : peers) {
+
+			if (resultOptionSets.get(each).contains(value)) {
+				resultOptionSets.get(each).remove(value);
+				int size = resultOptionSets.get(each).size();
+				if (size == 1) {
+					int first = resultOptionSets.get(each).first();
+					associateValueWithSquareAndRemoveFromPeers(resultOptionSets, each, first);
+				}
+			}
+		}
 	}
 
 	private static SortedSet<Integer> singleOption(int value) {

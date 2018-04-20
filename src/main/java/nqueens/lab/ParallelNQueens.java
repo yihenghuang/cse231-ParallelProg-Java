@@ -64,21 +64,20 @@ public class ParallelNQueens {
 	private static void placeQueenInRow(FinishAccumulator<Integer> acc, ImmutableQueenLocations queenLocations)
 			throws InterruptedException, ExecutionException {
 		doWork(1);
-
 		int row = queenLocations.getRowCount();
 		forasync(0, queenLocations.getBoardSize(), (int col) -> {
+
 			if (queenLocations.isCandidateThreatFree(row, col)) {
 
 				if (row == queenLocations.getBoardSize() - 1) {
 					acc.put(1);
 				} else {
-					ImmutableQueenLocations newBoard = queenLocations.createNext(col);
 
+					ImmutableQueenLocations newBoard = queenLocations.createNext(col);
 					placeQueenInRow(acc, newBoard);
 				}
 			}
 		});
-
 	}
 
 	/**

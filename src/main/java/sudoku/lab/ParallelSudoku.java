@@ -25,12 +25,12 @@ import static edu.wustl.cse231s.v5.V5.doWork;
 import static edu.wustl.cse231s.v5.V5.finish;
 import static edu.wustl.cse231s.v5.V5.forasync;
 
+import java.util.SortedSet;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.lang3.mutable.MutableObject;
 
 import edu.wustl.cse231s.IntendedForStaticAccessOnlyError;
-import edu.wustl.cse231s.NotYetImplementedException;
 import edu.wustl.cse231s.v5.V5;
 import sudoku.core.ImmutableSudokuPuzzle;
 import sudoku.core.Square;
@@ -61,7 +61,11 @@ public class ParallelSudoku {
 	public static ImmutableSudokuPuzzle solve(ImmutableSudokuPuzzle puzzle, SquareSearchAlgorithm squareSearchAlgorithm)
 			throws InterruptedException, ExecutionException {
 		MutableObject<ImmutableSudokuPuzzle> solution = new MutableObject<>(null);
-		throw new NotYetImplementedException();
+
+		finish(() -> {
+			solveKernel(solution, puzzle, squareSearchAlgorithm);
+		});
+		return solution.getValue();
 	}
 
 	/**
@@ -96,7 +100,18 @@ public class ParallelSudoku {
 	private static void solveKernel(MutableObject<ImmutableSudokuPuzzle> solution, ImmutableSudokuPuzzle puzzle,
 			SquareSearchAlgorithm squareSearchAlgorithm) throws InterruptedException, ExecutionException {
 		doWork(1);
-		throw new NotYetImplementedException();
+
+		if (squareSearchAlgorithm.selectNextUnfilledSquare(puzzle) != null) {
+
+			Square sq = squareSearchAlgorithm.selectNextUnfilledSquare(puzzle);
+			SortedSet<Integer> num = puzzle.getOptions(sq);
+			forasync(num, (Integer each) -> {
+				ImmutableSudokuPuzzle newPuzzle = puzzle.createNext(sq, each);
+				solveKernel(solution, newPuzzle, squareSearchAlgorithm);
+			});
+		} else {
+			solution.setValue(puzzle);
+		}
 	}
 
 }

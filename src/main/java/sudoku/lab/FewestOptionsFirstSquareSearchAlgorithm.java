@@ -21,9 +21,6 @@
  ******************************************************************************/
 package sudoku.lab;
 
-import java.util.Collection;
-
-import edu.wustl.cse231s.NotYetImplementedException;
 import net.jcip.annotations.Immutable;
 import sudoku.core.Square;
 import sudoku.core.SquareSearchAlgorithm;
@@ -44,6 +41,18 @@ public class FewestOptionsFirstSquareSearchAlgorithm implements SquareSearchAlgo
 	 */
 	@Override
 	public Square selectNextUnfilledSquare(SudokuPuzzle puzzle) {
-		throw new NotYetImplementedException();
+
+		int min = 4;
+		Square minSq = null;
+
+		Square[] set = Square.values();
+		for (Square each : set) {
+			int cursize = puzzle.getOptions(each).size();
+			if (cursize < min && cursize != 1) {
+				min = cursize;
+				minSq = each;
+			}
+		}
+		return minSq;
 	}
 }

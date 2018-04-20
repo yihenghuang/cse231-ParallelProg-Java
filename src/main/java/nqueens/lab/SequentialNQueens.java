@@ -60,7 +60,6 @@ public class SequentialNQueens {
 	private static void placeQueenInRow(MutableInt count, MutableQueenLocations queenLocations, int row) {
 
 		doWork(1);
-
 		for (int col = 0; col < queenLocations.getBoardSize(); col++) {
 
 			if (queenLocations.isCandidateThreatFree(row, col)) {
