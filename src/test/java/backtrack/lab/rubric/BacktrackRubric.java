@@ -53,8 +53,8 @@ public @interface BacktrackRubric {
 		PARALLEL_N_QUEENS_PARALLELISM(SuperCatergory.N_QUEENS, "Parallel ParallelNQueens", 0.1),
 		IMMUTABLE_SUDOKU_PUZZLE(SuperCatergory.SUDOKU, "Correct ImmutableSudokuPuzzle", 0.05),
 		CONTRAINT_PROPAGATOR(SuperCatergory.SUDOKU, "Correct ContraintPropagator", 0.15),
-		ROW_MAJOR_SEARCH(SuperCatergory.SUDOKU, "Correct RowMajorSearch", 0.15),
-		FEWEST_OPTIONS_FIRST_SEARCH(SuperCatergory.SUDOKU, "Correct FewestOptionsFirstSearch", 0.15),
+		ROW_MAJOR_SEARCH(SuperCatergory.SUDOKU, "Correct RowMajorSearch", 0.05),
+		FEWEST_OPTIONS_FIRST_SEARCH(SuperCatergory.SUDOKU, "Correct FewestOptionsFirstSearch", 0.1),
 		PARALLEL_SUDOKU_CORRECTNESS(SuperCatergory.SUDOKU, "Correct ParallelSudoku", 0.1),
 		PARALLEL_SUDOKU_PARALLELISM(SuperCatergory.SUDOKU, "Parallel ParallelSudoku", 0.1),
 		NO_PRINTING(null, null, 0.0);

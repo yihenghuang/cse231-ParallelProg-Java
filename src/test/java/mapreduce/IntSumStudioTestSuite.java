@@ -32,7 +32,7 @@ import mapreduce.apps.cards.studio.CardMapperNumericOnlyTest;
 import mapreduce.apps.cards.studio.CardMapperTest;
 import mapreduce.apps.kmer.studio.KMerMapperTest;
 import mapreduce.apps.kmer.studio.KMerPointedMapperTest;
-import mapreduce.apps.kmer.studio.KMerSpecificKMerLengthMapperTest;
+import mapreduce.apps.kmer.studio.KMerSpecificKMapperTest;
 import mapreduce.apps.wordcount.core.WordCountUtils;
 import mapreduce.apps.wordcount.studio.IntegerSumClassicReducerPointedTest;
 import mapreduce.apps.wordcount.studio.WordCountMapperLetterCaseTest;
@@ -45,7 +45,7 @@ import mapreduce.apps.wordcount.studio.WordCountReducerStressTest;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ WordCountMapperLetterCaseTest.class, WordCountMapperStressTest.class,
 		CardMapperNumericOnlyTest.class, CardMapperTest.class, IntegerSumClassicReducerPointedTest.class,
-		WordCountReducerStressTest.class, KMerSpecificKMerLengthMapperTest.class, KMerPointedMapperTest.class,
+		WordCountReducerStressTest.class, KMerSpecificKMapperTest.class, KMerPointedMapperTest.class,
 		KMerMapperTest.class })
 public class IntSumStudioTestSuite {
 	@BeforeClass

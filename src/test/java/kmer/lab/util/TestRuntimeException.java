@@ -19,37 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-
-package nqueens.lab;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
-import backtrack.lab.rubric.BacktrackRubric;
-import edu.wustl.cse231s.v5.bookkeep.BookkeepingUtils;
-import edu.wustl.cse231s.v5.impl.BookkeepingV5Impl;
-import nqueens.core.ImmutableQueenLocations;
+package kmer.lab.util;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@BacktrackRubric(BacktrackRubric.Category.PARALLEL_N_QUEENS_PARALLELISM)
-public class ParallelNQueensTaskAndFinishTest {
-	@Test
-	public void test() {
-		BookkeepingV5Impl bookkeep = BookkeepingUtils.bookkeep(() -> {
-			ImmutableQueenLocations queenLocations = new DefaultImmutableQueenLocations(4);
-			ParallelNQueens.countSolutions(queenLocations);
-		});
-
-		if (bookkeep.getTaskCount() > 0) {
-			assertTrue("spawning tasks without ever invoking finish", (bookkeep.getNonAccumulatorFinishInvocationCount()
-					+ bookkeep.getAccumulatorFinishInvocationCount()) > 0);
-			assertEquals(0, bookkeep.getNonAccumulatorFinishInvocationCount());
-			assertEquals(1, bookkeep.getAccumulatorFinishInvocationCount());
-			assertEquals(1, bookkeep.getAccumulatorRegisterCount());
-		}
-	}
+public class TestRuntimeException extends RuntimeException {
+	private static final long serialVersionUID = 1L;
 }

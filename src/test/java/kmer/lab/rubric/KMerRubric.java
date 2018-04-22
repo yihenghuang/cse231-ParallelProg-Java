@@ -36,8 +36,8 @@ public @interface KMerRubric {
 		LONG_CONCURRENT_HASH_MAP("Correct Long ConcurrentHashMap", 0.15),
 		INT_ARRAY("Correct Int Array", 0.15),
 		ATOMIC_INTEGER_ARRAY("Correct AtomicIntegerArray", 0.15),
-		BUCKET_DICTIONARY_COUNTER("Correct BucketDictionaryCounter", 0.15),
-		BUCKET_DICTIONARY("Correct BucketDictionary", 0.1);
+		BUCKET_DICTIONARY_COUNTER("Correct BucketDictionaryCounter", 0.10),
+		BUCKET_DICTIONARY("Correct BucketDictionary", 0.25);
 
 		private final String title;
 		private final double portion;

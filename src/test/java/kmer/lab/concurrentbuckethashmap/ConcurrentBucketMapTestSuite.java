@@ -25,7 +25,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ EqualsTest.class, PutGetTest.class, ReplaceValueTest.class, CollisionTest.class,
-		NotInvokingGetFromComputeTest.class, ComputeTest.class, WordCountComputeTest.class })
+@Suite.SuiteClasses({ ConstructorTest.class, GetIndexBucketAndLockTest.class, EqualsTest.class, PutGetTest.class,
+		ReplaceValueTest.class, CollisionTest.class, NotInvokingGetFromComputeTest.class, ComputeTest.class,
+		ComputeHoldsLockTest.class, WordCountComputeTest.class })
 public class ConcurrentBucketMapTestSuite {
 }
