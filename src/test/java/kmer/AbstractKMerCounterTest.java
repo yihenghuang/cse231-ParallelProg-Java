@@ -28,8 +28,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import kmer.core.KMerCount;
 import kmer.core.KMerCounter;
 import kmer.instructor.InstructorKMerTestUtils;
@@ -50,6 +53,9 @@ public abstract class AbstractKMerCounterTest {
 		this.k = k;
 		this.checkEntent = checkEntent;
 	}
+
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule(10);
 
 	protected abstract KMerCounter createKMerCounter();
 
@@ -81,7 +87,7 @@ public abstract class AbstractKMerCounterTest {
 		List<KMerResource> result = new LinkedList<>();
 		result.add(KMerResource.CHOLERAE_ORI_C);
 		result.add(KMerResource.MITOCHONDRION);
-		for(KMerResource yChromosomeChoice : yChromosomeChoices ) {
+		for (KMerResource yChromosomeChoice : yChromosomeChoices) {
 			result.add(yChromosomeChoice);
 		}
 		return result;

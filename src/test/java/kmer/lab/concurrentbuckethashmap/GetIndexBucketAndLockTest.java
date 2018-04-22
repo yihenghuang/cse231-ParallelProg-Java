@@ -34,11 +34,14 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.locks.ReadWriteLock;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import kmer.lab.rubric.KMerRubric;
 
 /**
@@ -57,6 +60,9 @@ public class GetIndexBucketAndLockTest {
 		this.keyHashCode = keyHashCode;
 	}
 
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+	
 	@Test
 	public void test() throws NoSuchMethodException, SecurityException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, NoSuchFieldException {

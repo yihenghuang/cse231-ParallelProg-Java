@@ -25,6 +25,10 @@ import static edu.wustl.cse231s.v5.V5.launchApp;
 
 import java.util.List;
 
+import org.junit.Rule;
+import org.junit.rules.TestRule;
+
+import edu.wustl.cse231s.junit.JUnitUtils;
 import edu.wustl.cse231s.print.AbstractNoPrintingTest;
 import kmer.core.KMerCounter;
 import kmer.lab.atomicintegerarray.AtomicIntegerArrayKMerCounter;
@@ -39,6 +43,9 @@ import kmer.util.KMerResource;
  */
 @KMerRubric(KMerRubric.Category.NO_PRINTING)
 public class NoPrintingTest extends AbstractNoPrintingTest {
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
 	@Override
 	protected void testKernel() {
 		List<byte[]> sequences = KMerResource.CHOLERAE_ORI_C.getSubSequences();

@@ -28,8 +28,11 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import edu.wustl.cse231s.v5.bookkeep.BookkeepingUtils;
 import edu.wustl.cse231s.v5.impl.BookkeepingV5Impl;
 import kmer.core.KMerCounter;
@@ -40,6 +43,9 @@ import slice.core.Slice;
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public abstract class AbstractKMerCounterParallelismTest {
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
 	protected abstract KMerCounter createKMerCounter();
 
 	@Test

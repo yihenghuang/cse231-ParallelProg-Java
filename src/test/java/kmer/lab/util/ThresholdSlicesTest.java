@@ -25,8 +25,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import kmer.lab.rubric.KMerRubric;
 import kmer.lab.util.ThresholdSlices;
 import slice.core.Slice;
@@ -38,6 +41,9 @@ import slice.core.Slice;
  */
 @KMerRubric(KMerRubric.Category.THRESHOLD_SLICES)
 public class ThresholdSlicesTest {
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
 	@Test
 	public void test() {
 		final int N = 100;

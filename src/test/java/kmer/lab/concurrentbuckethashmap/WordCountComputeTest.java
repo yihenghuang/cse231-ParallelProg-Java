@@ -24,8 +24,11 @@ package kmer.lab.concurrentbuckethashmap;
 import static edu.wustl.cse231s.v5.V5.launchApp;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import kmer.lab.concurrentbuckethashmap.ConcurrentBucketHashMap;
 import kmer.lab.rubric.KMerRubric;
 
@@ -36,6 +39,9 @@ import kmer.lab.rubric.KMerRubric;
  */
 @KMerRubric(KMerRubric.Category.BUCKET_MAP)
 public class WordCountComputeTest extends AbstractDictionaryTest {
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
 	@Test
 	public void testNotPresent() {
 		launchApp(() -> {

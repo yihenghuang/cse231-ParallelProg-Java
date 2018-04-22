@@ -31,11 +31,14 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.locks.ReadWriteLock;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import kmer.lab.rubric.KMerRubric;
 
 /**
@@ -47,6 +50,9 @@ import kmer.lab.rubric.KMerRubric;
 @KMerRubric(KMerRubric.Category.BUCKET_MAP)
 public class ConstructorTest {
 	private final int arrayLength;
+
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
 
 	public ConstructorTest(int arrayLength) {
 		this.arrayLength = arrayLength;
