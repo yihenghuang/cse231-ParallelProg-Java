@@ -36,6 +36,6 @@ import kmer.lab.util.ThresholdSlicesTest;
 @Suite.SuiteClasses({ ThresholdSlicesTest.class, ChromosomeThresholdSlicesTest.class,
 		LongConcurrentHashMapKMerCounterTest.class, IntArrayKMerCounterTest.class,
 		AtomicIntegerArrayKMerCounterTest.class, ConcurrentBucketMapTestSuite.class,
-		ConcurrentBucketMapKMerCounterTest.class })
+		ConcurrentBucketMapKMerCounterTest.class, NoPrintingTest.class })
 public class KMerTestSuite {
 }

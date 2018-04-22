@@ -21,6 +21,7 @@
  ******************************************************************************/
 package kmer.lab.concurrentbuckethashmap;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -52,13 +53,21 @@ public class ComputeHoldsLockTest {
 		mthdGetLock.setAccessible(true);
 		ReentrantReadWriteLock lock = (ReentrantReadWriteLock) mthdGetLock.invoke(map, word);
 		assertNotNull(lock);
+		assertEquals(0, lock.getReadLockCount());
+		assertEquals(0, lock.getReadHoldCount());
 		assertFalse(lock.isWriteLocked());
+
 		try {
 			map.compute(word, (k, v) -> {
+				assertEquals(0, lock.getReadLockCount());
+				assertEquals(0, lock.getReadHoldCount());
 				assertTrue(lock.isWriteLockedByCurrentThread());
+				assertEquals(1, lock.getWriteHoldCount());
 				return remappingFunction.apply(k, v);
 			});
 		} finally {
+			assertEquals(0, lock.getReadLockCount());
+			assertEquals(0, lock.getReadHoldCount());
 			assertFalse(lock.isWriteLocked());
 		}
 	}

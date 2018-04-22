@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2017 Dennis Cosgrove
+ * Copyright (C) 2016-2018 Dennis Cosgrove
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,44 +19,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package kmer.lab.rubric;
+package kmer.lab;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import static edu.wustl.cse231s.v5.V5.launchApp;
 
-import edu.wustl.cse231s.rubric.RubricCategory;
+import java.util.List;
+
+import edu.wustl.cse231s.print.AbstractNoPrintingTest;
+import kmer.core.KMerCounter;
+import kmer.lab.atomicintegerarray.AtomicIntegerArrayKMerCounter;
+import kmer.lab.concurrentbuckethashmap.ConcurrentBucketHashMapKMerCounter;
+import kmer.lab.intarray.IntArrayKMerCounter;
+import kmer.lab.longconcurrenthashmap.LongConcurrentHashMapKMerCounter;
+import kmer.lab.rubric.KMerRubric;
+import kmer.util.KMerResource;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@Retention(RetentionPolicy.RUNTIME)
-public @interface KMerRubric {
-	public static enum Category implements RubricCategory {
-		THRESHOLD_SLICES("Correct ThresholdSlices", 0.1),
-		LONG_CONCURRENT_HASH_MAP("Correct Long ConcurrentHashMap", 0.15),
-		INT_ARRAY("Correct Int Array", 0.15),
-		ATOMIC_INTEGER_ARRAY("Correct AtomicIntegerArray", 0.15),
-		BUCKET_DICTIONARY_COUNTER("Correct BucketDictionaryCounter", 0.10),
-		BUCKET_DICTIONARY("Correct BucketDictionary", 0.25),
-		NO_PRINTING(null, 0.0);
-
-		private final String title;
-		private final double portion;
-
-		private Category(String title, double portion) {
-			this.title = title;
-			this.portion = portion;
-		}
-
-		public String getTitle() {
-			return title;
-		}
-
-		@Override
-		public double getPortion() {
-			return portion;
+@KMerRubric(KMerRubric.Category.NO_PRINTING)
+public class NoPrintingTest extends AbstractNoPrintingTest {
+	@Override
+	protected void testKernel() {
+		List<byte[]> sequences = KMerResource.CHOLERAE_ORI_C.getSubSequences();
+		KMerCounter[] counters = { new IntArrayKMerCounter(), new AtomicIntegerArrayKMerCounter(),
+				new LongConcurrentHashMapKMerCounter(), new ConcurrentBucketHashMapKMerCounter() };
+		for (KMerCounter counter : counters) {
+			launchApp(() -> {
+				counter.parse(sequences, 5);
+			});
 		}
 	}
-
-	Category[] value();
 }
