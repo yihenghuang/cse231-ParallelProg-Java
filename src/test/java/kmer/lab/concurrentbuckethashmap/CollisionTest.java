@@ -39,7 +39,7 @@ import kmer.lab.rubric.KMerRubric;
  * 
  *         {@link ConcurrentBucketHashMap#put(Object, Object)}
  */
-@KMerRubric(KMerRubric.Category.BUCKET_DICTIONARY)
+@KMerRubric(KMerRubric.Category.BUCKET_MAP)
 public class CollisionTest extends AbstractDictionaryTest {
 	private static class ValidButPessimalHashObject {
 		private final String value;

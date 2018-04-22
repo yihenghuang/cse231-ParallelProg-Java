@@ -36,9 +36,9 @@ import kmer.util.KMerResource;
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  * 
- *         {@link AtomicIntegerArrayKMerCounter}
+ *         {@link AtomicIntegerArrayKMerCounter#parse(java.util.List, int)}
  */
-@KMerRubric(KMerRubric.Category.ATOMIC_INTEGER_ARRAY)
+@KMerRubric(KMerRubric.Category.ATOMIC_INTEGER_ARRAY_CORRECTNESS)
 @RunWith(Parameterized.class)
 public class AtomicIntegerArrayKMerCounterTest extends AbstractKMerCounterTest {
 	public AtomicIntegerArrayKMerCounterTest(KMerResource resource, int k, CheckEntent checkEntent) {

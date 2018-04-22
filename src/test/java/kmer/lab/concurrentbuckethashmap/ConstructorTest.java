@@ -44,7 +44,7 @@ import kmer.lab.rubric.KMerRubric;
  *         {@link ConcurrentBucketHashMap#ConcurrentBucketHashMap(int)}
  */
 @RunWith(Parameterized.class)
-@KMerRubric(KMerRubric.Category.BUCKET_DICTIONARY)
+@KMerRubric(KMerRubric.Category.BUCKET_MAP)
 public class ConstructorTest {
 	private final int arrayLength;
 

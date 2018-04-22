@@ -41,7 +41,7 @@ import kmer.lab.util.TestRuntimeException;
  * 
  *         {@link ConcurrentBucketHashMap#compute(Object, java.util.function.BiFunction)}
  */
-@KMerRubric(KMerRubric.Category.BUCKET_DICTIONARY)
+@KMerRubric(KMerRubric.Category.BUCKET_MAP)
 public class ComputeHoldsLockTest {
 	private void testRemap(BiFunction<? super String, ? super Integer, ? extends Integer> remappingFunction)
 			throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,

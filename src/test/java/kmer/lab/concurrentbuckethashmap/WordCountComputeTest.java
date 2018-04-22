@@ -34,7 +34,7 @@ import kmer.lab.rubric.KMerRubric;
  * 
  *         {@link ConcurrentBucketHashMap#compute(Object, java.util.function.BiFunction)}
  */
-@KMerRubric(KMerRubric.Category.BUCKET_DICTIONARY)
+@KMerRubric(KMerRubric.Category.BUCKET_MAP)
 public class WordCountComputeTest extends AbstractDictionaryTest {
 	@Test
 	public void testNotPresent() {

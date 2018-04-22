@@ -19,39 +19,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package kmer.lab.longconcurrenthashmap;
+package kmer;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.Test;
 
-import kmer.AbstractKMerCounterTest;
+import edu.wustl.cse231s.v5.bookkeep.BookkeepingUtils;
+import edu.wustl.cse231s.v5.impl.BookkeepingV5Impl;
 import kmer.core.KMerCounter;
-import kmer.lab.longconcurrenthashmap.LongConcurrentHashMapKMerCounter;
-import kmer.lab.rubric.KMerRubric;
 import kmer.util.KMerResource;
+import slice.core.Slice;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
- * 
- *         {@link LongConcurrentHashMapKMerCounter#parse(java.util.List, int)}
  */
-@KMerRubric(KMerRubric.Category.LONG_MAP_CORRECTNESS)
-@RunWith(Parameterized.class)
-public class LongConcurrentHashMapKMerCounterTest extends AbstractKMerCounterTest {
-	public LongConcurrentHashMapKMerCounterTest(KMerResource resource, int k, CheckEntent checkEntent) {
-		super(resource, k, checkEntent);
-	}
+public abstract class AbstractKMerCounterParallelismTest {
+	protected abstract KMerCounter createKMerCounter();
 
-	@Override
-	protected KMerCounter createKMerCounter() {
-		return new LongConcurrentHashMapKMerCounter();
-	}
+	@Test
+	public void test() {
+		KMerCounter kMerCounter = this.createKMerCounter();
+		List<byte[]> sequences = KMerResource.Y_CHROMOSOME_TINY.getSubSequences();
 
-	@Parameters(name = "{0}, k={1}, {2}")
-	public static Collection<Object[]> getConstructorArguments() {
-		return createConstructorArgumentsForMappableImplementations();
+		BookkeepingV5Impl bookkeep = BookkeepingUtils.bookkeep(() -> {
+			kMerCounter.parse(sequences, 5);
+		});
+
+		assertEquals(1, bookkeep.getForasyncTotalInvocationCount());
+		assertEquals(0, bookkeep.getForasyncRangeInvocationCount());
+		assertEquals(0, bookkeep.getForasyncArrayInvocationCount());
+		assertEquals(1, bookkeep.getForasyncIterableInvocationCount());
+		assertEquals(1, bookkeep.getNonAccumulatorFinishInvocationCount());
+
+		Collection<Iterable<?>> iterables = bookkeep.getForasyncIterables();
+		assertEquals(1, iterables.size());
+		Iterable<?> iterable = iterables.iterator().next();
+
+		Iterator<?> iterator = iterable.iterator();
+		assertTrue(iterator.hasNext());
+		while (iterator.hasNext()) {
+			Object o = iterator.next();
+			assertTrue(o instanceof Slice);
+		}
 	}
 }

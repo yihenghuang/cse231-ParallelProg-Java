@@ -37,7 +37,7 @@ import kmer.lab.rubric.KMerRubric;
  *         {@link ConcurrentBucketHashMap#put(Object, Object)}
  *         {@link ConcurrentBucketHashMap#get(Object)}
  */
-@KMerRubric(KMerRubric.Category.BUCKET_DICTIONARY)
+@KMerRubric(KMerRubric.Category.BUCKET_MAP)
 public class EqualsTest extends AbstractDictionaryTest {
 	@Test
 	public void testPrimitiveGet() {

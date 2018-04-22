@@ -70,7 +70,7 @@ public class IterativeAveragerParallelismTest {
 	@Test
 	public void testParallel() {
 		BookkeepingV5Impl bookkeepingV5Impl = bookkeep(new ForForallIterativeAverager());
-		assertEquals(NUM_ITERATIONS, bookkeepingV5Impl.getForasyncInvocationCount());
+		assertEquals(NUM_ITERATIONS, bookkeepingV5Impl.getForasyncTotalInvocationCount());
 		assertEquals(NUM_ITERATIONS, bookkeepingV5Impl.getNonAccumulatorFinishInvocationCount());
 		assertEquals(NUM_ITERATIONS * NUM_SLICES, bookkeepingV5Impl.getAsyncViaForasyncCount());
 	}
@@ -78,7 +78,7 @@ public class IterativeAveragerParallelismTest {
 	@Test
 	public void testParallelPhased() {
 		BookkeepingV5Impl bookkeepingV5Impl = bookkeep(new ForallForPhasedIterativeAverager());
-		assertEquals(1, bookkeepingV5Impl.getForasyncInvocationCount());
+		assertEquals(1, bookkeepingV5Impl.getForasyncTotalInvocationCount());
 		assertEquals(1, bookkeepingV5Impl.getNonAccumulatorFinishInvocationCount());
 		assertEquals(NUM_SLICES, bookkeepingV5Impl.getAsyncViaForasyncCount());
 	}

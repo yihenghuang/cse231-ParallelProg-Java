@@ -49,7 +49,7 @@ import kmer.lab.rubric.KMerRubric;
  *         {@link ConcurrentBucketHashMap#getLock(Object)}
  */
 @RunWith(Parameterized.class)
-@KMerRubric(KMerRubric.Category.BUCKET_DICTIONARY)
+@KMerRubric(KMerRubric.Category.BUCKET_MAP)
 public class GetIndexBucketAndLockTest {
 	private final int keyHashCode;
 

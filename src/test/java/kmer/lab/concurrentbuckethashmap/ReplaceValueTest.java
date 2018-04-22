@@ -34,7 +34,7 @@ import kmer.lab.rubric.KMerRubric;
  * 
  *         {@link ConcurrentBucketHashMap#put(Object, Object)}
  */
-@KMerRubric(KMerRubric.Category.BUCKET_DICTIONARY)
+@KMerRubric(KMerRubric.Category.BUCKET_MAP)
 public class ReplaceValueTest extends AbstractDictionaryTest {
 	@Test
 	public void testPutReplaceValue() {

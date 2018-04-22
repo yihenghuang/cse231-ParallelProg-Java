@@ -36,7 +36,7 @@ import kmer.lab.rubric.KMerRubric;
  * 
  *         {@link ConcurrentBucketHashMap#compute(Object, java.util.function.BiFunction)}
  */
-@KMerRubric(KMerRubric.Category.BUCKET_DICTIONARY)
+@KMerRubric(KMerRubric.Category.BUCKET_MAP)
 public class ComputeTest extends AbstractDictionaryTest {
 	@Test
 	public void test() {
