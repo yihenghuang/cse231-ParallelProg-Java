@@ -21,8 +21,10 @@
  ******************************************************************************/
 package kmer.lab.concurrentbuckethashmap;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.either;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Field;
@@ -62,7 +64,7 @@ public class GetIndexBucketAndLockTest {
 
 	@Rule
 	public TestRule timeout = JUnitUtils.createTimeoutRule();
-	
+
 	@Test
 	public void test() throws NoSuchMethodException, SecurityException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, NoSuchFieldException {
@@ -103,22 +105,25 @@ public class GetIndexBucketAndLockTest {
 		mthdGetIndex.setAccessible(true);
 		int actualIndex = (int) mthdGetIndex.invoke(map, key);
 
-		int expectedIndex = Math.floorMod(keyHashCode, length);
+		int expectedIndexA = Math.floorMod(keyHashCode, length);
+		int expectedIndexB = Math.abs(keyHashCode % length);
+		// NOTE: Math.abs(keyHashCode) % length fails for Integer.MIN_VALUE
+
 		assertTrue(actualIndex + " is less than 0", actualIndex >= 0);
 		assertTrue(actualIndex < length);
-		assertEquals(expectedIndex, actualIndex);
+		assertThat(actualIndex, either(is(expectedIndexA)).or(is(expectedIndexB)));
 
 		Field fldBuckets = ConcurrentBucketHashMap.class.getDeclaredField("buckets");
 		fldBuckets.setAccessible(true);
 		@SuppressWarnings("unchecked")
 		List<Entry<Key, Void>>[] buckets = (List<Entry<Key, Void>>[]) fldBuckets.get(map);
-	
+
 		Method mthdGetBucket = ConcurrentBucketHashMap.class.getDeclaredMethod("getBucket", Object.class);
 		mthdGetBucket.setAccessible(true);
 		@SuppressWarnings("unchecked")
 		List<Entry<Key, Void>> actualBucket = (List<Entry<Key, Void>>) mthdGetBucket.invoke(map, key);
 
-		assertSame(buckets[expectedIndex], actualBucket);
+		assertSame(buckets[actualIndex], actualBucket);
 
 		Field fldLocks = ConcurrentBucketHashMap.class.getDeclaredField("locks");
 		fldLocks.setAccessible(true);
@@ -128,7 +133,7 @@ public class GetIndexBucketAndLockTest {
 		mthdGetLock.setAccessible(true);
 		ReadWriteLock actualLock = (ReadWriteLock) mthdGetLock.invoke(map, key);
 
-		assertSame(locks[expectedIndex], actualLock);
+		assertSame(locks[actualIndex], actualLock);
 	}
 
 	@Parameters(name = "keyHashCode={0}")
