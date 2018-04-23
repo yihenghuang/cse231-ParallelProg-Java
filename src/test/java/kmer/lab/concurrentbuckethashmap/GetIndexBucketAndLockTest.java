@@ -104,7 +104,7 @@ public class GetIndexBucketAndLockTest {
 		int actualIndex = (int) mthdGetIndex.invoke(map, key);
 
 		int expectedIndex = Math.floorMod(keyHashCode, length);
-		assertTrue(actualIndex >= 0);
+		assertTrue(actualIndex + " is less than 0", actualIndex >= 0);
 		assertTrue(actualIndex < length);
 		assertEquals(expectedIndex, actualIndex);
 
@@ -134,7 +134,7 @@ public class GetIndexBucketAndLockTest {
 	@Parameters(name = "keyHashCode={0}")
 	public static Collection<Object[]> getConstructorArguments() {
 		Collection<Object[]> result = new LinkedList<>();
-		int[] values = { 0, 1, 2, 71, 1000, -1, -1000 };
+		int[] values = { 0, 1, 2, 71, 1000, -1, -1000, Integer.MIN_VALUE };
 		for (int value : values) {
 			result.add(new Object[] { value });
 		}
