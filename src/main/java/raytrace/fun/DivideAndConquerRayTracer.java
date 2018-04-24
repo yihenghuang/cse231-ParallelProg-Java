@@ -42,7 +42,7 @@ import raytrace.core.RayTracer;
 import raytrace.core.Section;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public class DivideAndConquerRayTracer implements RayTracer {
