@@ -34,7 +34,7 @@ import connectfour.studio.SequentialConnectFour;
 import edu.wustl.cse231s.NotYetImplementedException;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Finn Voichick
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
