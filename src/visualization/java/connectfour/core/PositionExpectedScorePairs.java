@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2017 Dennis Cosgrove
+ * Copyright (C) 2016-2018 Dennis Cosgrove
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,26 +20,30 @@
  * SOFTWARE.
  ******************************************************************************/
 
-package all.lab;
+package connectfour.core;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
-import backtrack.lab.BacktrackTestSuite;
-import count.assignment.CountTestSuite;
-import kmer.lab.KMerTestSuite;
-import mapreduce.FrameworksLabTestSuite;
-import tnx.lab.ThreadsAndExecutorsTestSuite;
-import util.lab.UtilTestSuite;
-import util.lab.UtilWithLateAdditionsTestSuite;
+import org.apache.commons.io.FileUtils;
+
+import edu.wustl.cse231s.download.DownloadUtils;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ CountTestSuite.class,
-		// UtilTestSuite.class,
-		UtilWithLateAdditionsTestSuite.class, ThreadsAndExecutorsTestSuite.class, FrameworksLabTestSuite.class,
-		BacktrackTestSuite.class, KMerTestSuite.class })
-public class AllLabTestSuite {
+public class PositionExpectedScorePairs {
+	public static List<PositionExpectedScorePair> readAll(URL url) throws IOException {
+		File file = DownloadUtils.getDownloadedFile(url);
+		List<String> lines = FileUtils.readLines(file, Charset.defaultCharset());
+		List<PositionExpectedScorePair> result = new ArrayList<>(lines.size());
+		for (String line : lines) {
+			result.add(new PositionExpectedScorePair(line));
+		}
+		return result;
+	}
 }

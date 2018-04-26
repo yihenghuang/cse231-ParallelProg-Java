@@ -25,15 +25,20 @@ package all.studio;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import atomicity.AtomicityTestSuite;
 import fibonacci.studio.FibonacciTestSuite;
 import iterativeaveraging.studio.IterativeAveragingTestSuite;
 import leggedrace.studio.LeggedRaceTestSuite;
+import lock.allornothing.studio.TryLockingTestSuite;
+import lock.order.studio.LockOrderingTestSuite;
 import mapreduce.CholeraStudioTestSuite;
 import mapreduce.CollectorStudioTestSuite;
 import mapreduce.IntSumStudioTestSuite;
 import mapreduce.MutualFriendsStudioTestSuite;
 import matrixmultiply.studio.MatrixMultiplyTestSuite;
+import pipeline.cake.studio.CakePipelineTestSuite;
 import racecondition.studio.RaceConditionTestSuite;
+import scan.studio.ScanTestSuite;
 import slice.studio.SlicesTestSuite;
 import sort.studio.merge.MergeSortTestSuite;
 
@@ -44,12 +49,8 @@ import sort.studio.merge.MergeSortTestSuite;
 @Suite.SuiteClasses({ SlicesTestSuite.class, MergeSortTestSuite.class, /* floodfill */ FibonacciTestSuite.class,
 		RaceConditionTestSuite.class, MatrixMultiplyTestSuite.class, IntSumStudioTestSuite.class,
 		CollectorStudioTestSuite.class, MutualFriendsStudioTestSuite.class, CholeraStudioTestSuite.class,
-		IterativeAveragingTestSuite.class, LeggedRaceTestSuite.class,
-		// PipelineFaceDetectionTestSuite.class,
-		// DataFlowFaceDetectionTestSuite.class,
-		// LockOrderingTestSuite.class,
-		// TryLockingTestSuite.class
-})
+		IterativeAveragingTestSuite.class, LeggedRaceTestSuite.class, CakePipelineTestSuite.class, ScanTestSuite.class,
+		AtomicityTestSuite.class, LockOrderingTestSuite.class, TryLockingTestSuite.class })
 public class AllStudioTestSuite {
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2017 Dennis Cosgrove
+ * Copyright (C) 2016-2018 Dennis Cosgrove
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,26 +20,33 @@
  * SOFTWARE.
  ******************************************************************************/
 
-package all.lab;
+package connectfour.core;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
-import backtrack.lab.BacktrackTestSuite;
-import count.assignment.CountTestSuite;
-import kmer.lab.KMerTestSuite;
-import mapreduce.FrameworksLabTestSuite;
-import tnx.lab.ThreadsAndExecutorsTestSuite;
-import util.lab.UtilTestSuite;
-import util.lab.UtilWithLateAdditionsTestSuite;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ CountTestSuite.class,
-		// UtilTestSuite.class,
-		UtilWithLateAdditionsTestSuite.class, ThreadsAndExecutorsTestSuite.class, FrameworksLabTestSuite.class,
-		BacktrackTestSuite.class, KMerTestSuite.class })
-public class AllLabTestSuite {
+public class PositionExpectedScorePair {
+	private final String position;
+	private final int expectedScore;
+
+	public PositionExpectedScorePair(String s) {
+		String[] vs = s.split(" ");
+		this.position = vs[0];
+		this.expectedScore = Integer.parseInt(vs[1]);
+	}
+
+	public String getPosition() {
+		return position;
+	}
+
+	public int getExpectedScore() {
+		return expectedScore;
+	}
+
+	@Override
+	public String toString() {
+		return StringUtils.rightPad(this.position, 42, '_') + "; expected score: " + this.expectedScore;
+	}
 }

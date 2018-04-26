@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016-2017 Dennis Cosgrove
+ * Copyright (C) 2016-2018 Dennis Cosgrove
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,26 +20,22 @@
  * SOFTWARE.
  ******************************************************************************/
 
-package all.lab;
+package connectfour.studio;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
-import backtrack.lab.BacktrackTestSuite;
-import count.assignment.CountTestSuite;
-import kmer.lab.KMerTestSuite;
-import mapreduce.FrameworksLabTestSuite;
-import tnx.lab.ThreadsAndExecutorsTestSuite;
-import util.lab.UtilTestSuite;
-import util.lab.UtilWithLateAdditionsTestSuite;
+import connectfour.challenge.NegamaxUtils;
+import connectfour.core.Board;
+import connectfour.core.ColumnEvaluationPair;
+import connectfour.core.Config;
+import edu.wustl.cse231s.NotYetImplementedException;
 
 /**
+ * @author __STUDENT_NAME__
+ * @author Finn Voichick
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ CountTestSuite.class,
-		// UtilTestSuite.class,
-		UtilWithLateAdditionsTestSuite.class, ThreadsAndExecutorsTestSuite.class, FrameworksLabTestSuite.class,
-		BacktrackTestSuite.class, KMerTestSuite.class })
-public class AllLabTestSuite {
+public class SequentialConnectFour {
+	public static ColumnEvaluationPair negamax(Board board, Config config, int currentDepth) {
+		throw new NotYetImplementedException();
+	}
+
 }

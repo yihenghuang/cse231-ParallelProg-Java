@@ -33,7 +33,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Supplier;
 
 import org.apache.commons.lang3.mutable.Mutable;
 import org.apache.commons.lang3.mutable.MutableBoolean;
@@ -45,8 +44,6 @@ import org.junit.rules.TestRule;
 import org.junit.runners.MethodSorters;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
-import edu.wustl.cse231s.v5.api.CheckedRunnable;
-import lock.allornothing.studio.LockUtils;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
