@@ -45,7 +45,7 @@ import mapreduce.apps.wordcount.studio.WordCountReducerStressTest;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ WordCountMapperLetterCaseTest.class, WordCountMapperStressTest.class,
 		CardMapperNumericOnlyTest.class, CardMapperTest.class, IntegerSumClassicReducerPointedTest.class,
-		WordCountReducerStressTest.class, KMerSpecificKMapperTest.class, KMerPointedMapperTest.class,
+		WordCountReducerStressTest.class, KMerSpecificKMapperTest.class, /*KMerPointedMapperTest.class,*/
 		KMerMapperTest.class })
 public class IntSumStudioTestSuite {
 	@BeforeClass
