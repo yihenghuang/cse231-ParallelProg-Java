@@ -36,7 +36,7 @@ import edu.wustl.cse231s.NotYetImplementedException;
 import edu.wustl.cse231s.util.IntegerRange;
 
 /**
- * @author __STUDENT_NAME__
+ * @author Yiheng Huang
  * @author Finn Voichick
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
