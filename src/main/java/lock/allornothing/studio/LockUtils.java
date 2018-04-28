@@ -23,11 +23,8 @@ package lock.allornothing.studio;
 
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Objects;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import edu.wustl.cse231s.concurrent.Interruptible;
 
 /**
@@ -41,14 +38,30 @@ public class LockUtils {
 	 * acquired.
 	 */
 	public static boolean tryLockAll(List<ReentrantLock> locks) {
-		throw new NotYetImplementedException();
+		boolean lockAll = true;
+		ListIterator<ReentrantLock> it = locks.listIterator();
+		while (it.hasNext()) {
+			if (!it.next().tryLock()) {
+				lockAll = false;
+				break;
+			}
+		}
+		if (lockAll != true) {
+			it.previous();
+			while (it.hasPrevious()) {
+				it.previous().unlock();
+			}
+		}
+		return lockAll;
 	}
 
 	/**
 	 * Unlocks all of the specified locks.
 	 */
 	public static void unlockAllHeldLocks(List<ReentrantLock> locks) {
-		throw new NotYetImplementedException();
+		for (ReentrantLock each : locks) {
+			each.unlock();
+		}
 	}
 
 	/**
@@ -58,7 +71,15 @@ public class LockUtils {
 	 * @return whether or not successful
 	 */
 	public static boolean runWithAllLocksOrDontRunAtAll(List<ReentrantLock> locks, Runnable body) {
-		throw new NotYetImplementedException();
+		boolean status = tryLockAll(locks);
+		if (status) {
+			try {
+				body.run();
+			} finally {
+				unlockAllHeldLocks(locks);
+			}
+		}
+		return status;
 	}
 
 	/**
