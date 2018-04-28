@@ -21,13 +21,20 @@
  ******************************************************************************/
 package kmer.lab;
 
+import java.io.IOException;
+
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import edu.wustl.cse231s.bioinformatics.io.resource.ChromosomeResource;
+import kmer.lab.atomicintegerarray.AtomicIntegerArrayKMerCounterParallelismTest;
 import kmer.lab.atomicintegerarray.AtomicIntegerArrayKMerCounterTest;
+import kmer.lab.concurrentbuckethashmap.ConcurrentBucketMapKMerCounterParallelismTest;
 import kmer.lab.concurrentbuckethashmap.ConcurrentBucketMapKMerCounterTest;
 import kmer.lab.concurrentbuckethashmap.ConcurrentBucketMapTestSuite;
 import kmer.lab.intarray.IntArrayKMerCounterTest;
+import kmer.lab.longconcurrenthashmap.LongConcurrentHashMapKMerCounterParallelismTest;
 import kmer.lab.longconcurrenthashmap.LongConcurrentHashMapKMerCounterTest;
 import kmer.lab.util.ChromosomeThresholdSlicesTest;
 import kmer.lab.util.ThresholdSlicesTest;
@@ -36,6 +43,16 @@ import kmer.lab.util.ThresholdSlicesTest;
 @Suite.SuiteClasses({ ThresholdSlicesTest.class, ChromosomeThresholdSlicesTest.class,
 		LongConcurrentHashMapKMerCounterTest.class, IntArrayKMerCounterTest.class,
 		AtomicIntegerArrayKMerCounterTest.class, ConcurrentBucketMapTestSuite.class,
-		ConcurrentBucketMapKMerCounterTest.class })
+		ConcurrentBucketMapKMerCounterTest.class, LongConcurrentHashMapKMerCounterParallelismTest.class,
+		AtomicIntegerArrayKMerCounterParallelismTest.class, ConcurrentBucketMapKMerCounterParallelismTest.class,
+		NoPrintingTest.class })
 public class KMerTestSuite {
+	@BeforeClass
+	public static void setUp() throws IOException {
+		ChromosomeResource[] chromosomeResources = { ChromosomeResource.HOMO_SAPIENS_Y,
+				ChromosomeResource.HOMO_SAPIENS_X };
+		for (ChromosomeResource chromosomeResource : chromosomeResources) {
+			ChromosomeResource.readSubSequences(chromosomeResource);
+		}
+	}
 }

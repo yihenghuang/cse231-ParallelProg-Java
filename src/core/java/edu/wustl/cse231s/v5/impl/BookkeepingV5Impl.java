@@ -21,6 +21,8 @@
  *******************************************************************************/
 package edu.wustl.cse231s.v5.impl;
 
+import java.util.Collection;
+
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
@@ -35,7 +37,13 @@ public interface BookkeepingV5Impl extends V5Impl {
 
 	int getAccumulatorRegisterCount();
 
-	int getForasyncInvocationCount();
+	int getForasyncTotalInvocationCount();
+
+	int getForasyncRangeInvocationCount();
+
+	int getForasyncIterableInvocationCount();
+
+	int getForasyncArrayInvocationCount();
 
 	int getForasyncChunkedInvovationCount();
 
@@ -50,4 +58,8 @@ public interface BookkeepingV5Impl extends V5Impl {
 	int getFutureInvocationCount();
 
 	void resetAllInvocationCounts();
+
+	Collection<Object[]> getForasyncArrays();
+
+	Collection<Iterable<?>> getForasyncIterables();
 }

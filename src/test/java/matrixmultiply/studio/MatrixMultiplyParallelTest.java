@@ -58,7 +58,7 @@ public class MatrixMultiplyParallelTest {
 		int SIZE = 16;
 		BookkeepingV5Impl bookkeep = test(SIZE, new ForallForallMatrixMultiplier());
 
-		int forasyncCount = bookkeep.getForasyncInvocationCount();
+		int forasyncCount = bookkeep.getForasyncTotalInvocationCount();
 		int forasync2dCount = bookkeep.getForasync2dInvocationCount();
 		int finishCount = bookkeep.getNonAccumulatorFinishInvocationCount();
 		Assert.assertNotEquals(0, forasyncCount);
@@ -77,7 +77,7 @@ public class MatrixMultiplyParallelTest {
 		int SIZE = 16;
 		BookkeepingV5Impl bookkeep = test(SIZE, new Forall2dMatrixMultiplier());
 
-		int forasyncCount = bookkeep.getForasyncInvocationCount();
+		int forasyncCount = bookkeep.getForasyncTotalInvocationCount();
 		int forasync2dCount = bookkeep.getForasync2dInvocationCount();
 		int forasync2dChunkedCount = bookkeep.getForasync2dChunkedInvocationCount();
 		int finishCount = bookkeep.getNonAccumulatorFinishInvocationCount();
@@ -92,7 +92,7 @@ public class MatrixMultiplyParallelTest {
 		int SIZE = 16;
 		BookkeepingV5Impl bookkeep = test(SIZE, new Forall2dChunkedMatrixMultiplier());
 
-		int forasyncCount = bookkeep.getForasyncInvocationCount();
+		int forasyncCount = bookkeep.getForasyncTotalInvocationCount();
 		int forasync2dCount = bookkeep.getForasync2dInvocationCount();
 		int forasync2dChunkedCount = bookkeep.getForasync2dChunkedInvocationCount();
 		int finishCount = bookkeep.getNonAccumulatorFinishInvocationCount();

@@ -35,6 +35,7 @@ import java.util.TreeSet;
 
 import org.junit.Test;
 
+import backtrack.lab.rubric.BacktrackRubric;
 import sudoku.core.ConstraintPropagator;
 import sudoku.core.Square;
 import sudoku.util.GivensUtils;
@@ -42,6 +43,7 @@ import sudoku.util.GivensUtils;
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
+@BacktrackRubric(BacktrackRubric.Category.CONTRAINT_PROPAGATOR)
 public class ConstraintPropagationDeepCopyTest {
 	@Test
 	public void test() {

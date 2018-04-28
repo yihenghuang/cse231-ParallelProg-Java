@@ -36,9 +36,9 @@ import kmer.util.KMerResource;
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  * 
- *         {@link LongConcurrentHashMapKMerCounter}
+ *         {@link LongConcurrentHashMapKMerCounter#parse(java.util.List, int)}
  */
-@KMerRubric(KMerRubric.Category.LONG_CONCURRENT_HASH_MAP)
+@KMerRubric(KMerRubric.Category.LONG_MAP_CORRECTNESS)
 @RunWith(Parameterized.class)
 public class LongConcurrentHashMapKMerCounterTest extends AbstractKMerCounterTest {
 	public LongConcurrentHashMapKMerCounterTest(KMerResource resource, int k, CheckEntent checkEntent) {

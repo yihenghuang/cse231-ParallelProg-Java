@@ -46,11 +46,11 @@ import mapreduce.framework.core.Mapper;
 @RunWith(Parameterized.class)
 public class KMerPointedMapperTest {
 	private final String chromosomeText;
-	private final int kMerLength;
+	private final int k;
 
-	public KMerPointedMapperTest(String chromosomeText, int kMerLength) {
+	public KMerPointedMapperTest(String chromosomeText, int k) {
 		this.chromosomeText = chromosomeText;
-		this.kMerLength = kMerLength;
+		this.k = k;
 	}
 
 	@Rule
@@ -58,19 +58,19 @@ public class KMerPointedMapperTest {
 
 	@Test
 	public void test() {
-		Mapper<byte[], String, Integer> mapper = new KMerMapper(kMerLength);
+		Mapper<byte[], String, Integer> mapper = new KMerMapper(k);
 		MutableInt i = new MutableInt(0);
 		byte[] chromosome = chromosomeText.getBytes(StandardCharsets.UTF_8);
-		mapper.map(chromosome, (k, v) -> {
-			assertEquals(1, v.intValue());
-			assertEquals(kMerLength, k.length());
-			assertEquals(chromosomeText.substring(i.getValue(), i.getValue() + kMerLength), k);
+		mapper.map(chromosome, (key, value) -> {
+			assertEquals(1, value.intValue());
+			assertEquals(k, key.length());
+			assertEquals(chromosomeText.substring(i.getValue(), i.getValue() + k), k);
 			i.increment();
 		});
-		assertEquals(chromosomeText.length() - kMerLength + 1, i.intValue());
+		assertEquals(chromosomeText.length() - k + 1, i.intValue());
 	}
 
-	@Parameters(name = "{0}; kMerLength={1}")
+	@Parameters(name = "{0}; k={1}")
 	public static Collection<Object[]> getConstructorArguments() {
 		List<Object[]> result = new LinkedList<>();
 		String asThenTs = "AAATTT";

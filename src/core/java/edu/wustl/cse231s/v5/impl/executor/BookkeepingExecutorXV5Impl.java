@@ -21,7 +21,9 @@
  *******************************************************************************/
 package edu.wustl.cse231s.v5.impl.executor;
 
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -48,7 +50,9 @@ public class BookkeepingExecutorXV5Impl extends MetricsExecutorV5Impl implements
 	private final AtomicInteger finishAccumulatorInvocationCount = new AtomicInteger(0);
 	private final AtomicInteger accumulatorRegisterCount = new AtomicInteger(0);
 
-	private final AtomicInteger forasyncInvovationCount = new AtomicInteger(0);
+	private final AtomicInteger forasyncRangeInvovationCount = new AtomicInteger(0);
+	private final AtomicInteger forasyncArrayInvovationCount = new AtomicInteger(0);
+	private final AtomicInteger forasyncIterableInvovationCount = new AtomicInteger(0);
 	private final AtomicInteger forasyncChunkedInvovationCount = new AtomicInteger(0);
 	private final AtomicInteger asyncViaForasyncCount = new AtomicInteger(0);
 
@@ -56,6 +60,9 @@ public class BookkeepingExecutorXV5Impl extends MetricsExecutorV5Impl implements
 	private final AtomicInteger forasync2dChunkedInvocationCount = new AtomicInteger(0);
 
 	private final AtomicInteger futureInvocationCount = new AtomicInteger(0);
+
+	private final ConcurrentLinkedQueue<Iterable<?>> forasyncIterables = new ConcurrentLinkedQueue<>();
+	private final ConcurrentLinkedQueue<Object[]> forasyncArrays = new ConcurrentLinkedQueue<>();
 
 	public BookkeepingExecutorXV5Impl(ExecutorService executorService) {
 		super(executorService);
@@ -77,7 +84,7 @@ public class BookkeepingExecutorXV5Impl extends MetricsExecutorV5Impl implements
 	public void finish(RegisterAccumulatorsOption registerAccumulatorsOption, CheckedRunnable body)
 			throws InterruptedException, ExecutionException {
 		super.finish(registerAccumulatorsOption, body);
-		if(registerAccumulatorsOption != null) {
+		if (registerAccumulatorsOption != null) {
 			finishAccumulatorInvocationCount.incrementAndGet();
 			FinishAccumulator<?>[] accumulators = registerAccumulatorsOption.getAccumulators();
 			accumulatorRegisterCount.addAndGet(accumulators != null ? accumulators.length : 0);
@@ -97,22 +104,23 @@ public class BookkeepingExecutorXV5Impl extends MetricsExecutorV5Impl implements
 	public void forasync(int min, int maxExclusive, CheckedIntConsumer body)
 			throws InterruptedException, ExecutionException {
 		super.forasync(min, maxExclusive, body);
-		forasyncInvovationCount.incrementAndGet();
+		forasyncRangeInvovationCount.incrementAndGet();
 		asyncViaForasyncCount.addAndGet(maxExclusive - min);
 	}
 
 	@Override
 	public <T> void forasync(T[] array, CheckedConsumer<T> body) throws InterruptedException, ExecutionException {
 		super.forasync(array, body);
-		forasyncInvovationCount.incrementAndGet();
+		forasyncArrayInvovationCount.incrementAndGet();
 		asyncViaForasyncCount.addAndGet(array.length);
+		forasyncArrays.offer(array);
 	}
 
 	@Override
 	public <T> void forasync(Iterable<T> iterable, CheckedConsumer<T> body)
 			throws InterruptedException, ExecutionException {
 		super.forasync(iterable, body);
-		forasyncInvovationCount.incrementAndGet();
+		forasyncIterableInvovationCount.incrementAndGet();
 		Iterator<T> iterator = iterable.iterator();
 		int taskCount = 0;
 		while (iterator.hasNext()) {
@@ -120,6 +128,8 @@ public class BookkeepingExecutorXV5Impl extends MetricsExecutorV5Impl implements
 			taskCount++;
 		}
 		asyncViaForasyncCount.addAndGet(taskCount);
+
+		forasyncIterables.offer(iterable);
 	}
 
 	@Override
@@ -172,8 +182,24 @@ public class BookkeepingExecutorXV5Impl extends MetricsExecutorV5Impl implements
 	}
 
 	@Override
-	public int getForasyncInvocationCount() {
-		return forasyncInvovationCount.get();
+	public int getForasyncTotalInvocationCount() {
+		return getForasyncRangeInvocationCount() + getForasyncArrayInvocationCount()
+				+ getForasyncIterableInvocationCount();
+	}
+
+	@Override
+	public int getForasyncRangeInvocationCount() {
+		return forasyncRangeInvovationCount.get();
+	}
+
+	@Override
+	public int getForasyncArrayInvocationCount() {
+		return forasyncArrayInvovationCount.get();
+	}
+
+	@Override
+	public int getForasyncIterableInvocationCount() {
+		return forasyncIterableInvovationCount.get();
 	}
 
 	@Override
@@ -208,11 +234,25 @@ public class BookkeepingExecutorXV5Impl extends MetricsExecutorV5Impl implements
 	}
 
 	@Override
+	public Collection<Object[]> getForasyncArrays() {
+		return forasyncArrays;
+	}
+
+	@Override
+	public Collection<Iterable<?>> getForasyncIterables() {
+		return forasyncIterables;
+	}
+
+	@Override
 	public void resetAllInvocationCounts() {
 		asyncInvocationCount.set(0);
 		finishNonAccumulatorInvocationCount.set(0);
-		forasyncInvovationCount.set(0);
+		forasyncRangeInvovationCount.set(0);
+		forasyncArrayInvovationCount.set(0);
+		forasyncIterableInvovationCount.set(0);
 		asyncViaForasyncCount.set(0);
 		futureInvocationCount.set(0);
+
+		forasyncIterables.clear();
 	}
 }

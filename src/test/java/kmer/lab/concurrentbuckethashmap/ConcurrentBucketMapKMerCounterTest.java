@@ -36,9 +36,9 @@ import kmer.util.KMerResource;
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  * 
- *         {@link ConcurrentBucketHashMapKMerCounter}
+ *         {@link ConcurrentBucketHashMapKMerCounter#parse(java.util.List, int)}
  */
-@KMerRubric(KMerRubric.Category.BUCKET_DICTIONARY_COUNTER)
+@KMerRubric(KMerRubric.Category.BUCKET_COUNTER_CORRECTNESS)
 @RunWith(Parameterized.class)
 public class ConcurrentBucketMapKMerCounterTest extends AbstractKMerCounterTest {
 	public ConcurrentBucketMapKMerCounterTest(KMerResource resource, int k, CheckEntent checkEntent) {

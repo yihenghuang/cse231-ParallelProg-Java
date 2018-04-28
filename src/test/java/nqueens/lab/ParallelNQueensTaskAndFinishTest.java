@@ -27,6 +27,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import backtrack.lab.rubric.BacktrackRubric;
 import edu.wustl.cse231s.v5.bookkeep.BookkeepingUtils;
 import edu.wustl.cse231s.v5.impl.BookkeepingV5Impl;
 import nqueens.core.ImmutableQueenLocations;
@@ -34,6 +35,7 @@ import nqueens.core.ImmutableQueenLocations;
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
+@BacktrackRubric(BacktrackRubric.Category.PARALLEL_N_QUEENS_PARALLELISM)
 public class ParallelNQueensTaskAndFinishTest {
 	@Test
 	public void test() {

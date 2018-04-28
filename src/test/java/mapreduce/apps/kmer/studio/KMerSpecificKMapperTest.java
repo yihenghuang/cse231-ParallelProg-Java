@@ -45,10 +45,10 @@ import mapreduce.framework.core.Mapper;
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 @RunWith(Parameterized.class)
-public class KMerSpecificKMerLengthMapperTest {
+public class KMerSpecificKMapperTest {
 	private final String chromosomeText;
 
-	public KMerSpecificKMerLengthMapperTest(String chromosomeText) {
+	public KMerSpecificKMapperTest(String chromosomeText) {
 		this.chromosomeText = chromosomeText;
 	}
 
@@ -91,7 +91,7 @@ public class KMerSpecificKMerLengthMapperTest {
 		});
 	}
 
-	@Parameters(name = "{0}; kMerLength={1}")
+	@Parameters(name = "{0}; k={1}")
 	public static Collection<Object[]> getConstructorArguments() {
 		List<Object[]> result = new LinkedList<>();
 		String asThenTs = "AAATTT";

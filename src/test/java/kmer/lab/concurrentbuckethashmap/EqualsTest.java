@@ -26,8 +26,11 @@ import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
+import edu.wustl.cse231s.junit.JUnitUtils;
 import kmer.lab.concurrentbuckethashmap.ConcurrentBucketHashMap;
 import kmer.lab.rubric.KMerRubric;
 
@@ -37,8 +40,11 @@ import kmer.lab.rubric.KMerRubric;
  *         {@link ConcurrentBucketHashMap#put(Object, Object)}
  *         {@link ConcurrentBucketHashMap#get(Object)}
  */
-@KMerRubric(KMerRubric.Category.BUCKET_DICTIONARY)
+@KMerRubric(KMerRubric.Category.BUCKET_MAP)
 public class EqualsTest extends AbstractDictionaryTest {
+	@Rule
+	public TestRule timeout = JUnitUtils.createTimeoutRule();
+
 	@Test
 	public void testPrimitiveGet() {
 		launchApp(() -> {

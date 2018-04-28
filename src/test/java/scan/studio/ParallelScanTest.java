@@ -53,7 +53,7 @@ public class ParallelScanTest extends AbstractScanTest {
 			powerOfTwoCount++;
 			value *= 2;
 		}
-		assertEquals(powerOfTwoCount, bookkeep.getForasyncInvocationCount());
+		assertEquals(powerOfTwoCount, bookkeep.getForasyncTotalInvocationCount());
 		assertEquals(powerOfTwoCount, bookkeep.getNonAccumulatorFinishInvocationCount());
 		assertEquals(powerOfTwoCount * length, bookkeep.getAsyncViaForasyncCount());
 	}

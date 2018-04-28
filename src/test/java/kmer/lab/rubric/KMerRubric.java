@@ -33,11 +33,15 @@ import edu.wustl.cse231s.rubric.RubricCategory;
 public @interface KMerRubric {
 	public static enum Category implements RubricCategory {
 		THRESHOLD_SLICES("Correct ThresholdSlices", 0.1),
-		LONG_CONCURRENT_HASH_MAP("Correct Long ConcurrentHashMap", 0.15),
+		LONG_MAP_CORRECTNESS("Correct Long ConcurrentHashMap", 0.10),
+		LONG_MAP_PARALLELISM("Parallel Long ConcurrentHashMap", 0.05),
 		INT_ARRAY("Correct Int Array", 0.15),
-		ATOMIC_INTEGER_ARRAY("Correct AtomicIntegerArray", 0.15),
-		BUCKET_DICTIONARY_COUNTER("Correct BucketDictionaryCounter", 0.15),
-		BUCKET_DICTIONARY("Correct BucketDictionary", 0.1);
+		ATOMIC_INTEGER_ARRAY_CORRECTNESS("Correct AtomicIntegerArray", 0.10),
+		ATOMIC_INTEGER_ARRAY_PARALLELISM("Parallel AtomicIntegerArray", 0.05),
+		BUCKET_COUNTER_CORRECTNESS("Correct ConcurrentBucketHashMapCounter", 0.05),
+		BUCKET_COUNTER_PARALLELISM("Parallel ConcurrentBucketHashMapCounter", 0.05),
+		BUCKET_MAP("Correct ConcurrentBucketHashMap", 0.25),
+		NO_PRINTING(null, 0.0);
 
 		private final String title;
 		private final double portion;
