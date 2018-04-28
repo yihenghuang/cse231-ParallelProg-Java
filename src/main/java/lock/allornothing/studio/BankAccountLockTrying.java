@@ -66,6 +66,7 @@ public class BankAccountLockTrying {
 					} finally {
 						recipient.getLock().unlock();
 					}
+
 				}
 			} finally {
 				sender.getLock().unlock();

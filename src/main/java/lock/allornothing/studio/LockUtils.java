@@ -45,6 +45,7 @@ public class LockUtils {
 				lockAll = false;
 				break;
 			}
+
 		}
 		if (lockAll != true) {
 			it.previous();
