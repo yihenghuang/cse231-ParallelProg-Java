@@ -22,27 +22,67 @@
 package connectfour.core;
 
 /**
+ * An enum representing the two players in the game. These are used to
+ * distinguish between pieces on the board.
+ * 
  * @author Finn Voichick
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
 public enum Player {
+
+	/** The red player in the game. */
 	RED() {
+
 		@Override
 		public Player getOpponent() {
 			return YELLOW;
 		}
+
+		@Override
+		public char toLetterRepresentation() {
+			return 'R';
+		}
+
+		@Override
+		public String toString() {
+			return "Red player";
+		}
+
 	},
 
+	/** The yellow player in the game. */
 	YELLOW() {
+
 		@Override
 		public Player getOpponent() {
 			return RED;
 		}
+
+		@Override
+		public char toLetterRepresentation() {
+			return 'Y';
+		}
+
+		@Override
+		public String toString() {
+			return "Yellow player";
+		}
+
 	};
 
+	/**
+	 * Gets this player's opponent. {@link #RED} and {@link #YELLOW} are each
+	 * other's opponent.
+	 * 
+	 * @return a player's opponent in the game
+	 */
 	public abstract Player getOpponent();
 
-	public char toLetterRepresentation() {
-		return this.name().charAt(0);
-	}
+	/**
+	 * Gets a single-letter representation of this player, either 'R' or 'Y'. This
+	 * is used to display the board in text in a matrix form.
+	 * 
+	 * @return a single character representing this player
+	 */
+	public abstract char toLetterRepresentation();
 }
