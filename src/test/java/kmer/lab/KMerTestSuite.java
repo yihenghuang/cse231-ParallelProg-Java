@@ -37,11 +37,12 @@ import kmer.lab.intarray.IntArrayKMerCounterTest;
 import kmer.lab.longconcurrenthashmap.LongConcurrentHashMapKMerCounterParallelismTest;
 import kmer.lab.longconcurrenthashmap.LongConcurrentHashMapKMerCounterTest;
 import kmer.lab.util.ChromosomeThresholdSlicesTest;
+import kmer.lab.util.ThresholdSlicesComprehensiveTest;
 import kmer.lab.util.ThresholdSlicesTest;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ ThresholdSlicesTest.class, ChromosomeThresholdSlicesTest.class,
-		LongConcurrentHashMapKMerCounterTest.class, IntArrayKMerCounterTest.class,
+@Suite.SuiteClasses({ ThresholdSlicesTest.class, ThresholdSlicesComprehensiveTest.class,
+		ChromosomeThresholdSlicesTest.class, LongConcurrentHashMapKMerCounterTest.class, IntArrayKMerCounterTest.class,
 		AtomicIntegerArrayKMerCounterTest.class, ConcurrentBucketMapTestSuite.class,
 		ConcurrentBucketMapKMerCounterTest.class, LongConcurrentHashMapKMerCounterParallelismTest.class,
 		AtomicIntegerArrayKMerCounterParallelismTest.class, ConcurrentBucketMapKMerCounterParallelismTest.class,

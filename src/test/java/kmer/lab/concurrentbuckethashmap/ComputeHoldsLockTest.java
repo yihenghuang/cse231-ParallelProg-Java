@@ -37,7 +37,6 @@ import org.junit.rules.TestRule;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
 import kmer.lab.rubric.KMerRubric;
-import kmer.lab.util.TestRuntimeException;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
