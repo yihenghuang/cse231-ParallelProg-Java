@@ -21,6 +21,7 @@
  ******************************************************************************/
 package kmer.lab.util;
 
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -33,7 +34,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
@@ -43,12 +43,11 @@ import org.junit.runners.Parameterized.Parameters;
 
 import edu.wustl.cse231s.junit.JUnitUtils;
 import slice.core.Slice;
-import slice.studio.Slices;
 
 /**
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  * 
- *         {@link Slices}
+ *         {@link ThresholdSlices#createSlicesBelowThreshold(List, int, int)}
  */
 @RunWith(Parameterized.class)
 public class ThresholdSlicesComprehensiveTest {
@@ -113,7 +112,7 @@ public class ThresholdSlicesComprehensiveTest {
 		List<Object[]> result = new LinkedList<>();
 		for (int length = 71; length < 231; length += 11) {
 			for (int k : new int[] { 1, 12, 23, length }) {
-				for (int sliceThreshold : new int[] { 1, 2, 3, 8, 17, 101 }) {
+				for (int sliceThreshold : new int[] { 2, 3, 8, 17, 101 }) {
 					result.add(new Object[] { length, k, sliceThreshold });
 				}
 			}
