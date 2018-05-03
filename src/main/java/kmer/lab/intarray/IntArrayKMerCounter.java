@@ -44,6 +44,7 @@ public class IntArrayKMerCounter implements KMerCounter {
 		for (byte[] each : sequences) {
 			for (int i = 0; i < (each.length + 1 - k); ++i) {
 				arr[KMerUtils.toPackedInt(each, i, k)]++;
+
 			}
 		}
 		return new IntArrayKMerCount(k, arr);

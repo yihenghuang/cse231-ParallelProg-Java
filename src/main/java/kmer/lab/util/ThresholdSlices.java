@@ -58,6 +58,7 @@ public class ThresholdSlices {
 		if (max - min < sliceThreshold) {
 			Slice<byte[]> s = new Slice<byte[]>(sequence, -1, min, max);
 			slices.add(s);
+
 		} else {
 			int mid = (max + min) / 2;
 			addToCollectionKernel(slices, sequence, min, mid, sliceThreshold);

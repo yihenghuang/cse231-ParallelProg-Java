@@ -50,6 +50,7 @@ public class AtomicIntegerArrayKMerCounter implements KMerCounter {
 		forall(s, (slice) -> {
 			for (int i = slice.getMinInclusive(); i < (slice.getMaxExclusive()); ++i) {
 				arr.getAndIncrement(KMerUtils.toPackedInt(slice.getOriginalUnslicedData(), i, k));
+
 			}
 		});
 		return new AtomicIntegerArrayKMerCount(k, arr);

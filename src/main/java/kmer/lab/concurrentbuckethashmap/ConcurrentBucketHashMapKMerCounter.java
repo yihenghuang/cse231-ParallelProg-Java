@@ -44,7 +44,6 @@ public class ConcurrentBucketHashMapKMerCounter implements KMerCounter {
 
 		ConcurrentBucketHashMap<Long, Integer> amap = new ConcurrentBucketHashMap<Long, Integer>(1024);
 		List<Slice<byte[]>> s = ThresholdSlices.createSlicesBelowReasonableThreshold(sequences, k);
-
 		forall(s, (slice) -> {
 			for (int i = slice.getMinInclusive(); i < slice.getMaxExclusive(); ++i) {
 				long key = KMerUtils.toPackedLong(slice.getOriginalUnslicedData(), i, k);

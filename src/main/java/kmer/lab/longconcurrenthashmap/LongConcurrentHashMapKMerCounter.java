@@ -50,7 +50,6 @@ public class LongConcurrentHashMapKMerCounter implements KMerCounter {
 		ConcurrentHashMap<Long, Integer> map = new ConcurrentHashMap<Long, Integer>();
 		List<Slice<byte[]>> s = ThresholdSlices.createSlicesBelowReasonableThreshold(sequences, k);
 		forall(s, (slice) -> {
-
 			int min = slice.getMinInclusive();
 			int max = slice.getMaxExclusive();
 			for (int i = min; i < max; ++i) {

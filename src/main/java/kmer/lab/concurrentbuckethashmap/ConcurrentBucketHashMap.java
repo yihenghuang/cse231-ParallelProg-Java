@@ -78,6 +78,7 @@ import net.jcip.annotations.ThreadSafe;
 			if (Objects.equal(entry.getKey(), key)) {
 				return entry;
 			}
+
 		}
 		return value;
 	}
