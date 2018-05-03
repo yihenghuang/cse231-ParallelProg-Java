@@ -21,11 +21,27 @@
  ******************************************************************************/
 package connectfour.core;
 
-@FunctionalInterface
 /**
+ * A heuristic function that is used to quickly evaluate a board. A typical
+ * heuristic function does not need to look ahead in the game; it is a fast way
+ * to estimate how good a given board is.
+ * 
  * @author Finn Voichick
  * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
  */
+@FunctionalInterface
 public interface Heuristic {
+
+	/**
+	 * Evaluates the board. Implementations should return a positive number if the
+	 * board is favorable for the current player, and a negative number if the board
+	 * is favorable for the opponent of the current player. Values closer to zero
+	 * indicate that the game is more evenly-matched, while more extreme values
+	 * indicate a more extreme advantage.
+	 * 
+	 * @param board
+	 *            a board to evaluate
+	 * @return an evaluation of the board
+	 */
 	public double evaluate(Board board);
 }

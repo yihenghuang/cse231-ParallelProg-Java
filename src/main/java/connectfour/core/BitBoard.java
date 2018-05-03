@@ -26,17 +26,29 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import net.jcip.annotations.Immutable;
+
 /**
- * @author Finn Voichick
+ * An immutable implementation of the Board interface that uses bit-shifting to
+ * store the whole board state in two longs. It takes up very little memory and
+ * most of its operations are very fast.
  * 
- *         credit: Pascal Pons
- *         http://blog.gamesolver.org/solving-connect-four/06-bitboard/
+ * @author Finn Voichick
  */
+@Immutable
 public class BitBoard implements Board {
+	/*
+	 * This class is based heavily on the C++ bitboard implementation created by
+	 * Pascal Pons and described at
+	 * http://blog.gamesolver.org/solving-connect-four/06-bitboard/.
+	 */
 
 	private final long currentPosition;
 	private final long mask;
 
+	/**
+	 * Constructs an empty BitBoard, with no pieces on the board.
+	 */
 	public BitBoard() {
 		currentPosition = 0;
 		mask = 0;
@@ -47,6 +59,14 @@ public class BitBoard implements Board {
 		this.mask = mask;
 	}
 
+	/**
+	 * Constructs a BitBoard with the moves represented by the given string. The
+	 * moves are represented as described by Pascal Pons here:
+	 * http://blog.gamesolver.org/solving-connect-four/02-test-protocol/
+	 * 
+	 * @param moves
+	 *            a string representing the moves that have been played so far
+	 */
 	public BitBoard(String moves) {
 		long tempPosition = 0;
 		long tempMask = 0;
@@ -96,7 +116,7 @@ public class BitBoard implements Board {
 
 	@Override
 	public boolean isDone() {
-		return getWinner() != null;
+		return getWinner() != null || isFull();
 	}
 
 	@Override
@@ -135,13 +155,14 @@ public class BitBoard implements Board {
 
 	@Override
 	public boolean isFull() {
-		boolean result = getTurnsPlayed() >= HEIGHT * WIDTH;
-		if (result) {
-			System.out.println("done at " + mask);
-		}
-		return result;
+		return getTurnsPlayed() >= HEIGHT * WIDTH;
 	}
 
+	/**
+	 * Gets a key that uniquely identifies this board.
+	 * 
+	 * @return a unique long representing this board
+	 */
 	public long getKey() {
 		return currentPosition + mask;
 	}

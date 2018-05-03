@@ -97,4 +97,10 @@ public class Units {
 		}
 		return result;
 	}
+
+	public static Iterable<Collection<Square>> getUnitsForSquare(Square square) {
+		int row = square.getRow();
+		int column = square.getColumn();
+		return Arrays.asList(getRowUnit(row), getColumnUnit(column), getBoxUnit(row, column));
+	}
 }
