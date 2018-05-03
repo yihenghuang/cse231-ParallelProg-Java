@@ -23,7 +23,6 @@ package kmer.lab.intarray;
 
 import java.util.List;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import kmer.core.KMerCount;
 import kmer.core.KMerCounter;
 import kmer.core.KMerUtils;
@@ -41,7 +40,13 @@ public class IntArrayKMerCounter implements KMerCounter {
 
 	@Override
 	public KMerCount parse(List<byte[]> sequences, int k) {
-		throw new NotYetImplementedException();
+		int[] arr = new int[KMerUtils.toArrayLength(KMerUtils.calculatePossibleKMers(k))];
+		for (byte[] each : sequences) {
+			for (int i = 0; i < (each.length + 1 - k); ++i) {
+				arr[KMerUtils.toPackedInt(each, i, k)]++;
+			}
+		}
+		return new IntArrayKMerCount(k, arr);
 	}
 
 }

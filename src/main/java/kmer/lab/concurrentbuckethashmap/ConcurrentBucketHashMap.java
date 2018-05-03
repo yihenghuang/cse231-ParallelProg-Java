@@ -25,14 +25,14 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.BiFunction;
 
-import edu.wustl.cse231s.NotYetImplementedException;
+import com.google.common.base.Objects;
+
 import edu.wustl.cse231s.util.KeyMutableValuePair;
 import net.jcip.annotations.ThreadSafe;
 
@@ -47,38 +47,106 @@ import net.jcip.annotations.ThreadSafe;
 
 	@SuppressWarnings("unchecked")
 	public ConcurrentBucketHashMap(int bucketCount) {
-		throw new NotYetImplementedException();
+
+		buckets = new List[bucketCount];
+		locks = new ReadWriteLock[bucketCount];
+
+		for (int i = 0; i < buckets.length; ++i) {
+			buckets[i] = new LinkedList<>();
+			locks[i] = new ReentrantReadWriteLock();
+		}
+
 	}
 
 	private int getIndex(Object key) {
-		throw new NotYetImplementedException();
+
+		return Math.floorMod(key.hashCode(), buckets.length);
+
 	}
 
 	private List<Entry<K, V>> getBucket(Object key) {
-		throw new NotYetImplementedException();
+		return buckets[getIndex(key)];
 	}
 
 	private ReadWriteLock getLock(Object key) {
-		throw new NotYetImplementedException();
+		return locks[getIndex(key)];
 	}
 
 	private static <K, V> Entry<K, V> getEntry(List<Entry<K, V>> bucket, Object key) {
-		throw new NotYetImplementedException();
+		Entry<K, V> value = null;
+		for (Map.Entry<K, V> entry : bucket) {
+			if (Objects.equal(entry.getKey(), key)) {
+				return entry;
+			}
+		}
+		return value;
 	}
 
 	@Override
 	public V get(Object key) {
-		throw new NotYetImplementedException();
+
+		V value = null;
+		ReadWriteLock getLock = getLock(key);
+		getLock.readLock().lock();
+		try {
+			for (Map.Entry<K, V> entry : buckets[getIndex(key)]) {
+				if (Objects.equal(entry.getKey(), key)) {
+					value = entry.getValue();
+				}
+			}
+		} finally {
+			getLock.readLock().unlock();
+		}
+		return value;
 	}
 
 	@Override
 	public V put(K key, V value) {
-		throw new NotYetImplementedException();
+		ReadWriteLock putLock = getLock(key);
+		putLock.writeLock().lock();
+		try {
+			KeyMutableValuePair<K, V> entry = new KeyMutableValuePair<K, V>(key, value);
+			if (key == null) {
+				return null;
+			}
+			for (Map.Entry<K, V> e : buckets[getIndex(key)]) {
+				if (Objects.equal(e.getKey(), key)) {
+					V getValue = e.getValue();
+					e.setValue(value);
+					return getValue;
+				}
+			}
+
+			buckets[getIndex(key)].add(entry);
+		} finally {
+			putLock.writeLock().unlock();
+		}
+		return null;
 	}
 
 	@Override
 	public V compute(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
-		throw new NotYetImplementedException();
+
+		V newValue = null;
+		ReadWriteLock computeLock = getLock(key);
+		computeLock.writeLock().lock();
+
+		try {
+			Entry<K, V> entry = getEntry(getBucket(key), key);
+			if (entry == null) {
+				newValue = remappingFunction.apply(key, null);
+				KeyMutableValuePair<K, V> newEntry = new KeyMutableValuePair<K, V>(key, newValue);
+				buckets[getIndex(key)].add(newEntry);
+			} else {
+				newValue = remappingFunction.apply(key, entry.getValue());
+				if (newValue != null) {
+					entry.setValue(newValue);
+				}
+			}
+		} finally {
+			computeLock.writeLock().unlock();
+		}
+		return newValue;
 	}
 
 	@Override

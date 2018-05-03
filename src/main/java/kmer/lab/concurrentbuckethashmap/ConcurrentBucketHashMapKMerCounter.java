@@ -26,7 +26,6 @@ import static edu.wustl.cse231s.v5.V5.forall;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import kmer.core.KMerCount;
 import kmer.core.KMerCounter;
 import kmer.core.KMerUtils;
@@ -42,6 +41,23 @@ import slice.core.Slice;
 public class ConcurrentBucketHashMapKMerCounter implements KMerCounter {
 	@Override
 	public KMerCount parse(List<byte[]> sequences, int k) throws InterruptedException, ExecutionException {
-		throw new NotYetImplementedException();
+
+		ConcurrentBucketHashMap<Long, Integer> amap = new ConcurrentBucketHashMap<Long, Integer>(1024);
+		List<Slice<byte[]>> s = ThresholdSlices.createSlicesBelowReasonableThreshold(sequences, k);
+
+		forall(s, (slice) -> {
+			for (int i = slice.getMinInclusive(); i < slice.getMaxExclusive(); ++i) {
+				long key = KMerUtils.toPackedLong(slice.getOriginalUnslicedData(), i, k);
+				amap.compute(key, (Key, j) -> {
+					if (j == null) {
+						return 1;
+					} else {
+						j++;
+						return j;
+					}
+				});
+			}
+		});
+		return new MapKMerCount<>(k, amap, LongKMerCodec.INSTANCE);
 	}
 }

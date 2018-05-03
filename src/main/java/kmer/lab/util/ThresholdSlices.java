@@ -56,7 +56,8 @@ public class ThresholdSlices {
 	private static void addToCollectionKernel(Collection<Slice<byte[]>> slices, byte[] sequence, int min, int max,
 			int sliceThreshold) {
 		if (max - min < sliceThreshold) {
-
+			Slice<byte[]> s = new Slice<byte[]>(sequence, -1, min, max);
+			slices.add(s);
 		} else {
 			int mid = (max + min) / 2;
 			addToCollectionKernel(slices, sequence, min, mid, sliceThreshold);
@@ -80,12 +81,13 @@ public class ThresholdSlices {
 	 * @return an unmodifiable list of slices
 	 */
 	public static List<Slice<byte[]>> createSlicesBelowThreshold(List<byte[]> sequences, int k, int sliceThreshold) {
-		List<Slice<byte[]>> list = new LinkedList<>();
+
+		LinkedList<Slice<byte[]>> linkedlist = new LinkedList<>();
 
 		for (byte[] each : sequences) {
-			addToCollectionKernel(list, each, 0, each.length - k + 1, sliceThreshold);
+			addToCollectionKernel(linkedlist, each, 0, each.length + 1 - k, sliceThreshold);
 		}
-		return list;
+		return linkedlist;
 	}
 
 	/**
