@@ -62,28 +62,25 @@ public class ParallelCombiner implements Combiner {
 			throws InterruptedException, ExecutionException {
 		int m = aMaxExclusive - aMin;
 		int n = bMaxExclusive - bMin;
-		if (m < n) {
-			int temp = aMin;
-			aMin = bMin;
-			bMin = temp;
-			temp = aMaxExclusive;
-			aMaxExclusive = bMaxExclusive;
-			bMaxExclusive = temp;
-			temp = m;
-			m = n;
-			n = temp;
-		}
 		if (m < threshold) {
 			sequentialCombine(bufferIndex, data, aMin, aMaxExclusive, bMin, bMaxExclusive);
 		} else {
-			int r = (aMin + aMaxExclusive) / 2;
-			int[] data2 = new int[aMaxExclusive - aMin];
-			for (int i = bMin; i < bMaxExclusive; ++i) {
-				data2[i - bMin] = data[i];
+			if (m < n) {
+				int temp = aMin;
+				aMin = bMin;
+				bMin = temp;
+				temp = aMaxExclusive;
+				aMaxExclusive = bMaxExclusive;
+				bMaxExclusive = temp;
+				temp = m;
+				m = n;
+				n = temp;
 			}
-			int s = Arrays.binarySearch(data2, r);
+			int r = (aMin + aMaxExclusive) / 2;
+
+			int s = Arrays.binarySearch(data, bMin, bMaxExclusive, data[r]);
 			if (s < 0) {
-				s = -1 * s;
+				s = -(s + 1);
 			}
 			int t = bufferIndex + (r - aMin) + (s - bMin);
 			final int maxA = aMaxExclusive;
@@ -93,9 +90,9 @@ public class ParallelCombiner implements Combiner {
 			final int ss = s;
 			finish(() -> {
 				async(() -> {
-					parallelCombine(bufferIndex, data, minA, r - 1, minB, ss - 1);
+					parallelCombine(bufferIndex, data, minA, r, minB, ss);
 				});
-				parallelCombine(t + 1, data, r + 1, maxA, ss, maxB);
+				parallelCombine(t, data, r, maxA, ss, maxB);
 			});
 		}
 	}
