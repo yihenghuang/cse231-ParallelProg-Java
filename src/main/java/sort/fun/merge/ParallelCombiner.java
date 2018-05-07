@@ -28,7 +28,6 @@ import static edu.wustl.cse231s.v5.V5.finish;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
-import edu.wustl.cse231s.NotYetImplementedException;
 import sort.core.merge.Combiner;
 
 /**
@@ -61,7 +60,44 @@ public class ParallelCombiner implements Combiner {
 
 	private void parallelCombine(int bufferIndex, int[] data, int aMin, int aMaxExclusive, int bMin, int bMaxExclusive)
 			throws InterruptedException, ExecutionException {
-		throw new NotYetImplementedException();
+		int m = aMaxExclusive - aMin;
+		int n = bMaxExclusive - bMin;
+		if (m < n) {
+			int temp = aMin;
+			aMin = bMin;
+			bMin = temp;
+			temp = aMaxExclusive;
+			aMaxExclusive = bMaxExclusive;
+			bMaxExclusive = temp;
+			temp = m;
+			m = n;
+			n = temp;
+		}
+		if (m < threshold) {
+			sequentialCombine(bufferIndex, data, aMin, aMaxExclusive, bMin, bMaxExclusive);
+		} else {
+			int r = (aMin + aMaxExclusive) / 2;
+			int[] data2 = new int[aMaxExclusive - aMin];
+			for (int i = bMin; i < bMaxExclusive; ++i) {
+				data2[i - bMin] = data[i];
+			}
+			int s = Arrays.binarySearch(data2, r);
+			if (s < 0) {
+				s = -1 * s;
+			}
+			int t = bufferIndex + (r - aMin) + (s - bMin);
+			final int maxA = aMaxExclusive;
+			final int maxB = bMaxExclusive;
+			final int minA = aMin;
+			final int minB = bMin;
+			final int ss = s;
+			finish(() -> {
+				async(() -> {
+					parallelCombine(bufferIndex, data, minA, r - 1, minB, ss - 1);
+				});
+				parallelCombine(t + 1, data, r + 1, maxA, ss, maxB);
+			});
+		}
 	}
 
 	@Override
