@@ -22,11 +22,9 @@
 
 package connectfour.studio;
 
-import connectfour.challenge.NegamaxUtils;
 import connectfour.core.Board;
 import connectfour.core.ColumnEvaluationPair;
 import connectfour.core.Config;
-import edu.wustl.cse231s.NotYetImplementedException;
 
 /**
  * @author Yiheng Huang
@@ -35,7 +33,26 @@ import edu.wustl.cse231s.NotYetImplementedException;
  */
 public class SequentialConnectFour {
 	public static ColumnEvaluationPair negamax(Board board, Config config, int currentDepth) {
-		throw new NotYetImplementedException();
-	}
+		// base case
+		if (currentDepth == config.getMaxDepth() || board.isDone()) {
+			return new ColumnEvaluationPair(0, config.getHeuristic().evaluate(board));
+		}
 
+		ColumnEvaluationPair[] storage = new ColumnEvaluationPair[board.WIDTH];
+
+		for (Integer i : board.getValidPlays()) {
+			Board next_board = board.createNextBoard(i);
+			storage[i] = new ColumnEvaluationPair(i, -negamax(next_board, config, currentDepth + 1).getEvaluation());
+		}
+
+		double max_val = -100;
+		int max_col = 0;
+		for (ColumnEvaluationPair p : storage) {
+			if (p.getEvaluation() > max_val) {
+				max_col = p.getColumn();
+				max_val = p.getEvaluation();
+			}
+		}
+		return storage[max_col];
+	}
 }

@@ -24,7 +24,6 @@ package connectfour.studio;
 import connectfour.core.Board;
 import connectfour.core.Heuristic;
 import connectfour.core.Player;
-import edu.wustl.cse231s.NotYetImplementedException;
 
 /**
  * @author Yiheng Huang
@@ -36,7 +35,13 @@ public enum WinOrLoseHeuristic implements Heuristic {
 
 	@Override
 	public double evaluate(Board board) {
-		throw new NotYetImplementedException();
+		if (board.getWinner() == Player.YELLOW) {
+			return 1;
+		}
+		if (board.getWinner() == Player.RED) {
+			return -1;
+		}
+		return 0;
 	}
 
 	@Override
